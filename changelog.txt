@@ -61,4 +61,5 @@ Ver     Date      Description
 0.41    03/11/12  Chat messages persist across pages. Chat working before video/images load.
 0.41.1  03/31/12  Improve URL matching.
 0.41.2  03/31/12  Remove columns for thread flag ("new") and move them to thread title column.
-0.42    03/31/12  Post content cell now autocrolls.
+0.42    03/31/12  Post content cell autocroll.
+0.42.1  03/31/12  Rearrange thread list column widths.

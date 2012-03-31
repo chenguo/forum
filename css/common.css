@@ -115,29 +115,18 @@ textarea.edit_text {
 a.makenew{ text-decoration:none }
 a.thread{ text-decoration:none }
 div.posts{ text-align:center }
-*.noshow{
-  border-style:none;
-  border:none;
-}
+*.noshow{ border-style:none; border:none; }
 table#threads {text-align:center}
-*.new_thr{
-  font-weight:bold;
-  font-size:medium;
-}
+*.new_thr{ font-weight:bold; font-size:medium; }
 th.thr_title { width:50% }
-th.num { width:4em }
-th.thr_time { width:12em }
+th.num { width:7% }
+th.thr_time { width:18% }
 .thr_page_link { font-size:x-small }
 
 /* For individual threads */
 .posts {table-layout:fixed}
 .profile{text-align:center; width:25%; vertical-align:top}
-
-#board_links{
-  text-align:center;
-  font-size:large;
-  font-weight:bold;
-}
+#board_links{ text-align:center; font-size:large; font-weight:bold; }
 .content_col{height:100%;}
 .content{height:100%; vertical-align:top}
 div.content{overflow:auto}
@@ -149,7 +138,6 @@ div.content{overflow:auto}
   height:100%;
   vertical-align:top;
 }
-.test{height:100%; vertical-align:bottom}
 .content_left{width:25%}
 .content_center{width:20%}
 .content_right{width:45%; text-align:right;}
