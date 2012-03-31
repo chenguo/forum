@@ -397,7 +397,7 @@ class Forum
     $sidebar_chat = tableRow(tableCol($this->DisplayChat($session, FALSE)));
     $sidebar_cur_usr = tableRow(tableCol($online_usr_str));
     $sidebar_day_usr = tableRow(tableCol($day_usr_str));
-    $sidebar_logout = tableRow(tableCol(makeLink('logout.php', 'logout')));
+    $sidebar_logout = tableRow(tableCol(makeLink('action.php?action=logout', 'logout')));
     $sidebar_version = tableRow(tableCol("LOLBros beta " . makeLink("changelog.txt", "v{$this->version}")));
 
     $sidebar_table = table($sidebar_welcome

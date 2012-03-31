@@ -63,3 +63,5 @@ Ver     Date      Description
 0.41.2  03/31/12  Remove columns for thread flag ("new") and move them to thread title column.
 0.42    03/31/12  Post content cell autocroll.
 0.42.1  03/31/12  Rearrange thread list column widths.
+0.42.2  03/31/12  Make login.php index.php.
+0.42.3  03/31/12  Merge logout.php into actions.php.

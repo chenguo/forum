@@ -3,10 +3,24 @@ ini_set('display_errors', 1); error_reporting(E_ALL | E_STRICT);
 require_once("./include/defines.php");
 include_once("./include/common_cfg.php");
 
-// This page requires login access. We need both pid and uid, and they must be equal.
-if ($session->CheckLogin() && isset($_REQUEST['action']))
+if (!isset($_REQUEST['action']))
   {
-    $action = $_REQUEST['action'];
+    exit();
+  }
+
+$action = $_REQUEST['action'];
+
+// First check for logout
+if ($action === "logout")
+  {
+    $session->Logout();
+    header("Location: index.php");
+    exit();
+  }
+
+// This page requires login access. We need both pid and uid, and they must be equal.
+if ($session->CheckLogin())
+  {
     if (0 > ($uid = $session->GetUID()))
       {
         echo 0;
