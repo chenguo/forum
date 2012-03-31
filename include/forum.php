@@ -134,8 +134,7 @@ class Forum
     echo $link_table;
 
     // Display posts in thread.
-    $title_row = HTMLTag("th", "", array('class'=>'thr_flags'))
-      . HTMLTag("th", "title", array('class'=>'thr_title'))
+    $title_row = HTMLTag("th", "title", array('class'=>'thr_title'))
       . HTMLTag("th", "posts", array('class'=>'num'))
       . HTMLTag("th", "views", array('class'=>'num'))
       . HTMLTag("th", "created", array('class'=>'thr_time'))
@@ -152,12 +151,14 @@ class Forum
         $thread_flags = $this->GetThreadFlags($uid, $thread);
         // Get the link to thread as well as links to pages in thread.
         $thread_link = makeLink("thread.php?tid={$thread['tid']}", $thread['title'], 'thread')
-          . $this->MakeThreadPageLinks($posts_per_page, $thread['posts'], "thread.php?tid={$thread['tid']}");
+          . "</br>"
+          . $this->MakeThreadPageLinks($posts_per_page, $thread['posts'], "thread.php?tid={$thread['tid']}")
+          . " " . $this->GetThreadFlags($uid, $thread);
+
         $create_time = GetTime(TIME_FULL, $thread['create_time']);
         $post_time = GetTime(TIME_FULL, $thread['post_time']);
 
-        echo tableRow ( tableCol($thread_flags)
-                        . tableCol($thread_link)
+        echo tableRow ( tableCol($thread_link)
                         . tableCol($thread['posts'])
                         . tableCol($thread['views'])
                         . tableCol($this->db->GetUserName($thread['uid']) . "</br>" . fontSize($create_time, 1))
@@ -176,7 +177,7 @@ class Forum
     $max_page = GetPageCount($max_items, $items_per_page);
     $page_links = "";
     if ($max_page > 1)
-      $page_links .= "</br>" . makeLink("$link", "1", "thr_page_link") . " " . makeLink("$link&page=2", "2", "thr_page_link");
+      $page_links .= makeLink("$link", "1", "thr_page_link") . " " . makeLink("$link&page=2", "2", "thr_page_link");
     if ($max_page > 2)
       $page_links .= " " . makeLink("$link&page=3", "3", "thr_page_link");
     if ($max_page > 3)

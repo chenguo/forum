@@ -124,8 +124,6 @@ table#threads {text-align:center}
   font-weight:bold;
   font-size:medium;
 }
-th.thr_flags { width:4em;}
-.thr_flags {font-size:x-small; font-weight:bold; color:#0000FF}
 th.thr_title { width:50% }
 th.num { width:4em }
 th.thr_time { width:12em }
