@@ -1,0 +1,63 @@
+Ver     Date      Description
+0.01    01/08/12  Basic thread making, post making.
+0.02    01/08/12  Login functionality.
+0.03    01/08/12  Personalized header, footer showing online messages.
+0.04    01/09/12  Display users online in last 24 hours.
+0.05    01/09/12  CSS styling for whole forum.
+0.06    01/10/12  Can no longer create empty posts/threads.
+0.07    01/10/12  Improve coding practice by restructuring internal codebase.
+0.08    01/10/12  Enabled posting of images and Youtube videos.
+0.09    01/11/12  Add user profile page. User names now link to profile.
+0.10    01/11/12  Support double newlines.
+0.11    01/12/12  Add in-place edit post feature.
+0.12    01/14/12  Enable embedding of Vimeo videos.
+0.13    01/14/12  Fix newlines for in-place editing.
+0.14    01/14/12  In place edit preview enabled.
+0.15    01/16/12  Add cancel feature to editing posts, make buttons persistent. Format location.
+0.16    01/17/12  Support inserting ", ', and \ into MySQL database.
+0.17    01/19/12  Display edit time for posts.
+0.18    01/19/12  Enable updating to email and avatar in user profile.
+0.18.1  01/21/12  Fix bug where submitting edited post displays nothing.
+0.19    01/26/12  Add paged views to threads. Prev/next button displays when prev/next page of posts exists.
+0.20    01/26/12  Add paged views to board. Prev/next button displays when prev/next page of threads exist.
+0.21    01/28/12  Edit profile has cancel option. Users can now change their passwords.
+0.21.1  01/28/12  Update internal database and HMTL generation APIs.
+0.22    01/28/12  Cache fetched user profiles to reduce database queries.
+0.22.1  01/28/12  Implement post content as subtable. Update post editing for this change.
+0.23    01/28/12  Implement quoting functionality, including quoting multiple posts on one page.
+0.23.1  01/28/12  Stretch post content subtable to fill containing cell.
+0.23.2  01/28/12  Display maximum number of pages with page links.
+0.24    01/28/12  Implement brofist/bitchslap feature. Which users applied either is tracked for each post, but
+                  not yet displayed.
+0.24.1  01/28/12  Profile view count is enabled.
+0.25    01/28/12  Prevent most double-post cases with PRG.
+0.25.1  01/28/12  Resolved some timestamp inconsistencies (MySQL time vs server time in different zones).
+0.26    01/29/12  Improved page-jumping links to include more choices, including first/last page.
+0.27    01/29/12  Threads page now has links to each thread.
+0.28    01/29/12  Jump to last page when making new post.
+0.29    01/31/12  For each post that has karma, display who provided it.
+0.29.1  02/01/12  Make buttons smaller
+0.29.2  02/04/12  Instead of passing table names to DB constructor, make then defines.
+0.30    02/04/12  Add "NEW" flag to posts indicating unread posts.
+0.31    02/04/12  Quotes link to original post.
+0.31.1  02/05/12  Fix bug where editing post doesn't support special characters.
+0.32    02/12/12  User profile displays recent posts.
+0.33    02/12/12  User profile displays recent karma action.
+0.33.1  02/13/12  CSS bug fix for table vertical alignment. Posts' karma givers now link to profile.
+0.34    02/26/12  Robustify youtube tag. Add support for [url] tag.
+0.34.1  02/26/12  Support [b], [i], [u], and [s] tags.
+0.34.2  02/27/12  Recognize basic links even without [url] tag.
+0.34.3  02/27/12  Make quote post urls more robust with regards to user names with spaces.
+0.34.4  02/28/12  Greatly robustify link detection.
+0.34.5  02/28/12  Fix double quote of user posts issue.
+0.34.6  02/28/12  Disable double click on some buttons.
+0.34.7  02/28/12  Fix crash on cancelling post edit.
+0.34.8  02/29/12  Fix links with dashes
+0.34.9  02/29/12  Protect against posts made by UID -1 (likely seassion time out)
+0.34.10 03/07/12  Support mlb.com video embeds.
+0.34.11 03/10/12  Fix logic in choosing threads to display (threads got skipped)
+0.35    03/11/12  Some actions moved to new file action.php. Todo: move remaining action handling there.
+0.40    03/11/12  Chat implemented.
+0.41    03/11/12  Chat messages persist across pages. Chat working before video/images load.
+0.41.1  03/31/12  Improve URL matching
+

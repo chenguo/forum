@@ -1,0 +1,213 @@
+@font-face {
+    font-family: 'FFFTusjBold';
+    src: url('../fonts/FFF_Tusj-webfont.eot');
+    src: url('../fonts/FFF_Tusj-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/FFF_Tusj-webfont.woff') format('woff'),
+    url('../fonts/FFF_Tusj-webfont.ttf') format('truetype'),
+    url('../fonts/FFF_Tusj-webfont.svg#FFFTusjBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+a:link{color:black;}
+a:visited{color:black;}
+a:hover{font-weight:bold;}
+
+body{ background-image:url(mario.jpg); }
+
+table, td, th, tr{
+    border-collapse:collapse;
+    border:1px solid #AAA;
+    padding:0.3em;
+    width:90%;
+    margin-left:5%;
+    margin-right:5%;
+    table-layout:fixed;
+    background:#ffffff;
+    border-radius:.5em;
+    -webkit-border-radius:.5em;
+    -moz-border-radius:.5em;
+    font-size:small;
+    font-family:sans-serif;
+    overflow:auto;
+}
+
+div#banner{
+    font-family:'FFFTusjBold';
+    text-align:center;
+    font-size:100px;
+    text-shadow: 0px 15px 11px #363536;
+}
+
+div#post{
+  overflow:auto;
+}
+
+div#common{
+    text-align:center;
+    max-width:100%;
+    overflow:hidden;
+}
+
+table#header, table#footer {
+    text-align:center;
+    width:100%;
+    margin-left:0%;
+    margin-right:0%;
+}
+
+table.thread_header, table#threads, table.posts {
+    text-align:center;
+    width:85%;
+    margin-left:0%;
+    margin-right:20%;
+}
+
+table.noshow, table.noshow td, table.noshow tr{
+    border-style:none;
+    border:none;
+}
+
+table.quote{
+    width:96%;
+    margin-left:0%;
+    margin-right:4%;
+    border-color:#000000;
+}
+
+table.quote td{ background-color:#e5e5e5 }
+table img.profile_img{
+    max-width:80%;
+    max-height:180px;
+}
+
+form {text-align:center}
+textarea.post_text {
+    margin-left:20%;
+    margin-right:20%;
+    resize:both;
+    resize:vertical;
+    width:60%;
+    min-height:20em;
+    height:20em;
+}
+textarea.edit_text {
+    margin-left:10%;
+    margin-right:10%;
+    width:80%;
+    resize:vertical;
+}
+
+.button {
+    border-radius:1px;
+    border-style:solid;
+    border-color:#000000;
+    border-width:1px;
+    background-color:#ffffff;
+    width:6em;
+    font-size:small;
+    font-weight:bold;
+    border-radius:.5em;
+    text-align:center;
+}
+
+/* For list of threads */
+a.makenew{ text-decoration:none }
+a.thread{ text-decoration:none }
+div.posts{ text-align:center }
+*.noshow{
+  border-style:none;
+  border:none;
+}
+table#threads {text-align:center}
+*.new_thr{
+  font-weight:bold;
+  font-size:medium;
+}
+th.thr_flags { width:4em;}
+.thr_flags {font-size:x-small; font-weight:bold; color:#0000FF}
+th.thr_title { width:50% }
+th.num { width:4em }
+th.thr_time { width:12em }
+.thr_page_link { font-size:x-small }
+
+/* For individual threads */
+.posts {table-layout:fixed}
+.profile{text-align:center; width:25%; vertical-align:top}
+
+#board_links{
+  text-align:center;
+  font-size:large;
+  font-weight:bold;
+}
+.content_col{height:100%;}
+.content{height:100%; vertical-align:top}
+.content_table{
+  width:100%;
+  margin-left:0%;
+  margin-right:0%;
+  text-align:left;
+  height:100%;
+  vertical-align:top;
+}
+.test{height:100%; vertical-align:bottom}
+.content_left{width:25%}
+.content_center{width:20%}
+.content_right{width:45%; text-align:right;}
+.content_footer_left{text-align:left}
+.content_footer_center{text-align:center}
+.content_footer_right{text-align:right; vertical-align:bottom; height:100%}
+.karma_table { text-align:right; width:80%; margin-left:20%;}
+
+/* For user profile page */
+table#user_profile {
+    text-align:center;
+    width:85%;
+    margin-left:0%;
+    margin-right:20%;
+}
+.subprofile{ width:30%; }
+.recent_posts { text-align:left; padding-left: 1em }
+.recent_karma { text-align:left; padding-left: 1em }
+
+/* For making new threads */
+form.newthr_form  { margin-left:20%; margin-right:20%; width:60% }
+input.newthr_title { margin-left:20%; margin-right:20%; width:60% }
+textarea.newthr_body { margin-left:20%; margin-right:20%; width:60%; resize:vertical }
+
+/* Sidebar */
+#sidebar {
+    vertical-align:center;
+    text-align:center;
+    right:0;
+    top:90px;
+    width:15%;
+    height:90%;
+    position:fixed;
+}
+
+table#chat_area {
+    margin-left:2%;
+    margin-right:2%;
+    width:96%;
+    vertical-align:top;
+}
+
+#chat_msgs_div {
+    overflow:auto;
+    height:20em;
+    text-align:left;
+    vertical-align:top;
+}
+
+td#chat_msgs {
+    text-align:left;
+    vertical-align:top;
+}
+textarea#chat_post {
+    width:95%;
+    resize:vertical;
+}
+
+font.chatmsg_name { font-weight:bold; color:red }
+font.chatmsg_user { font-weight:bold; color:blue }
