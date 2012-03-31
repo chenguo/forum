@@ -299,7 +299,7 @@ class Forum
                           array('class'=>'karma_table noshow'));
 
     // Create content table.
-    $content = prepContent($post['content'], $post['tid']);
+    $content = HTMLTag("div", prepContent($post['content'], $post['tid']), array("class"=>"content"));
     $content_table = table( $this->GeneratePostHeader($session_id, $post)
                             . tableRow( tableCol($content, array('colspan'=>'3', 'class'=>'content',
                                                                  'id'=>"post{$post['pid']}")) )

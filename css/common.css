@@ -140,6 +140,7 @@ th.thr_time { width:12em }
 }
 .content_col{height:100%;}
 .content{height:100%; vertical-align:top}
+div.content{overflow:auto}
 .content_table{
   width:100%;
   margin-left:0%;
