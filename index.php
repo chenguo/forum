@@ -34,7 +34,7 @@ input.form{
 <body>
 <?php $forum->DisplayBanner() ?>
 <div id='common'>
-<form name='login' action='login.php' method='post'>
+<form name='login' action='index.php' method='post'>
 <table id='login'><tr>
 <td><label>username</label></td>
 <td><input type='text' size='20' name='username' class='form'></td>
