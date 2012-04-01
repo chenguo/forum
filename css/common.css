@@ -122,6 +122,7 @@ th.thr_title { width:50% }
 th.num { width:7% }
 th.thr_time { width:18% }
 .thr_page_link { font-size:x-small }
+.thr_flags { color:blue; font-weight:bold }
 
 /* For individual threads */
 .posts {table-layout:fixed}
