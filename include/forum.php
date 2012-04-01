@@ -147,6 +147,10 @@ class Forum
       {
         array_push($formatted_posts, $this->FormatPost($post));
       }
+    // Mark user as at least having read the last post on current page.
+    $last_post = end($posts);
+    $this->db->UpdateUserPostView($this->session->GetUID(), $tid, $last_post['pid'], $last_post['tpid']);
+
 
     $thread_info['title'] = $thread['title'];
     $thread_info['pages'] = $this->MakePageLinks($page, $posts_per_page, $thread['posts'], "thread.php?tid=$tid");

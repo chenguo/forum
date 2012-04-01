@@ -124,7 +124,7 @@ th.thr_time { width:18% }
 
 /* For user profiles */
 div.user_prof { width:20%;  background:white; text-align:center; padding:0.5em; border:2px solid; border-radius:5px; border-color:grey; float:left; overflow-x:auto;}
-img.user_prof_avatar { max-width:80%; max-height:180px }
+img.user_prof_avatar { max-width:80%; max-height:180px; margin-top:0.5em; margin-bottom:0.5em }
 div.user_prof_karma_val { display:inline; }
 div.user_prof_karma_desc { font-size: x-small; display:inline; }
 

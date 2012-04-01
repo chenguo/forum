@@ -66,3 +66,5 @@ Ver     Date      Description
 0.42.2  03/31/12  Make login.php index.php.
 0.42.3  03/31/12  Merge logout.php into actions.php.
 0.50    04/01/12  Individual threads display overhaul; replace tables with divs and CSS styling. Add Display module.
+0.50.1  04/01/12  Fix minor bug where "new" flag wasn't removed on user reading post.
+0.50.2  04/01/12  In profile, give user avatar vertical margin.
