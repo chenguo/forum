@@ -168,7 +168,7 @@ class Display
     $user_info = $this->forum->GetCachedUser($uid);
     $user_profile = HTMLTag("div",
                             // User name
-                            HTMLTag("div", makeUserLink($user_info['uid'], $user_info['name']), array('class'=>'user_profile_name'))
+                            HTMLTag("div", makeUserLink($user_info['uid'], $user_info['name']), array('class'=>'user_prof_name'))
                             // User avatar
                             . showImg($user_info['avatar'], array('class'=>'user_prof_avatar'))
                             // Positive karma
