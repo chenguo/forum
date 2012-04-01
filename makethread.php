@@ -4,7 +4,7 @@ require_once("./include/common_cfg.php");
 /* This page requires login access. */
 if (!$session->CheckLogin())
   {
-    header("LOCATION: login.php");
+    header("LOCATION: index.php");
   }
 
 /* Handle thread submission. */

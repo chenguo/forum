@@ -6,7 +6,7 @@ ini_set('display_errors', 1); error_reporting(E_ALL | E_STRICT);
 /* This page requires login access. */
 if (!$session->CheckLogin(TRUE))
   {
-    header("LOCATION: login.php");
+    header("LOCATION: index.php");
   }
 
 if (!isset($_GET['uid']) || $_GET['uid'] < 0)

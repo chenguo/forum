@@ -5,7 +5,7 @@ ini_set('display_errors', 1); error_reporting(E_ALL | E_STRICT);
 
 // This page requires login access.
 if (!$session->CheckLogin(TRUE) && $session->GetUID() < 0)
-  header("LOCATION: login.php");
+  header("LOCATION: index.php");
 
 $thread_id;
 $page;

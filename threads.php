@@ -2,7 +2,7 @@
 require_once("./include/common_cfg.php");
 
 if (!$session->CheckLogin(TRUE))
-  header("LOCATION: login.php");
+  header("LOCATION: index.php");
 
 $page = 1;
 if (isset($_REQUEST['page']))
