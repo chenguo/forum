@@ -171,6 +171,8 @@ class Display
                             HTMLTag("div", makeUserLink($user_info['uid'], $user_info['name']), array('class'=>'user_prof_name'))
                             // User avatar
                             . showImg($user_info['avatar'], array('class'=>'user_prof_avatar'))
+                            // Post count
+                            . HTMLTag("div", $user_info['posts'] . " posts", array('class'=>'user_prof_posts'))
                             // Positive karma
                             . HTMLTag("div",
                                       HTMLTag("div", $user_info['plus'], array('class'=>'user_prof_karma_val'))

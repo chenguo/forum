@@ -70,3 +70,4 @@ Ver     Date      Description
 0.50.2  04/01/12  In profile, give user avatar vertical margin.
 0.50.3  04/01/12  In profile, make user name larger.
 0.50.4  04/01/12  Disable embedding HTML.
+0.50.5  04/01/12  Restore user post count in profile.
