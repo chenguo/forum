@@ -65,3 +65,4 @@ Ver     Date      Description
 0.42.1  03/31/12  Rearrange thread list column widths.
 0.42.2  03/31/12  Make login.php index.php.
 0.42.3  03/31/12  Merge logout.php into actions.php.
+0.50    04/01/12  Individual threads display overhaul; replace tables with divs and CSS styling. Add Display module.

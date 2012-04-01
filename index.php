@@ -13,7 +13,7 @@ if (isset($_POST['username']) && isset($_POST['password']))
 <!DOCTYPE html>
 <html>
 <head>
-<?php $forum->DisplayTitle(); ?>
+<?php $display->DisplayTitle(); ?>
 <style>
 #login {
   table-layout:auto;
@@ -32,9 +32,9 @@ input.form{
 </head>
 
 <body>
-<?php $forum->DisplayBanner() ?>
+<?php $display->DisplayBanner(FALSE /* no sidebar */) ?>
 <div id='common'>
-<form name='login' action='index.php' method='post'>
+<form class='login' name='login' action='index.php' method='post'>
 <table id='login'><tr>
 <td><label>username</label></td>
 <td><input type='text' size='20' name='username' class='form'></td>

@@ -16,7 +16,7 @@ if (isset($_REQUEST['page']))
 <!DOCTYPE html>
 <html>
 <head>
-<?php $forum->DisplayTitle(); ?>
+<?php $display->DisplayTitle(); ?>
 <script src='include/jsfunc.js'></script>
 <script>
 window.addEventListener('DOMContentLoaded', loadAction, false);
@@ -25,8 +25,8 @@ window.addEventListener('DOMContentLoaded', loadAction, false);
 
 <body>
 <?php
-$forum->DisplayBanner();
-$forum->DisplaySidebar($session);
+$display->DisplayBanner();
+$display->DisplaySidebar($session);
 $forum->DisplayThreads($session, $page);
 ?>
 </body>

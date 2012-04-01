@@ -21,7 +21,7 @@ $uid = $_GET['uid'];
 <!DOCTYPE html>
 <html>
 <head>
-<?php $forum->DisplayTitle(Title::USER, $uid); ?>
+<?php $display->DisplayTitle(Title::USER, $uid); ?>
 
 <script src='include/jsfunc.js'></script>
 <script type='text/javascript'>
@@ -127,10 +127,9 @@ function editProfile(action)
 </head>
 
 <body>
-<?php $forum->DisplayBanner(); ?>
-<a href="threads.php">Back to Board</a></br></br>
+<?php $display->DisplayBanner(); ?>
 <?php
-$forum->DisplaySidebar($session);
+$display->DisplaySidebar();
 $forum->DisplayUserPage($uid, $session->GetUID());
  ?>
 </body>

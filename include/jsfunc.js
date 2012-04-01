@@ -13,14 +13,14 @@ function editPost(pid, action)
         if (fields)
           {
             document.getElementById("edittime"+pid).innerHTML="</br>"+fields[1];
-            document.getElementById("post"+pid).innerHTML=fields[2];
+            document.getElementById("post"+pid+"_text").innerHTML=fields[2];
           }
         else if (req.responseText != 0)
-          document.getElementById("post"+pid).innerHTML=req.responseText;
+          document.getElementById("post"+pid+"_text").innerHTML=req.responseText;
       }
   }
-  var post = document.getElementById("post"+pid);
-  var post_controls = document.getElementById("post"+pid+"controls");
+  //var post = document.getElementById("post"+pid);
+  var post_controls = document.getElementById("post"+pid+"_controls");
 
   // Update button display.
   if (action == "edit_edit")

@@ -8,16 +8,18 @@ class Forum
 {
   var $title;
   var $db;
+  var $session;
   var $version;
   var $cur_users;
   var $day_users;
   var $user_cache;
 
-  function Forum($db, $title, $version)
+  function Forum($db, $session)
   {
-    $this->title = $title;
-    $this->version = $version;
+    //$this->title = $title;
+    //$this->version = $version;
     $this->db = $db;
+    $this->session = $session;
     $this->user_cache = array();
   }
 
@@ -27,84 +29,6 @@ class Forum
    *                             *
   \*******************************/
 
-  /*  Display general forum title. */
-  function DisplayTitle($type = Title::COMMON, $id = -1)
-  {
-    echo COMMON_CSS;
-    $title = $this->title;
-    if (Title::THREAD == $type && $id >= 0)
-      {
-        /* Get title info for thread. */
-        $thread = $this->db->GetThread($id, FALSE /* Only title info */);
-        $title .= " - " . $thread['title'];
-      }
-    else if (Title::USER == $type && $id >= 0)
-      $title .= " - " . $this->db->GetUserName($id, FALSE);
-    echo HTMLTag("title", $title);
-  }
-
-  // Display site banner
-  function DisplayBanner()
-  {
-    echo HTMLTag("div", $this->title, array('id'=>'banner'));
-  }
-
-  /* Display common header for forum. */
-  function DisplayCommonHeader($session)
-  {
-    echo HTMLTag("div", $this->title, array('id'=>'banner'));
-    return;
-    /* If user is logged in, display some things. */
-    $welcome_col = "";
-    $logout_col = "";
-    $welcome = "welcome";
-    if ($session->CheckLogin())
-      {
-        $welcome .= " {$this->db->GetUserName($session->GetUID())}!";
-        $welcome_col = tableCol($welcome);
-        $logout_col = tableCol(makeLink('logout.php', 'logout'));
-      }
-
-    /* Get the online users. */
-    $this->cur_users = $this->GetOnlineUsers(15);
-    $this->day_users = $this->GetOnlineUsers(1440);
-    $user_str = count($this->cur_users) . " user";
-    $user_str .= (count($this->cur_users) != 1)? "s" : "";
-    $user_str .= " online";
-    $user_col = tableCol($user_str);
-
-    echo HTMLTag("div",
-                 table( tableRow($welcome_col . $user_col . $logout_col),
-                        array('id'=>'header')),
-                 array('id'=>'common_header'));
-    echo "</br>\n";
-  }
-
-  /* Display common footer for forum */
-  function DisplayCommonFooter()
-  {
-    /* Assume we've called GetOnlineUsers already (which we should have in header function. */
-    $cur_user_links = array();
-    foreach ($this->cur_users as $user)
-      array_push ($cur_user_links, makeUserLink($user['uid'], $user['name']));
-    $online_usr_str = "online users: ";
-    $online_usr_str .= (count($cur_user_links) == 0)? "none" : implode(", ", $cur_user_links);
-
-    $day_user_links = array();
-    foreach ($this->day_users as $user)
-      array_push ($day_user_links, makeUserLink($user['uid'], $user['name']));
-    $day_usr_str = "users in past day: ";
-    $day_usr_str .= (count($day_user_links) == 0)? "none" : implode(", ", $day_user_links);
-
-    echo HTMLTag("div",
-                 table( tableRow( tableCol($online_usr_str) . tableCol($day_usr_str) )
-                        . tableRow( tableCol("LOLBros beta v{$this->version}  " . makeLink("changelog.txt", "changelog"), array('colspan'=>'2')) ),
-                        array('id'=>'footer')),
-                 array('id'=>'common_footer'));
-  }
-
-  /* Get the number of users online within the past $
-  . */
   function GetOnlineUsers($time)
   {
     return $this->db->GetOnlineUsers($time);
@@ -112,9 +36,16 @@ class Forum
 
   /*******************************\
    *                             *
-   *      Thread generators      *
+   *      Thread Information     *
    *                             *
   \*******************************/
+
+  // Get thread title
+  function GetThreadTitle($tid)
+  {
+    $thread = $this->db->GetThread($tid, FALSE /* Only title */);
+    return $thread['title'];
+  }
 
   // Display threads in the forum.
   function DisplayThreads($session, $page=1)
@@ -202,35 +133,39 @@ class Forum
     return HTMLTag("label", $flags, array('class'=>'thr_flags'));
   }
 
-  // Display thread.
-  function DisplayThread($thread_id, $session, $page=1)
+  // Get thread information.
+  function GetThreadInfo($tid, $posts_per_page=DEFAULT_ITEMS_PER_PAGE, $page=1)
   {
-    $thread = $this->db->GetThread($thread_id, TRUE /* update viewcount */);
+    $thread_info = array();
+    $formatted_posts = array();
 
-    // Initialize some post-counting information.
-    $posts_per_page = DEFAULT_ITEMS_PER_PAGE;
-    $posts = $this->db->GetPosts($thread_id, $page, $posts_per_page);
-    $session_id = $session->GetUID();
+    $thread = $this->db->GetThread($tid, TRUE /* update viewcount */);
+    $posts = $this->db->GetPosts($tid, $page, $posts_per_page);
 
-    // Create links to board and other pages
-    $page_links = $this->MakePageLinks ($page, $posts_per_page, $thread['posts'], "thread.php?tid=$thread_id");
-    $links = table( tableRow( tableCol( makeLink("threads.php", "board") )
-                              . tableCol($page_links) ),
-                    array('class'=>'noshow', 'id'=>'board_links'));
-
-    // Make the table
-    echo "<table id='posts' class='posts'>";
-    echo HTMLTag("thead", tableRow(HTMLTag("th", $links, array('class'=>'profile')) . HTMLTag("th", $thread['title'])), array('id'=>'posts_head'));
-
+    // Format post info for output.
     foreach ($posts as $post)
-      $this->DisplayPost($session_id, $post);
-    // Mark user as at least having read last post on this page.
-    $last_post = end($posts);
-    $this->db->UpdateUserPostView($session_id, $thread_id, $last_post['pid'], $last_post['tpid']);
+      {
+        array_push($formatted_posts, $this->FormatPost($post));
+      }
 
-    // Make a table footer with links
-    echo HTMLTag("tfoot", tableRow(tableCol($links) . tableCol("")), array('id'=>'posts_foot'));
-    echo "</table></br>";
+    $thread_info['title'] = $thread['title'];
+    $thread_info['pages'] = $this->MakePageLinks($page, $posts_per_page, $thread['posts'], "thread.php?tid=$tid");
+    $thread_info['posts'] = $formatted_posts;
+    return $thread_info;
+  }
+
+  // Format post from database to display format
+  function FormatPost($post)
+  {
+    $formatted_post = array();
+    $formatted_post['pid'] = $post['pid'];
+    $formatted_post['uid'] = $post['uid'];
+    $formatted_post['content'] = prepContent($post['content'], $post['tid']);
+    $formatted_post['controls'] = $this->GetPostControls($post);
+    $formatted_post['time'] = $this->GetPostTime($post);
+    $formatted_post['karma'] = $this->GetPostKarma($post);
+
+    return $formatted_post;
   }
 
   // Make page links. Format: << < p-2 p-1 page p+1 p+2 > >>
@@ -265,91 +200,74 @@ class Forum
    *                             *
   \*******************************/
 
-  // Display a single post.
-  function DisplayPost($session_id, $post)
+  // Post karma
+  function GetPostKarma($post)
   {
-    // Generate profile.
-    $user_info = $this->GetCachedUser($post['uid']);
-    $user_profile = $this->GenerateUserProfile($user_info);
-
-    // List karma providers of post.
     $post_karma = $this->db->GetPostKarma($post['pid']);
-    $karma_stats = "";
+    $karma_info = array('plus_karma'=>'', 'minus_karma'=>'');
     $plus_names = array();
     $minus_names = array();
 
+    // For all the karma applied to the post, find the user and organize into postive and
+    // negative karma.
     foreach ($post_karma as $karma)
-    {
-      $user_info = $this->GetCachedUser($karma['uid']);
-      if ($karma['type'] === 'plus')
-        array_push($plus_names, makeLink("user.php?uid={$user_info['uid']}", $user_info['name']));
-      else
-        array_push($minus_names, makeLink("user.php?uid={$user_info['uid']}", $user_info['name']));
-    }
+      {
+        $user_info = $this->GetCachedUser($karma['uid']);
+        if ($karma['type'] === 'plus')
+          array_push($plus_names, makeLink("user.php?uid={$user_info['uid']}", $user_info['name']));
+        else
+          array_push($minus_names, makeLink("user.php?uid={$user_info['uid']}", $user_info['name']));
+      }
 
-    if (count($plus_names) > 0)
-    {
-      $karma_stats .= Karma::PLUSact . " by: " . implode(", ", $plus_names);
-      if (count($minus_names) > 0)
-        $karma_stats .= "</br>";
-    }
-    if (count($minus_names) > 0)
-      $karma_stats .= Karma::MINUSact . " by: " . implode(", ", $minus_names);
-    $karma_table = table( tableRow( tableCol($karma_stats, array('id'=>"karma_stats{$post['pid']}")) ),
-                          array('class'=>'karma_table noshow'));
-
-    // Create content table.
-    $content = HTMLTag("div", prepContent($post['content'], $post['tid']), array("class"=>"content"));
-    $content_table = table( $this->GeneratePostHeader($session_id, $post)
-                            . tableRow( tableCol($content, array('colspan'=>'3', 'class'=>'content',
-                                                                 'id'=>"post{$post['pid']}")) )
-                            . tableRow( tableCol($karma_table, array('colspan'=>'3')) )
-                            . $this->GeneratePostFooter($session_id, $post)
-                            ,array('class'=>'content_table noshow')
-                            );
-    echo tableRow( tableCol($user_profile, array('class'=>'profile')) . tableCol($content_table, array('class'=>'content_col')) );
-    echo "\n";
+    // Assemble positive and negative karma lists.
+    if (0 < count($plus_names))
+      {
+        $karma_info['plus_karma'] = Karma::PLUSact . " by:" . implode(", ", $plus_names);
+      }
+    if (0 < count($minus_names))
+      {
+        $karma_info['minus_karma'] = Karma::MINUSact . " by:" . implode(", ", $plus_names);
+      }
+    return $karma_info;
   }
 
-  // Sub-table header for each post.
-  function GeneratePostHeader($session_id, $post)
+  // Post times
+  function GetPostTime($post)
   {
-    $post_header = tableRow( tableCol("", array('class'=>'content_left'))
-                             . tableCol("", array('class'=>'content_center'))
-                             . tableCol("", array('class'=>'content_right'))
-                             );
-    return $post_header;
-  }
-
-  // Sub-table footer for each post.
-  function GeneratePostFooter($session_id, $post)
-  {
-    // Post edit time.
+    // Post times.
     $edit_time = "";
-    if (isset($post['edit']))
-      $edit_time = fontsize("</br>edited " . GetTime(TIME_FULL, $post['edit']), 1);
+    if (isset($post['edit']) && $post['edit'] != 0)
+      {
+        $edit_time = "edited " . GetTime(TIME_FULL, $post['edit']);
+      }
+    // Edit time needs an id, since it can change dynamically.
     $edit_time = HTMLTag("label", $edit_time, array('id'=>"edittime{$post['pid']}"));
+    $post_time = "posted " . GetTime(TIME_FULL, $post['time']);
 
-    // Post time.
-    $post_time = fontsize("posted " . GetTime(TIME_FULL, $post['time']), 1);
+    return $edit_time . "</br>" . $post_time;
+  }
+
+  // Post action controls
+  function GetPostControls($post)
+  {
+    $session_id = $this->session->GetUID();
 
     // Allow users to edit their own posts.
     $post_controls = "";
     if ($session_id == $post['uid'])
-      $post_controls .= makeButton("edit", "editPost({$post['pid']}, \"edit_edit\")");
+      {
+        $post_controls .= makeButton("edit", "editPost({$post['pid']}, \"edit_edit\")");
+      }
+
     // If user hasn't modified karma of this post yet, display karma buttons.
     else if ($this->db->PostKarmaChangeAllowed($post['pid'], $session_id))
-      $post_controls .= makeButton(Karma::PLUS, "karma(\"karma_plus\", {$post['pid']}, {$post['uid']})")
-        . " " . makeButton(Karma::MINUS, "karma(\"karma_minus\", {$post['pid']}, {$post['uid']})");
-    $post_controls .= " " . makeButton("quote", "quotePost({$post['pid']})");
+      {
+        $post_controls .= makeButton(Karma::PLUS, "karma(\"karma_plus\", {$post['pid']}, {$post['uid']})")
+          . " " . makeButton(Karma::MINUS, "karma(\"karma_minus\", {$post['pid']}, {$post['uid']})");
+      }
 
-    $post_footer = tableRow ( tableCol($post_time . $edit_time, array('class'=>'content_footer_left'))
-                              . tableCol("")
-                              . tableCol($post_controls, array('id'=>"post{$post['pid']}controls",
-                                                               'class'=>'content_footer_right'))
-                              , array('class'=>"test")
-                              );
-    return $post_footer;
+    $post_controls .= " " . makeButton("quote", "quotePost({$post['pid']})");
+    return $post_controls;
   }
 
   // Get link to a particular post.
@@ -366,24 +284,20 @@ class Forum
    *      Sidebar Functions      *
    *                             *
   \*******************************/
-  function DisplaySidebar($session = "")
-  {
-    /* If user is logged in, display some things. */
-    $welcome_col = "";
-    $logout_col = "";
-    $welcome = "welcome";
-    if ($session->CheckLogin())
-      $welcome .= " {$this->db->GetUserName($session->GetUID())}!";
-    else
-      $welcome .= "!";
 
+  // Get sidebar contents
+  function GetSidebarInfo()
+  {
+    $sidebar_info = array();
+
+    // Get lists of active users currently and in past day
     $this->cur_users = $this->GetOnlineUsers(15);
     $this->day_users = $this->GetOnlineUsers(1440);
     $cur_user_links = array();
     foreach ($this->cur_users as $user)
       array_push ($cur_user_links, makeUserLink($user['uid'], $user['name']));
-    $online_usr_str = "online users</br>";
-    $online_usr_str .= (count($cur_user_links) == 0)? "none" : implode(", ", $cur_user_links);
+    $cur_usr_str = "online users</br>";
+    $cur_usr_str .= (count($cur_user_links) == 0)? "none" : implode(", ", $cur_user_links);
 
     $day_user_links = array();
     foreach ($this->day_users as $user)
@@ -391,48 +305,34 @@ class Forum
     $day_usr_str = "users in past day</br>";
     $day_usr_str .= (count($day_user_links) == 0)? "none" : implode(", ", $day_user_links);
 
-    $sidebar_welcome = tableRow(HTMLTag("th", $welcome));
-    $sidebar_bookmarks = tableRow(tableCol("bookmarks"));
-    $sidebar_pm = tableRow(tableCol("private messages"));
-    $sidebar_chat = tableRow(tableCol($this->DisplayChat($session, FALSE)));
-    $sidebar_cur_usr = tableRow(tableCol($online_usr_str));
-    $sidebar_day_usr = tableRow(tableCol($day_usr_str));
-    $sidebar_logout = tableRow(tableCol(makeLink('action.php?action=logout', 'logout')));
-    $sidebar_version = tableRow(tableCol("LOLBros beta " . makeLink("changelog.txt", "v{$this->version}")));
+    $sidebar_info['welcome'] =
+      "Welcome</br>"
+      . makeUserLink($this->session->GetUID(), $this->session->GetUserName())
+      . "!";
+    $sidebar_info['chat'] = $this->GenerateChat();
+    $sidebar_info['board'] = makeLink("threads.php", "board");
+    $sidebar_info['bookmark'] = makeLink("threads.php", "bookmarks");
+    $sidebar_info['privmsg'] = makeLink("threads.php", "private messages");
+    $sidebar_info['cur_users'] = $cur_usr_str;
+    $sidebar_info['day_users'] = $day_usr_str;
+    $sidebar_info['logout'] = makeLink("action.php?action=logout", "logout");
+    $sidebar_info['version'] = "LOLBros beta " . makeLink("changelog.txt", "v" . VERSION);
 
-    $sidebar_table = table($sidebar_welcome
-                           . $sidebar_bookmarks
-                           . $sidebar_pm
-                           . $sidebar_chat
-                           . $sidebar_cur_usr
-                           . $sidebar_day_usr
-                           . $sidebar_logout
-                           . $sidebar_version,
-                            array('id'=>'sidebar_table'));
-
-    echo HTMLTag("div",
-                 $sidebar_table,
-                 array('id'=>'sidebar'));
+    return $sidebar_info;
   }
 
-  function DisplayChat($session, $show = FALSE)
+  // Generate chat
+  function GenerateChat()
   {
-    $chat_msgs = $session->GetChatText();
-    $chat = "chat</br>";
-    $chat .= table( tableRow( tableCol(HTMLTag("div", $chat_msgs,
-                                               array('id'=>'chat_msgs_div')),
-                                       array('id'=>'chat_msgs'))),
-                    array('id'=>'chat_area'));
-
-    $chat .= HTMLTag("form",
-                     HTMLTag("textarea", "", array('rows'=>'2', 'name'=>'chat_post', 'id'=>'chat_post',  'onkeyup'=>'sendKey(event)'))
-                     . "</br>"
-                     . HTMLTag("input", "", array('type'=>'button', 'value'=>'send', 'class'=>'button', 'onClick'=>'sendChat(this.form)')),
-                     array('name'=>'chat_input', 'id'=>'chat_input'));
-    if ($show)
-      echo $chat;
-    else
-      return $chat;
+    $chat = "chat</br>"
+      . HTMLTag("div", $this->session->GetChatText(), array('id'=>'sidebar_chat_msgs'))
+      . HTMLTag("form",
+                HTMLTag("textarea", "",
+                        array('rows'=>'2', 'name'=>'chat_post',
+                              'id'=>'chat_post',  'onkeyup'=>'sendKey(event)'))
+                ,
+                array('name'=>'chat_input', 'id'=>'chat_input'));
+    return $chat;
   }
 
   /*******************************\
@@ -440,6 +340,14 @@ class Forum
    *        User Functions       *
    *                             *
   \*******************************/
+
+  // Get user information
+  function GetUserInfo($uid)
+  {
+    return $this->db->GetUserProfile($uid,
+                                     FALSE,  // only get basic info
+                                     FALSE); // don't increment profile view count
+  }
 
   /* Display user profile page. */
   function DisplayUserPage($uid, $session_user)
@@ -473,7 +381,7 @@ class Forum
     $user_profile = "<table id='subprofile' class='noshow'>"
       . tableRow( tableCol(makeUserLink($user_info['uid'], $user_info['name']) . "</br>"
                            . fontSize($user_info['posts'], 2) . fontSize(" posts", 1) ) )
-      . tableRow( tableCol(showImg($user_info['avatar'], "profile_img", "profile_img") ) )
+      . tableRow( tableCol(showImg($user_info['avatar'], array('class'=>'profile_img', 'id'=>'profile_img') ) ) )
       . tableRow( tableCol( fontSize($user_info['plus'], 2) . fontSize(" " . Karma::PLUSpl, 1) . "</br>"
                             . fontSize($user_info['minus'], 2) . fontSize(" " . Karma::MINUSpl, 1) ) )
       . "</table>";

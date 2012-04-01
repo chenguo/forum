@@ -85,7 +85,8 @@ class Session
   // Get saved chat text
   function GetChatText()
   {
-    return $_SESSION['chat'];
+    //return $_SESSION['chat'];
+    return "Chat currently disabled";
   }
 
   /* Log user out. */

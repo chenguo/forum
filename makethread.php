@@ -27,7 +27,7 @@ if (isset($_POST['title']) && strlen($_POST['title']) > 0
 
 <html>
 <head>
-<?php $forum->DisplayTitle(); ?>
+<?php $display->DisplayTitle(); ?>
 <script src='include/jsfunc.js'></script>
 <script type='text/javascript'>
 window.addEventListener('DOMContentLoaded', loadAction, false);
@@ -36,11 +36,10 @@ window.addEventListener('DOMContentLoaded', loadAction, false);
 
 <body>
 <?php
-$forum->DisplayBanner();
-$forum->DisplaySidebar($session);
+$display->DisplayBanner();
+$display->DisplaySidebar();
 ?>
 
-<a href="threads.php">Back to Board</a></br></br>
 <form class='newthr_form' name='post' action='makethread.php' method='post'>
 <input class='newthr_title' type='text' name='title' maxlength='64'></br>
 <textarea class='newthr_body' rows='10' cols='80' name='content'></textarea></br>

@@ -23,13 +23,13 @@ function makeUserLink($uid, $name)
 }
 
 // Display HTML image.
-function showImg($link, $class="", $id="")
+function showImg($link, $options_array = array())
 {
-  if ($class != "")
-    $class = " class='$class'";
-  if ($id != "")
-    $id = " id='$id'";
-  return "<img src='$link'$class$id>";
+  $options = "";
+  if (count($options_array) > 0)
+    foreach ($options_array as $optkey => $optval)
+      $options .= " $optkey='$optval'";
+  return "<img src='$link'$options>";
 }
 
 // Make HTML tag.
@@ -79,7 +79,7 @@ function makeButton($text, $onclick, $id="")
 function prepContent($content, $tid)
 {
   // [img] check.
-  $content = preg_replace("/\[img\](.*?)\[\/img\]/i","<img src='$1' alt='[IMAGE]'>", $content);
+  $content = preg_replace("/\[img\](.*?)\[\/img\]/i","<div class='img_container'><img src='$1' alt='[IMAGE]'></div>", $content);
 
   // [youtube] check.
   $content = preg_replace("/\[youtube\].*?youtube.*?v\/([0-9a-zA-Z_-]*).*?\[\/youtube\]/i",
@@ -127,7 +127,7 @@ function prepContent($content, $tid)
   // [quote] check.
   while (preg_match ("/\[quote\](.*?)\[\/quote\]/", $content) > 0)
     $content = preg_replace("/\[quote\](.*?)\[\/quote\]/i",
-                            "<table class='quote'><tr><td>$1</td></tr></table>",
+                            "<div class='quote'>$1</div>",
                             $content, 1);
 
   while(preg_match ("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\]/", $content, $matches) > 0)
@@ -136,12 +136,12 @@ function prepContent($content, $tid)
       $page = GetPageCount($matches[3], DEFAULT_ITEMS_PER_PAGE);
       $link = makeLink("thread.php?tid=$tid&page=$page#post$quote_pid" , $matches[1] . " wrote:");
       $content = preg_replace("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\]/i",
-                            "<table class='quote'><tr><td><b>$link</b></br>$4</td></table>",
+                            "<div class='quote'><b>$link</b></br>$4</div>",
                               $content, 1);
                               }
   while(preg_match ("/\[quote author=([^\]]*)\](.*)\[\/quote\]/", $content) > 0)
     $content = preg_replace("/\[quote author=([^\]]*)\](.*?)\[\/quote\]/i",
-                            "<table class='quote'><tr><td><b>$1 wrote</b></br>$2</td></table>",
+                            "<div class='quote'><b>$1 wrote</b></br>$2</div>",
                             $content, 1);
 
   // [s|u|b|i] check.
