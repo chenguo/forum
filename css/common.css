@@ -123,7 +123,7 @@ th.thr_time { width:18% }
 .thr_flags { color:blue; font-weight:bold }
 
 /* For user profiles */
-div.user_prof { width:20%;  background:white; text-align:center; padding:0.5em; border:2px solid; border-radius:5px; border-color:grey; float:left; overflow-x:auto;}
+div.user_prof { width:19%;  margin-left:1%; background:white; text-align:center; border:2px solid; border-radius:5px; border-color:grey; float:left; overflow-x:auto;}
 div.user_prof_name { font-size:medium; }
 img.user_prof_avatar { max-width:80%; max-height:180px; margin-top:0.5em; margin-bottom:0.5em }
 div.user_prof_karma_val { display:inline; }
@@ -135,7 +135,8 @@ div.thread_title_bar {
     background:white;
     padding-top:0.5em;
     padding-bottom:0.5em;
-    width:80.5%;
+    width:79%;
+    margin-left:1%;
     font-weight:bold;
     border:2px solid;
     border-radius:5px;
@@ -143,9 +144,9 @@ div.thread_title_bar {
 }
 div.thread_title { font-size:medium; display:inline; margin-left:2% }
 div.thread_pages { float:right; margin-right:2%; }
-div.post { max-width:81%; margin-top:1em; }
+div.post { max-width:80%; margin-top:1em; }
 div.post_content {
-    width:76.5%;
+    width:77.5%;
     text-align:left;
     float:right;
     background:white;
