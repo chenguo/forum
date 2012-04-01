@@ -69,3 +69,4 @@ Ver     Date      Description
 0.50.1  04/01/12  Fix minor bug where "new" flag wasn't removed on user reading post.
 0.50.2  04/01/12  In profile, give user avatar vertical margin.
 0.50.3  04/01/12  In profile, make user name larger.
+0.50.4  04/01/12  Disable embedding HTML.

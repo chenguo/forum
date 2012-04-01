@@ -78,6 +78,10 @@ function makeButton($text, $onclick, $id="")
 // Parse text for forum display. This sets up img tags, emoticons, etc.
 function prepContent($content, $tid)
 {
+  // Disable HTML by replacing < and > with &#60 and &#62.
+  $content = preg_replace("/</", "&#60", $content);
+  $content = preg_replace("/>/", "&#62", $content);
+
   // [img] check.
   $content = preg_replace("/\[img\](.*?)\[\/img\]/i","<div class='img_container'><img src='$1' alt='[IMAGE]'></div>", $content);
 
