@@ -123,7 +123,7 @@ th.thr_time { width:18% }
 .thr_flags { color:blue; font-weight:bold }
 
 /* For user profiles */
-div.user_prof { width:19%;  margin-left:1%; background:white; text-align:center; border:2px solid; border-radius:5px; border-color:grey; float:left; overflow-x:auto;}
+div.user_prof { width:19%;  margin-left:1%; padding-top:0.5em; padding-bottom:0.5em; background:white; text-align:center; border:2px solid; border-radius:5px; border-color:grey; float:left; overflow-x:auto;}
 div.user_prof_name { font-size:medium; }
 img.user_prof_avatar { max-width:80%; max-height:180px; margin-top:0.5em; margin-bottom:0.5em }
 div.user_prof_karma_val { display:inline; }
