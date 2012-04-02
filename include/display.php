@@ -107,7 +107,7 @@ class Display
                  . "<input type='hidden' name='tid' value='$tid'>"
                  . "<input type='hidden' name='action' value='post'>"
                  . "<input type='submit' value='submit' class='button new_post_button'>"
-                 . "<input type='button' value='preview' class='button preview_post_button' onclick='previewNewPost({$this->session->GetUID()})'>"
+                 . "<input type='button' value='preview' class='button preview_post_button' onclick='previewNewPost({$this->session->GetUID()},$tid)'>"
                  ,
                  array('id'=>'new_post', 'name'=>'post', 'action'=>'action.php', 'method'=>'post',
                        'onsubmit'=>'button.disabled=true; return true;'));

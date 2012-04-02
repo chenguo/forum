@@ -39,11 +39,11 @@ if ($session->CheckLogin())
         exit();
       }
     // Preview new post
-    else if ($action === "new_post_preview" && isset($_POST['content']))
+    else if ($action === "new_post_preview" && isset($_POST['content']) && isset($_POST['tid']))
       {
         $post_info = array('pid'=>'0',
                            'uid'=>"$uid",
-                           'content'=>"{$_POST['content']}",
+                           'content'=>prepContent($_POST['content'], $_POST['tid']),
                            'controls'=>"",
                            'time'=>"",
                            'edit'=>"",

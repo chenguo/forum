@@ -69,7 +69,7 @@ function quotePost(pid)
 }
 
 // Preview new post.
-function previewNewPost(uid)
+function previewNewPost(uid, tid)
 {
   var req;
   if (window.XMLHttpRequest)
@@ -86,10 +86,7 @@ function previewNewPost(uid)
   var content = document.getElementById("newpost_form").value;
   req.open("POST", "action.php?", true);
   req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  //req.send("action=new_post_preview&uid="+uid+"&content=abc");
-  req.send("action=new_post_preview&uid="+uid+"&content="+encodeURIComponent(content));
-
-  //alert("done: content "+content);
+  req.send("action=new_post_preview&uid="+uid+"&tid="+tid+"&content="+encodeURIComponent(content));
 }
 
 // Apply karma to post.
