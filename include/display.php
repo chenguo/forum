@@ -39,6 +39,8 @@ class Display
     $class = ($sidebar)? 'banner' : 'banner_no_sidebar';
     echo HTMLTag("div", $this->title, array('class'=>"$class"));
     echo "\n";
+
+    echo "<audio autoplay='autoplay'><source src='buff.ogg' type='audio/ogg' /></audio>\n";
   }
 
   /* Display sidebar
@@ -81,11 +83,7 @@ class Display
     $thread_info = $this->forum->GetThreadInfo($tid, $posts_per_page, $page);
 
     // Header
-    echo HTMLTag("div",
-                 HTMLTag("div", $thread_info['title'], array('class'=>'thread_title'))
-                 . HTMLTag("div", $thread_info['pages'], array('class'=>'thread_pages'))
-                 ,
-                 array('class'=>'thread_title_bar'));
+    echo $this->GenerateThreadTitle($thread_info);
     echo "\n";
 
     // Individual posts
@@ -95,7 +93,13 @@ class Display
         echo "\n";
       }
 
+    // Footer
+    echo $this->GenerateThreadTitle($thread_info);
+    echo "\n";
+
     // Make post form
+    echo HTMLTag("div", "", array('id'=>'new_post_preview'));
+    echo "\n";
     echo HTMLTag("form",
                  // Form input
                  HTMLTag('textarea', '', array('class'=>'new_post', 'name'=>'content', 'id'=>'newpost_form'))
@@ -103,10 +107,22 @@ class Display
                  . "<input type='hidden' name='tid' value='$tid'>"
                  . "<input type='hidden' name='action' value='post'>"
                  . "<input type='submit' value='submit' class='button new_post_button'>"
+                 . "<input type='button' value='preview' class='button preview_post_button' onclick='previewNewPost({$this->session->GetUID()})'>"
                  ,
                  array('id'=>'new_post', 'name'=>'post', 'action'=>'action.php', 'method'=>'post',
                        'onsubmit'=>'button.disabled=true; return true;'));
     echo "\n";
+  }
+
+  // Generate thread titlebar
+  function GenerateThreadTitle($thread_info)
+  {
+    return HTMLTag("div",
+                   HTMLTag("div", $thread_info['title'], array('class'=>'thread_title'))
+                   . HTMLTag("div", $thread_info['board'], array('class'=>'thread_board'))
+                   . HTMLTag("div", $thread_info['pages'], array('class'=>'thread_pages'))
+                   ,
+                   array('class'=>'thread_title_bar'));
   }
 
   /* Display a post
@@ -115,6 +131,7 @@ class Display
      uid:      user id of poster
      content:  content of the post
      controls: post action controls
+     karma:    post karma information
      time:     post time
      edit:     edit time
   */
@@ -166,6 +183,32 @@ class Display
   function GenerateUserProfile($uid)
   {
     $user_info = $this->forum->GetCachedUser($uid);
+    $name = "";
+    $index = rand(0,11);
+    if ($index == 0)
+        $name = "Pikachu";
+    else if ($index == 1)
+        $name = "Bulbasaur";
+    else if ($index == 2)
+        $name ="Squirtle";
+    else if ($index == 3)
+        $name = "Charmander";
+    else if ($index == 4)
+        $name = "Togepi";
+    else if ($index == 5)
+        $name = "Lapras";
+    else if ($index == 6)
+        $name = "Gengar";
+    else if ($index == 7)
+        $name = "Weedle";
+    else if ($index == 8)
+        $name = "Pidgey";
+    else if ($index == 9)
+        $name = "Magikarp";
+    else if ($index == 10)
+        $name = "Nutsack";
+
+    $user_info['name'] = $name;
     $user_profile = HTMLTag("div",
                             // User name
                             HTMLTag("div", makeUserLink($user_info['uid'], $user_info['name']), array('class'=>'user_prof_name'))

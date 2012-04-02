@@ -123,7 +123,7 @@ th.thr_time { width:18% }
 .thr_flags { color:blue; font-weight:bold }
 
 /* For user profiles */
-div.user_prof { width:19%;  margin-left:1%; padding-top:0.5em; padding-bottom:0.5em; background:white; text-align:center; border:2px solid; border-radius:5px; border-color:grey; float:left; overflow-x:auto;}
+div.user_prof { width:19%; padding-top:0.5em; padding-bottom:0.5em; background:white; text-align:center; border:2px solid; border-radius:5px; border-color:grey; overflow-x:auto; float:left;}
 div.user_prof_name { font-size:medium; }
 img.user_prof_avatar { max-width:80%; max-height:180px; margin-top:0.5em; margin-bottom:0.5em }
 div.user_prof_karma_val { display:inline; }
@@ -137,16 +137,19 @@ div.thread_title_bar {
     padding-bottom:0.5em;
     width:79%;
     margin-left:1%;
+    margin-bottom:1em;
     font-weight:bold;
     border:2px solid;
     border-radius:5px;
     border-color:grey;
 }
-div.thread_title { font-size:medium; display:inline; margin-left:2% }
-div.thread_pages { float:right; margin-right:2%; }
-div.post { max-width:80%; margin-top:1em; }
+div.post { width:79%; margin-bottom:1em; margin-left:1%; }
+div.thread_title { font-size:medium; float:right; margin-right:2%; }
+div.thread_board { display:inline; margin-left:2%; }
+div.thread_pages { display:inline; margin-left:3%; }
+
 div.post_content {
-    width:77.5%;
+    width:79%;
     text-align:left;
     float:right;
     background:white;
@@ -158,7 +161,8 @@ div.post_text { overflow-x:auto; padding:0.5em; }
 div.post_karma { padding:0.5em; font-size:x-small; }
 div.post_time { float:left; padding:0.5em; padding-bottom:1em; font-size:x-small; }
 div.post_controls{ float:right; padding:0.5em; }
-form#new_post { margin-top:2%; width:80%; margin-right:20%; }
+form#new_post { margin-top:2%; width:80%; margin-right:20%; margin-bottom:5%;}
+form#new_post .button {margin: 0.3em }
 textarea.new_post {
     width:80%;
     margin-left:10%;

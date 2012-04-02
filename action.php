@@ -38,8 +38,21 @@ if ($session->CheckLogin())
         header("LOCATION: thread.php?tid={$_POST['tid']}&page=$last_page");
         exit();
       }
-
-    if ($action === "chatGet" && isset($_REQUEST['seq']))
+    // Preview new post
+    else if ($action === "new_post_preview" && isset($_POST['content']))
+      {
+        $post_info = array('pid'=>'0',
+                           'uid'=>"$uid",
+                           'content'=>"{$_POST['content']}",
+                           'controls'=>"",
+                           'time'=>"",
+                           'edit'=>"",
+                           'karma'=>array('plus_karma'=>'', 'minus_karma'=>''));
+        echo $display->GeneratePost($post_info);
+        exit();
+      }
+    // Get chat messages
+    else if ($action === "chatGet" && isset($_REQUEST['seq']))
       {
         $seq = $_REQUEST['seq'];
         $msg_info = $db->GetChatText($seq);
@@ -62,7 +75,8 @@ if ($session->CheckLogin())
         echo $text_seq . $text_str;
         exit();
       }
-    if ($action === "chatSend" && isset($_REQUEST['text']))
+    // Send chat message
+    else if ($action === "chatSend" && isset($_REQUEST['text']))
       {
         $new_seq = $db->SendChat($uid, $_REQUEST['text']);
         //echo "Chat send new req: $new_seq\n";
@@ -105,6 +119,7 @@ if ($session->CheckLogin())
         $author = $db->GetUserName($post['uid'], FALSE);
         echo "[quote author=$author pid={$post['pid']} tpid={$post['tpid']}]{$post['content']}[/quote]\n";
       }
+    // Editing post
     else if (($action === "edit_edit" || $action === "edit_preview" || $action === "edit_cancel"
               || $action === "edit_submit")
              && ($post_uid == $uid))
@@ -119,7 +134,7 @@ if ($session->CheckLogin())
           {
             echo prepContent($post['content'], $tid);
           }
-        else if ($action === "edit_submit")
+        else if ($action === "edit_submit" && isset($_POST['content']))
           {
             $post = $db->UpdatePost($_POST['content'], $_POST['pid']);
             $edit_time = fontsize("edited " . GetTime(TIME_FULL, $post['edit']), 1);

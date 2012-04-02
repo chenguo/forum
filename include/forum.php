@@ -153,6 +153,7 @@ class Forum
 
 
     $thread_info['title'] = $thread['title'];
+    $thread_info['board'] = makeLink("threads.php", "board");
     $thread_info['pages'] = $this->MakePageLinks($page, $posts_per_page, $thread['posts'], "thread.php?tid=$tid");
     $thread_info['posts'] = $formatted_posts;
     return $thread_info;

@@ -1,3 +1,4 @@
+// Edit post; includes functionality to submit, preview, and cancel edit.
 function editPost(pid, action)
 {
   var req;
@@ -19,7 +20,6 @@ function editPost(pid, action)
           document.getElementById("post"+pid+"_text").innerHTML=req.responseText;
       }
   }
-  //var post = document.getElementById("post"+pid);
   var post_controls = document.getElementById("post"+pid+"_controls");
 
   // Update button display.
@@ -44,6 +44,7 @@ function editPost(pid, action)
     }
 }
 
+// Generates quoted content for making new post.
 function quotePost(pid)
 {
   //alert("test");
@@ -58,6 +59,7 @@ function quotePost(pid)
           var newpost = document.getElementById("newpost_form");
           if (req.responseText != 0)
             newpost.value = newpost.value + req.responseText;
+          newpost.focus();
         }
     }
   //alert("action quote pid " + pid);
@@ -66,6 +68,31 @@ function quotePost(pid)
   req.send("action=quote&pid="+pid);
 }
 
+// Preview new post.
+function previewNewPost(uid)
+{
+  var req;
+  if (window.XMLHttpRequest)
+    req = new XMLHttpRequest();
+  req.onreadystatechange=function()
+    {
+      if (req.readyState == 4 && req.status == 200)
+        {
+          var preview = document.getElementById("new_post_preview");
+          preview.innerHTML = req.responseText;
+        }
+    }
+  // Get text of new post
+  var content = document.getElementById("newpost_form").value;
+  req.open("POST", "action.php?", true);
+  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  //req.send("action=new_post_preview&uid="+uid+"&content=abc");
+  req.send("action=new_post_preview&uid="+uid+"&content="+encodeURIComponent(content));
+
+  //alert("done: content "+content);
+}
+
+// Apply karma to post.
 function karma(type, pid, puid)
 {
   var req;
