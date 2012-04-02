@@ -64,68 +64,6 @@ function editPost(pid, action, title)
   });
 }
 
-/*
-function editPost(pid, action, title)
-{
-  var req;
-  if (window.XMLHttpRequest)
-    req = new XMLHttpRequest();
-  req.onreadystatechange=function()
-  {
-    if (req.readyState == 4 && req.status == 200)
-      {
-        //alert(req.responseText);
-        var pattern = /^\[edit:([^\]]*)\](.*)/;
-        var fields = req.responseText.match(pattern);
-        if (fields)
-          {
-            document.getElementById("edittime"+pid).innerHTML="</br>"+fields[1];
-            document.getElementById("post"+pid+"_text").innerHTML=fields[2];
-          }
-        else if (req.responseText != 0)
-          document.getElementById("post"+pid+"_text").innerHTML=req.responseText;
-      }
-  }
-  var post_controls = document.getElementById("post"+pid+"_controls");
-
-  // Update button display.
-  if (action == "edit_edit")
-    post_controls.innerHTML = "";
-  else if (action == "edit_cancel" || action == "edit_submit")
-    post_controls.innerHTML =
-      "<input type='button' value='quote' class='button' onclick='quotePost("+pid+")'>"
-      + " <input type='button' value='edit' class='button' onclick='editPost("+pid+", \"edit_edit\")'>";
-
-  if (action == "edit_edit" || action == "edit_cancel")
-    {
-      req.open("GET", "action.php?pid="+pid+"&action="+action+"&t="+Math.random(), true);
-      req.send();
-    }
-  else // preview
-    {
-      var content = document.getElementById("edit"+pid).value;
-      req.open("POST", "action.php?", true);
-      req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-      req.send("pid="+pid+"&action="+action+"&content="+encodeURIComponent(content));
-    }
-
-  // If title needs to be changed:
-  if (title == 1)
-    {
-      var new_title = document.getElementById("edit_title").value;
-
-      if (action == "edit_preview")
-        {
-          var titles = getDivsByClass("thread_title");
-          for (var i = 0; i < titles.length; i++)
-            {
-              titles[i].innerHTML = new_title;
-            }
-          document.getElementById("edit_title").value = new_title;
-        }
-    }
-}*/
-
 // Generates quoted content for making new post.
 function quotePost(pid)
 {
@@ -163,9 +101,6 @@ function previewNewPost(tid)
 function karma(type, pid, puid)
 {
   var data = "action="+type + "&pid="+pid + "&puid="+puid+"&t="+Math.random();
-
-  var json_data = {"action":type, "pid":pid, "puid":puid, "t":Math.random()};
-  alert(JSON.stringify(json_data));
   var func = function(result) {
     if (result == 0)
       alert("action failed");
