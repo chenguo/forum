@@ -77,4 +77,4 @@ Ver     Date      Description
 0.51.2  04/01/12  Fixed background.
 0.52    04/01/12  Sidebar only visible after mouseover hover zone.
 0.52.1  04/01/12  CSS fixes for makethread/user profile pages. Sidebar not disappearing in Chrome fixed.
-
+0.52.2  04/01/12  Quote elements autoscroll.
