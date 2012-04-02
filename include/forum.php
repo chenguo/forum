@@ -261,17 +261,17 @@ class Forum
     $post_controls = "";
     if ($session_id == $post['uid'])
       {
-        $post_controls .= makeButton("edit", "editPost({$post['pid']}, \"edit_edit\")");
+        $post_controls .= makeButton("edit", array('onclick'=>"editPost({$post['pid']}, \"edit_edit\")"));
       }
 
     // If user hasn't modified karma of this post yet, display karma buttons.
     else if ($this->db->PostKarmaChangeAllowed($post['pid'], $session_id))
       {
-        $post_controls .= makeButton(Karma::PLUS, "karma(\"karma_plus\", {$post['pid']}, {$post['uid']})")
-          . " " . makeButton(Karma::MINUS, "karma(\"karma_minus\", {$post['pid']}, {$post['uid']})");
+        $post_controls .= makeButton(Karma::PLUS, array('onclick'=>"karma(\"karma_plus\", {$post['pid']}, {$post['uid']})"))
+          . " " . makeButton(Karma::MINUS, array('onclick'=>"karma(\"karma_minus\", {$post['pid']}, {$post['uid']})"));
       }
 
-    $post_controls .= " " . makeButton("quote", "quotePost({$post['pid']})");
+    $post_controls .= " " . makeButton("quote", array('onclick'=>"quotePost({$post['pid']})"));
     return $post_controls;
   }
 
@@ -373,7 +373,7 @@ class Forum
     if ($uid == $session_user)
       {
         echo "<div id='profile_control'>";
-        echo makeButton("edit profile", "editProfile(\"edit\")");
+        echo makeButton("edit profile", array('onclick'=>"editProfile(\"edit\")"));
         echo "</div>";
       }
 

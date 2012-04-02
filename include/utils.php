@@ -68,11 +68,13 @@ function fontSize($content, $fontsize)
 }
 
 // Make a button.
-function makeButton($text, $onclick, $id="")
+function makeButton($text, $options_array = array())
 {
-  if ($id != "")
-    $id = "id='$id'";
-  return "<input type='button' value='$text' class='button' $id onclick='$onclick'>";
+  $options = "";
+  if (count($options_array) > 0)
+    foreach ($options_array as $optkey => $optval)
+      $options .= " $optkey='$optval'";
+  return "<input type='button' class='button' value='$text'$options>";
 }
 
 // Parse text for forum display. This sets up img tags, emoticons, etc.

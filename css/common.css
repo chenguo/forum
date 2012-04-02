@@ -8,11 +8,9 @@
     font-weight: normal;
     font-style: normal;
 }
-
 a:link{color:black;}
 a:visited{color:black;}
 a:hover{font-weight:bold;}
-
 body{
     background-image:url(mario.jpg);
     background-repeat:no-repeat;
@@ -21,15 +19,12 @@ body{
     font-family:verdana;
     margin-left:4%;
     margin-right:4%;
+    text-align:center;
 }
-
 table, td, th, tr{
     border-collapse:collapse;
     border:1px solid #AAA;
     padding:0.3em;
-    width:90%;
-    margin-left:5%;
-    margin-right:5%;
     table-layout:fixed;
     background:#ffffff;
     border-radius:.5em;
@@ -39,25 +34,18 @@ table, td, th, tr{
     font-family:sans-serif;
     overflow:auto;
 }
-
 div.banner {
     font-family:'FFFTusjBold';
-    text-align:center;
     font-size:80px;
     text-shadow: 0px 15px 11px #363536;
 }
-
 table.thread_header, table#threads, table.posts {
-    text-align:center;
     width:100%;
-    margin-left:0%;
 }
-
 table.noshow, table.noshow td, table.noshow tr{
     border-style:none;
     border:none;
 }
-
 div.quote{
     width:96%;
     margin-left:0%;
@@ -87,7 +75,6 @@ textarea.edit_text {
     font-size:small;
     font-weight:bold;
     border-radius:0.4em;
-    text-align:center;
 }
 .button:hover { cursor:pointer; }
 .clear { clear:both; }
@@ -107,9 +94,18 @@ th.thr_time { width:18% }
 .thr_flags { color:blue; font-weight:bold }
 
 /* For user profiles */
-div.user_prof { width:19%; padding-top:0.5em; padding-bottom:0.5em; background:white; text-align:center; border:2px solid; border-radius:5px; border-color:grey; overflow-x:auto; float:left;}
+div.user_prof {
+    width:19%;
+    padding-top:0.5em;
+    padding-bottom:0.5em;
+    background:white;
+    border:2px solid grey;
+    border-radius:5px;
+    overflow-x:auto;
+    float:left;
+}
 div.user_prof_name { font-size:medium; }
-img.user_prof_avatar { max-width:80%; max-height:180px; margin-top:0.5em; margin-bottom:0.5em }
+img.user_prof_avatar { max-width:80%; max-height:150px; margin-top:0.5em; margin-bottom:0.5em }
 div.user_prof_karma_val { display:inline; }
 div.user_prof_karma_desc { font-size: x-small; display:inline; }
 
@@ -120,7 +116,6 @@ div.thread_title_bar {
     padding-top:0.5em;
     padding-bottom:0.5em;
     width:100% - 4px;
-    margin-left:0%;
     margin-bottom:1em;
     font-weight:bold;
     border:2px solid grey;
@@ -135,16 +130,15 @@ div.post_content {
     text-align:left;
     float:right;
     background:white;
-    border:2px solid;
+    border:2px solid grey;
     border-radius:5px;
-    border-color:grey;
 }
 div.post_text { overflow-x:auto; padding:0.5em; }
-div.post_karma { padding:0.5em; font-size:x-small; }
+div.post_karma { padding-left:0.5em; font-size:x-small; }
 div.post_time { float:left; padding:0.5em; padding-bottom:1em; font-size:x-small; }
-div.post_controls{ float:right; padding:0.5em; }
+div.post_controls{ float:right; padding:0.5em; padding-top:1em; }
 form#new_post { margin-top:2%; width:80%; margin-right:20%; margin-bottom:5%;}
-form#new_post .button {margin: 0.3em }
+form#new_post .button { margin:0.3em; }
 textarea.new_post {
     width:80%;
     margin-left:10%;

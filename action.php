@@ -158,9 +158,9 @@ if ($session->CheckLogin())
               . "<textarea class='edit_text' rows='10' cols='80' name='content' id='edit$pid'>$content</textarea>"
               . "</br></form>"
               . "<center>"
-              . makeButton("submit", "editPost($pid, \"edit_submit\")")
-              . " " . makeButton("preview", "editPost($pid, \"edit_preview\")")
-              . " " . makeButton("cancel", "editPost($pid, \"edit_cancel\")")
+              . makeButton("submit", array('onclick'=>"editPost($pid, \"edit_submit\")"))
+              . " " . makeButton("preview", array('onclick'=>"editPost($pid, \"edit_preview\")"))
+              . " " . makeButton("cancel", array('onclick'=>"editPost($pid, \"edit_cancel\")"))
               . "</center>";
           }
       }
