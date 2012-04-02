@@ -75,3 +75,4 @@ Ver     Date      Description
 0.51    04/01/12  Allow previewing of new posts; add title bar to bottom of threads with link to board.
 0.51.1  04/01/12  Format post content for previews.
 0.51.2  04/01/12  Fixed background.
+0.52    04/01/12  Sidebar only visible after mouseover hover zone.

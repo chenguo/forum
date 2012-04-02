@@ -34,10 +34,9 @@ class Display
   }
 
   // Display site banner
-  function DisplayBanner($sidebar = TRUE)
+  function DisplayBanner()
   {
-    $class = ($sidebar)? 'banner' : 'banner_no_sidebar';
-    echo HTMLTag("div", $this->title, array('class'=>"$class"));
+    echo HTMLTag("div", $this->title, array('class'=>"banner"));
     echo "\n";
 
     echo "<audio autoplay='autoplay'><source src='buff.ogg' type='audio/ogg' /></audio>\n";
@@ -51,6 +50,13 @@ class Display
   {
     $sidebar_info = $this->forum->GetSidebarInfo();
 
+    // Hover area to trigger sidebar
+    echo HTMLTag("div",
+                 HTMLTag("div", "sidebar", array('class'=>'sidebar_trigger_text'))
+                 ,
+                 array('class'=>'sidebar_trigger', 'onmouseover'=>'showSidebar()', 'id'=>'sidebar_trigger'));
+
+    // Actual sidebar
     echo HTMLTag("div",
                  HTMLTag("div", $sidebar_info['welcome'], array('class'=>'sidebar_item', 'id'=>'sidebar_welcome'))
                  . HTMLTag("div", $sidebar_info['chat'], array('class'=>'sidebar_item', 'id'=>'sidebar_chat'))
@@ -62,7 +68,7 @@ class Display
                  . HTMLTag("div", $sidebar_info['logout'], array('class'=>'sidebar_item'))
                  . HTMLTag("div", $sidebar_info['version'], array('class'=>'sidebar_item', 'id'=>'sidebar_version'))
                  ,
-                 array('class'=>'sidebar'));
+                 array('class'=>'sidebar', 'id'=>'sidebar', 'onmouseleave'=>'hideSidebar()'));
     echo "\n";
   }
 

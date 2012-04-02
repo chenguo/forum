@@ -32,7 +32,7 @@ input.form{
 </head>
 
 <body>
-<?php $display->DisplayBanner(FALSE /* no sidebar */) ?>
+<?php $display->DisplayBanner() ?>
 <div id='common'>
 <form class='login' name='login' action='index.php' method='post'>
 <table id='login'><tr>

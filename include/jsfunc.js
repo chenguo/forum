@@ -1,3 +1,16 @@
+// Display sidebar when mouse is hovering over trigger region
+function showSidebar()
+{
+  document.getElementById("sidebar").style.visibility = "visible";
+  document.getElementById("sidebar_trigger").style.visibility = "hidden";
+}
+// Hide sidebar when mouse leavse it
+function hideSidebar()
+{
+  document.getElementById("sidebar").style.visibility = "hidden";
+  document.getElementById("sidebar_trigger").style.visibility = "visible";
+}
+
 // Edit post; includes functionality to submit, preview, and cancel edit.
 function editPost(pid, action)
 {

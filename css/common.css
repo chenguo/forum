@@ -19,6 +19,8 @@ body{
     background-attachment:fixed;
     font-size:small;
     font-family:verdana;
+    margin-left:4%;
+    margin-right:4%;
 }
 
 table, td, th, tr{
@@ -43,37 +45,12 @@ div.banner {
     text-align:center;
     font-size:80px;
     text-shadow: 0px 15px 11px #363536;
-    width:80%;
-}
-div.banner_no_sidebar {
-    font-family:'FFFTusjBold';
-    text-align:center;
-    font-size:80px;
-    text-shadow: 0px 15px 11px #363536;
-}
-
-div#post{
-  overflow:auto;
-}
-
-div#common{
-    text-align:center;
-    max-width:100%;
-    overflow:hidden;
-}
-
-table#header, table#footer {
-    text-align:center;
-    width:100%;
-    margin-left:0%;
-    margin-right:0%;
 }
 
 table.thread_header, table#threads, table.posts {
     text-align:center;
-    width:81%;
+    width:100%;
     margin-left:0%;
-    margin-right:20%;
 }
 
 table.noshow, table.noshow td, table.noshow tr{
@@ -85,7 +62,7 @@ div.quote{
     width:96%;
     margin-left:0%;
     margin-right:4%;
-    margin-top:1%;
+    margin-bottom:1%;
     border:1px solid;
     border-radius:3px;
     background-color:#e5e5e5;
@@ -141,15 +118,14 @@ div.thread_title_bar {
     background:white;
     padding-top:0.5em;
     padding-bottom:0.5em;
-    width:79%;
-    margin-left:1%;
+    width:100% - 4px;
+    margin-left:0%;
     margin-bottom:1em;
     font-weight:bold;
-    border:2px solid;
+    border:2px solid grey;
     border-radius:5px;
-    border-color:grey;
 }
-div.post { width:79%; margin-bottom:1em; margin-left:1%; }
+div.post { width:100%; margin-bottom:1em; margin-right:0%; }
 div.thread_title { font-size:medium; float:right; margin-right:2%; }
 div.thread_board { display:inline; margin-left:2%; }
 div.thread_pages { display:inline; margin-left:3%; }
@@ -199,6 +175,31 @@ input.newthr_title { margin-left:20%; margin-right:20%; width:60% }
 textarea.newthr_body { margin-left:20%; margin-right:20%; width:60%; resize:vertical }
 
 /* Sidebar */
+div.sidebar_trigger {
+    position:fixed;
+    background-color:blue;
+    color:white;
+    right:0;
+    top:20%;
+    vertical-align:bottom;
+    height:6.5em;
+    width:2em;
+    border:2px solid grey;
+    border-right:none;
+    border-top-left-radius:5px;
+    border-bottom-left-radius:5px;
+}
+div.sidebar_trigger_text {
+    font-weight:bold;
+    padding:0.2em;
+    text-transform:uppercase;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    position:relative;
+    top:4.2em;
+}
 div.sidebar {
     vertical-align:center;
     text-align:center;
@@ -207,6 +208,7 @@ div.sidebar {
     width:18%;
     height:80%;
     position:fixed;
+    visibility:hidden;
 }
 div.sidebar_item {
     padding:0.4em;

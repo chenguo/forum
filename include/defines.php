@@ -43,7 +43,7 @@ final class Tables
 
 define("CHAT_SEQ_MAX", 1024);
 define("BOARD_NAME", "LOL Bros, LOL");
-define("VERSION", 0.51);
+define("VERSION", 0.52);
 define("COMMON_CSS", "<link href='/css/common.css' type='text/css' rel='stylesheet'>\n");
 define("TIME_FULL", "g:i a M/j/Y");
 define("TIME_MYSQL", "Y-m-d H:i:s");
