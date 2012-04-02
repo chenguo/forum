@@ -19,6 +19,7 @@ class Display
   function DisplayTitle($type = Title::COMMON, $id = -1)
   {
     echo COMMON_CSS;
+    echo COMMON_JQUERY;
     $title = $this->title;
     if (Title::THREAD == $type && $id >= 0)
       {
@@ -38,8 +39,7 @@ class Display
   {
     echo HTMLTag("div", $this->title, array('class'=>"banner"));
     echo "\n";
-
-    echo "<audio autoplay='autoplay'><source src='buff.ogg' type='audio/ogg' /></audio>\n";
+    //echo "<audio autoplay='autoplay'><source src='buff.ogg' type='audio/ogg' /></audio>\n";
   }
 
   /* Display sidebar
@@ -113,7 +113,7 @@ class Display
                  . "<input type='hidden' name='tid' value='$tid'>"
                  . "<input type='hidden' name='action' value='post'>"
                  . "<input type='submit' value='submit' class='button new_post_button'>"
-                 . "<input type='button' value='preview' class='button preview_post_button' onclick='previewNewPost({$this->session->GetUID()},$tid)'>"
+                 . "<input type='button' value='preview' class='button preview_post_button' onclick='previewNewPost($tid)'>"
                  ,
                  array('id'=>'new_post', 'name'=>'post', 'action'=>'action.php', 'method'=>'post',
                        'onsubmit'=>'button.disabled=true; return true;'));
@@ -189,32 +189,6 @@ class Display
   function GenerateUserProfile($uid)
   {
     $user_info = $this->forum->GetCachedUser($uid);
-    $name = "";
-    $index = rand(0,11);
-    if ($index == 0)
-        $name = "Pikachu";
-    else if ($index == 1)
-        $name = "Bulbasaur";
-    else if ($index == 2)
-        $name ="Squirtle";
-    else if ($index == 3)
-        $name = "Charmander";
-    else if ($index == 4)
-        $name = "Togepi";
-    else if ($index == 5)
-        $name = "Lapras";
-    else if ($index == 6)
-        $name = "Gengar";
-    else if ($index == 7)
-        $name = "Weedle";
-    else if ($index == 8)
-        $name = "Pidgey";
-    else if ($index == 9)
-        $name = "Magikarp";
-    else if ($index == 10)
-        $name = "Nutsack";
-
-    $user_info['name'] = $name;
     $user_profile = HTMLTag("div",
                             // User name
                             HTMLTag("div", makeUserLink($user_info['uid'], $user_info['name']), array('class'=>'user_prof_name'))

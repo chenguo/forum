@@ -21,7 +21,51 @@ function hideSidebar(e)
 }
 
 // Edit post; includes functionality to submit, preview, and cancel edit.
-function editPost(pid, action)
+function editPost(pid, action, title)
+{
+  if (action == "edit_edit")
+    $("#post"+pid+"_controls").val("");
+  else if (action == "edit_cancel" || action == "edit_submit")
+    {
+      var new_buttons =
+      " <input type='button' value='edit' class='button' onclick='editPost("+pid+", \"edit_edit\,"+title+")'>"
+      + "<input type='button' value='quote' class='button' onclick='quotePost("+pid+")'>";
+      $("#post"+pid+"_controls").val(new_buttons);
+    }
+
+  var data = "";
+  if (action == "edit_edit" || action == "edit_cancel")
+    {
+      data = "pid="+pid + "&action="+action;
+    }
+  else if (action == "edit_preview" || action == "edit_submit")
+    {
+      var content = $("#edit"+pid).val();
+      var data = "pid="+pid + "&action="+action + "&content="+encodeURIComponent(content);
+      if (title)
+        {
+          data += "&title="+$("#edit_title").val();
+        }
+    }
+  var func = function(result) {
+    var json_result = $.parseJSON(result);
+    $("#post"+pid+"_text").html(json_result.content);
+    if (json_result.title)
+      $("div.thread_title").html(json_result.title);
+    if (json_result.edit)
+      $("#edittime"+pid).html(json_result.edit);
+  };
+
+  $.ajax({
+    url: "action.php",
+    type: "POST",
+    data: data,
+    success: func
+  });
+}
+
+/*
+function editPost(pid, action, title)
 {
   var req;
   if (window.XMLHttpRequest)
@@ -57,86 +101,85 @@ function editPost(pid, action)
       req.open("GET", "action.php?pid="+pid+"&action="+action+"&t="+Math.random(), true);
       req.send();
     }
-  else
+  else // preview
     {
       var content = document.getElementById("edit"+pid).value;
       req.open("POST", "action.php?", true);
       req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
       req.send("pid="+pid+"&action="+action+"&content="+encodeURIComponent(content));
     }
-}
+
+  // If title needs to be changed:
+  if (title == 1)
+    {
+      var new_title = document.getElementById("edit_title").value;
+
+      if (action == "edit_preview")
+        {
+          var titles = getDivsByClass("thread_title");
+          for (var i = 0; i < titles.length; i++)
+            {
+              titles[i].innerHTML = new_title;
+            }
+          document.getElementById("edit_title").value = new_title;
+        }
+    }
+}*/
 
 // Generates quoted content for making new post.
 function quotePost(pid)
 {
-  //alert("test");
-  var req;
-  if (window.XMLHttpRequest)
-    req = new XMLHttpRequest();
-  req.onreadystatechange=function()
-    {
-      if (req.readyState == 4 && req.status == 200)
-        {
-          //alert(req.responseText);
-          var newpost = document.getElementById("newpost_form");
-          if (req.responseText != 0)
-            newpost.value = newpost.value + req.responseText;
-          newpost.focus();
-        }
-    }
-  //alert("action quote pid " + pid);
-  req.open("POST", "action.php?", true);
-  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  req.send("action=quote&pid="+pid);
+  var func = function(result) {
+    $("#newpost_form").val($("#newpost_form").val()+result);
+    $("#newpost_form").focus();
+  }
+
+  $.ajax({
+    url:"action.php",
+    type:"POST",
+    data:"action=quote&pid="+pid,
+    success:func
+  });
 }
 
 // Preview new post.
-function previewNewPost(uid, tid)
+function previewNewPost(tid)
 {
-  var req;
-  if (window.XMLHttpRequest)
-    req = new XMLHttpRequest();
-  req.onreadystatechange=function()
-    {
-      if (req.readyState == 4 && req.status == 200)
-        {
-          var preview = document.getElementById("new_post_preview");
-          preview.innerHTML = req.responseText;
-        }
-    }
-  // Get text of new post
-  var content = document.getElementById("newpost_form").value;
-  req.open("POST", "action.php?", true);
-  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  req.send("action=new_post_preview&uid="+uid+"&tid="+tid+"&content="+encodeURIComponent(content));
+  var content = $("#newpost_form").val();
+  var data = "action=new_post_preview&tid="
+                  +tid+"&content="+encodeURIComponent(content);
+  var func = function(result) {
+    $("#new_post_preview").html(result);
+  };
+  $.ajax({
+    url: "action.php",
+    type: "POST",
+    data: data,
+    success: func
+  });
 }
 
 // Apply karma to post.
 function karma(type, pid, puid)
 {
-  var req;
-  if (window.XMLHttpRequest)
-    req = new XMLHttpRequest();
-  req.onreadystatechange=function()
-    {
-      if (req.readyState == 4 && req.status == 200) //&& req.responseText == 1)
-        {
-          if (req.responseText == 0)
-            alert("action failed");
-          else if (type == "karma_plus")
-            {
-              alert("brofist successful");
-            }
-          else if (type == "karma_minus")
-            {
-              alert("bitchslap successful");
-            }
-        }
-    }
+  var data = "action="+type + "&pid="+pid + "&puid="+puid+"&t="+Math.random();
 
-  //alert("sending");
-  req.open("GET", "action.php?action="+type+"&pid="+pid+"&puid="+puid+"&t="+Math.random(), true);
-  req.send();
+  var json_data = {"action":type, "pid":pid, "puid":puid, "t":Math.random()};
+  alert(JSON.stringify(json_data));
+  var func = function(result) {
+    if (result == 0)
+      alert("action failed");
+    else if (type == "karma_plus")
+      alert("brofist successful");
+    else if (type == "karma_minus")
+      alert("bitchslap successful");
+  }
+
+  $.ajax({
+    url: "action.php",
+    data: data,
+    success: func
+  });
 }
 
 function loadAction()
@@ -205,4 +248,19 @@ function sendKey(e)
       var form = document.getElementById("chat_input");
       sendChat(form);
     }
+}
+
+// Get elements by class
+function getDivsByClass(class_name)
+{
+  var divs = document.getElementsByTagName("div");
+  var class_divs = new Array();
+  for (var i = 0; i < divs.length; i++)
+    {
+      if (divs[i].getAttribute("class") == class_name)
+      {
+        class_divs.push(divs[i]);
+      }
+    }
+  return class_divs;
 }

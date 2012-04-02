@@ -60,13 +60,6 @@ div.quote{
 
 table img.profile_img{ max-width:80%; max-height:180px; }
 form { text-align:center; }
-textarea.edit_text {
-    margin-left:10%;
-    margin-right:10%;
-    width:80%;
-    resize:vertical;
-}
-
 .button {
     border-color:#000000;
     border:1px solid;
@@ -136,7 +129,15 @@ div.post_content {
 div.post_text { overflow-x:auto; padding:0.5em; }
 div.post_karma { padding-left:0.5em; font-size:x-small; }
 div.post_time { float:left; padding:0.5em; padding-bottom:1em; font-size:x-small; }
-div.post_controls{ float:right; padding:0.5em; padding-top:1em; }
+div.post_controls{ float:right; padding-right:0.5em; padding-top:1em; }
+
+/* Editing a post */
+div.post_edit { text-align:center; width:80%; margin-left:10%;}
+div.post_edit .title { width:100%; }
+div.post_edit textarea { width:100%; resize:vertical; }
+div.post_edit .button { margin:0.2em; margin-top:0.5em }
+
+/* Making a new post */
 form#new_post { margin-top:2%; width:80%; margin-right:20%; margin-bottom:5%;}
 form#new_post .button { margin:0.3em; }
 textarea.new_post {

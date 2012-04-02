@@ -231,7 +231,7 @@ class Forum
       }
     if (0 < count($minus_names))
       {
-        $karma_info['minus_karma'] = Karma::MINUSact . " by:" . implode(", ", $plus_names);
+        $karma_info['minus_karma'] = Karma::MINUSact . " by:" . implode(", ", $minus_names);
       }
     return $karma_info;
   }
@@ -261,7 +261,10 @@ class Forum
     $post_controls = "";
     if ($session_id == $post['uid'])
       {
-        $post_controls .= makeButton("edit", array('onclick'=>"editPost({$post['pid']}, \"edit_edit\")"));
+        if ($post['tpid'] == 1)
+          $post_controls .= makeButton("edit", array('onclick'=>"editPost({$post['pid']}, \"edit_edit\", 1)"));
+        else
+          $post_controls .= makeButton("edit", array('onclick'=>"editPost({$post['pid']}, \"edit_edit\", 0)"));
       }
 
     // If user hasn't modified karma of this post yet, display karma buttons.

@@ -78,3 +78,6 @@ Ver     Date      Description
 0.52    04/01/12  Sidebar only visible after mouseover hover zone.
 0.52.1  04/01/12  CSS fixes for makethread/user profile pages. Sidebar not disappearing in Chrome fixed.
 0.52.2  04/01/12  Quote elements autoscroll.
+0.53    04/01/12  Convert most of javascript library to use JQuery.
+0.54    04/01/12  Allow editing of thread title.
+

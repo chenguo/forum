@@ -132,36 +132,73 @@ if ($session->CheckLogin())
         // If this was an edit submission, update in DB.
         if ($action === "edit_cancel")
           {
-            echo prepContent($post['content'], $tid);
+            echo json_encode(array('content'=>prepContent($post['content'], $tid)));
           }
         else if ($action === "edit_submit" && isset($_POST['content']))
           {
+            $reply = array();
             $post = $db->UpdatePost($_POST['content'], $_POST['pid']);
-            $edit_time = fontsize("edited " . GetTime(TIME_FULL, $post['edit']), 1);
-            echo "[edit:$edit_time]";
-            echo prepContent($_POST['content'], $tid);
+            $reply['content'] = prepContent($post['content'], $tid);
+            $reply['edit'] = "edited " . GetTime(TIME_FULL, $post['edit']);
+
+            if ($post['tpid'] == 1)
+              {
+                $title = $db->UpdateThreadTitle($tid, $_POST['title']);
+                if ($title)
+                  $reply['title'] = $title;
+              }
+            echo json_encode($reply);
           }
         else
           {
             $content;
+            $title = "";
 
             // Display post content. If preview, display submitted content instead.
             if ($action === "edit_edit")
-              $content = $post['content'];
+              {
+                $content = $post['content'];
+                if ($post['tpid'] == 1)
+                  $title = $db->GetThreadTitle($tid);
+
+              }
             else if ($action === "edit_preview")
-              $content = $_POST['content'];
+              {
+                $content = $_POST['content'];
+                if ($post['tpid'] == 1 && isset($_POST['title']))
+                  $title = $_POST['title'];
+              }
             else
               return;
 
-            echo prepContent($content, $tid);
-            echo "</br></br><form name='edit'>"
-              . "<textarea class='edit_text' rows='10' cols='80' name='content' id='edit$pid'>$content</textarea>"
-              . "</br></form>"
-              . "<center>"
-              . makeButton("submit", array('onclick'=>"editPost($pid, \"edit_submit\")"))
-              . " " . makeButton("preview", array('onclick'=>"editPost($pid, \"edit_preview\")"))
-              . " " . makeButton("cancel", array('onclick'=>"editPost($pid, \"edit_cancel\")"))
-              . "</center>";
+            // If first post, add field to edit title.
+            $title_flag = 0;
+            $form = "<textarea class='edit_text' rows='10' cols='80' name='content' id='edit$pid'>$content</textarea>";
+            if ($post['tpid'] == 1)
+              {
+                $form = "<input class='title' id='edit_title' type='text' name='title' maxlength='64' value='$title'>"
+                  . $form;
+                $title_flag = 1;
+              }
+
+            $reply_content = prepContent($content, $tid);
+            $reply_content .= "</br>" . // temporary hack
+              HTMLTag("div",
+                      HTMLTag("form",
+                              $form,
+                              array('name'=>'edit'))
+                      . makeButton("submit", array('onclick'=>"editPost($pid, \"edit_submit\", $title_flag)"))
+                      . makeButton("preview", array('onclick'=>"editPost($pid, \"edit_preview\", $title_flag)"))
+                      . makeButton("cancel", array('onclick'=>"editPost($pid, \"edit_cancel\", $title_flag)"))
+                      ,
+                      array('class'=>'post_edit'));
+
+            $reply = "";
+            if ($post['tpid'] == 1 && $action === "edit_preview")
+              $reply = json_encode(array('content'=>$reply_content, 'title'=>$title));
+            else
+              $reply = json_encode(array('content'=>$reply_content));
+            echo $reply;
           }
       }
   }

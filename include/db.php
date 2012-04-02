@@ -198,12 +198,29 @@ class DB
     return $result[0];
   }
 
+  // Get thread title.
+  function GetThreadTitle($thread_id)
+  {
+    $result = $this->__SelectFromTable(Tables::THREADS, array("title"), array("tid=$thread_id"));
+    return $result[0]['title'];
+  }
+
   // Get number of posts in a thread.
   function GetThreadNumPosts($thread_id)
   {
     $result = $this->__SelectFromTable(Tables::THREADS, array("posts"), array("tid=$thread_id"));
     return $result[0]['posts'];
   }
+
+  // Update title of existing thread
+  function UpdateThreadTitle($tid, $title)
+  {
+    $title = $this->insertPrep($title);
+    $data = array('title'=>"\"$title\"");
+    $this->__UpdateTable(Tables::THREADS, $data, array("tid=$tid"));
+    return $this->GetThreadTitle($tid);
+  }
+
 
   /* Add a new thread to the database. */
   function NewThread($title, $content, $uid)
@@ -274,14 +291,14 @@ class DB
     $result = $this->__SelectFromTable(Tables::POSTS, array('uid'), array("pid=$pid"));
     return $result[0]['uid'];
   }
-  
+
   // Get a post's karma stats.
   function GetPostKarma($pid)
   {
     $result = $this->__SelectFromTable(Tables::KARMA, array('*'), array("pid=$pid"));
     return $result;
   }
-  
+
   // Give a post karma
   function AddPostKarma($type, $pid, $puid, $uid)
   {
