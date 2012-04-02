@@ -68,7 +68,7 @@ class Display
                  . HTMLTag("div", $sidebar_info['logout'], array('class'=>'sidebar_item'))
                  . HTMLTag("div", $sidebar_info['version'], array('class'=>'sidebar_item', 'id'=>'sidebar_version'))
                  ,
-                 array('class'=>'sidebar', 'id'=>'sidebar', 'onmouseleave'=>'hideSidebar()'));
+                 array('class'=>'sidebar', 'id'=>'sidebar', 'onmouseout'=>'hideSidebar(event)'));
     echo "\n";
   }
 

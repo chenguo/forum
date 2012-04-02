@@ -159,20 +159,15 @@ textarea.new_post {
 }
 
 /* For user profile page */
-table#user_profile {
-    text-align:center;
-    width:81%;
-    margin-left:0%;
-    margin-right:20%;
-}
+table#user_profile { text-align:center; width:100%; margin-left:0% }
 .subprofile{ width:30%; }
 .recent_posts { text-align:left; padding-left: 1em }
 .recent_karma { text-align:left; padding-left: 1em }
 
 /* For making new threads */
-form.newthr_form  { margin-left:20%; margin-right:20%; width:60% }
-input.newthr_title { margin-left:20%; margin-right:20%; width:60% }
-textarea.newthr_body { margin-left:20%; margin-right:20%; width:60%; resize:vertical }
+form.newthr_form  { margin-left:10%; margin-right:10%; width:80% }
+input.newthr_title { margin-left:10%; margin-right:10%; width:80% }
+textarea.newthr_body { margin-left:10%; margin-right:10%; width:80%; resize:vertical }
 
 /* Sidebar */
 div.sidebar_trigger {
@@ -206,7 +201,6 @@ div.sidebar {
     right:1%;
     top:5%;
     width:18%;
-    height:80%;
     position:fixed;
     visibility:hidden;
 }

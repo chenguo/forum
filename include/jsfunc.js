@@ -5,8 +5,17 @@ function showSidebar()
   document.getElementById("sidebar_trigger").style.visibility = "hidden";
 }
 // Hide sidebar when mouse leavse it
-function hideSidebar()
+function hideSidebar(e)
 {
+  if (!e) var e = window.event;
+  var src = (window.event)? e.SrcElement : e.target;
+  var target = (e.relatedTarget)? e.relatedTarget : e.toElement;
+  while (target.nodeName != "HTML")
+    {
+      if (target.className == "sidebar")
+        return;
+      target = target.parentNode;
+    }
   document.getElementById("sidebar").style.visibility = "hidden";
   document.getElementById("sidebar_trigger").style.visibility = "visible";
 }
