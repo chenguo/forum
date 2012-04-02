@@ -166,11 +166,14 @@ class Display
                        // Post karma
                        . HTMLTag("div", $post_info['karma']['plus_karma'], array('class'=>'post_karma'))
                        . HTMLTag("div", $post_info['karma']['minus_karma'], array('class'=>'post_karma'))
-                       // Post times
-                       . HTMLTag("div", $post_info['time'], array('class'=>'post_time'))
-                       // Post controls
-                       . HTMLTag("div", $post_info['controls'], array('class'=>'post_controls',
-                                                                      'id'=>"post{$pid}_controls"))
+                       . HTMLTag("div",
+                                 // Post times
+                                 HTMLTag("div", $post_info['time'], array('class'=>'post_time'))
+                                 // Post controls
+                                 . HTMLTag("div", $post_info['controls'], array('class'=>'post_controls',
+                                                                                'id'=>"post{$pid}_controls"))
+                                 ,
+                                 array('class'=>'post_footer'))
                        ,
                        array('class'=>'post_content', 'id'=>"post{$post_info['pid']}"));
     return $content;
