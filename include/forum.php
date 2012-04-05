@@ -227,11 +227,11 @@ class Forum
     // Assemble positive and negative karma lists.
     if (0 < count($plus_names))
       {
-        $karma_info['plus_karma'] = Karma::PLUSact . " by:" . implode(", ", $plus_names);
+        $karma_info['plus_karma'] = Karma::PLUSact . " by: " . implode(", ", $plus_names);
       }
     if (0 < count($minus_names))
       {
-        $karma_info['minus_karma'] = Karma::MINUSact . " by:" . implode(", ", $minus_names);
+        $karma_info['minus_karma'] = Karma::MINUSact . " by: " . implode(", ", $minus_names);
       }
     return $karma_info;
   }

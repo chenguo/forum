@@ -104,10 +104,31 @@ function karma(type, pid, puid)
   var func = function(result) {
     if (result == 0)
       alert("action failed");
-    else if (type == "karma_plus")
-      alert("brofist successful");
-    else if (type == "karma_minus")
-      alert("bitchslap successful");
+    else
+      {
+        // Increase count in profile
+        $(".user_prof_"+puid+" .user_"+type)
+          .each(function(index){
+              $(this).html( Number($(this).html()) + 1 )
+            });
+
+        // Update list
+        var saved = $("#post"+pid+" .post_"+type);
+        var list = saved.html();
+        if (list == "")
+          {
+            if (type == "karma_plus")
+              list = "brofisted by: ";
+            else
+              list = "bitchslapped by: ";
+          }
+        else
+          {
+            list += ", ";
+          }
+        list += result;
+        saved.html(list);
+      }
   }
 
   $.ajax({

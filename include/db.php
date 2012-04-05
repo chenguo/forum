@@ -435,7 +435,6 @@ class DB
     $time = GetTime(TIME_MYSQL);
     try
       {
-        echo "HI\n";
         if ($type !== "plus" && $type !== "minus")
           throwException("Undefined karma type: $type");
         $result = mysql_query("SELECT pid FROM " . Tables::KARMA . " WHERE pid=$pid&&uid=$uid") or throwException("Could not check karma table: " . mysql_error());

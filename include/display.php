@@ -164,8 +164,8 @@ class Display
                                                                    'id'=>"post{$pid}_text"))
                        . "<hr>"
                        // Post karma
-                       . HTMLTag("div", $post_info['karma']['plus_karma'], array('class'=>'post_karma'))
-                       . HTMLTag("div", $post_info['karma']['minus_karma'], array('class'=>'post_karma'))
+                       . HTMLTag("div", $post_info['karma']['plus_karma'], array('class'=>'post_karma_plus'))
+                       . HTMLTag("div", $post_info['karma']['minus_karma'], array('class'=>'post_karma_minus'))
                        . HTMLTag("div",
                                  // Post times
                                  HTMLTag("div", $post_info['time'], array('class'=>'post_time'))
@@ -199,18 +199,19 @@ class Display
                             . showImg($user_info['avatar'], array('class'=>'user_prof_avatar'))
                             // Post count
                             . HTMLTag("div", $user_info['posts'] . " posts", array('class'=>'user_prof_posts'))
-                            // Positive karma
+                            // Karma
                             . HTMLTag("div",
-                                      HTMLTag("div", $user_info['plus'], array('class'=>'user_prof_karma_val'))
-                                      . HTMLTag("div", " " . Karma::PLUSpl, array('class'=>'user_prof_karma_desc')),
+                                      HTMLTag("div", $user_info['plus'], array('class'=>'user_karma_plus'))
+                                      . " " . Karma::PLUSpl
+                                      ,
                                       array('class'=>'user_karma'))
-                            // Negative karma
                             . HTMLTag("div",
-                                      HTMLTag("div", $user_info['minus'], array('class'=>'user_prof_karma_val'))
-                                      . HTMLTag("div", " " . Karma::MINUSpl, array('class'=>'user_prof_karma_desc')),
+                                      HTMLTag("div", $user_info['minus'], array('class'=>'user_karma_minus'))
+                                      . " " . Karma::MINUSpl
+                                      ,
                                       array('class'=>'user_karma'))
                             ,
-                            array('class'=>'user_prof'));
+                            array('class'=>"user_prof user_prof_$uid"));
     return $user_profile;
   }
 }

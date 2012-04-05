@@ -80,4 +80,4 @@ Ver     Date      Description
 0.52.2  04/01/12  Quote elements autoscroll.
 0.53    04/01/12  Convert most of javascript library to use JQuery.
 0.54    04/01/12  Allow editing of thread title.
-
+0.55    04/04/12  Applying karma dynamically updates page; no more popup notice.

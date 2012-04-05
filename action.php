@@ -107,7 +107,7 @@ if ($session->CheckLogin())
           {
             $type = ($action === "karma_plus")? "plus" : "minus";
             if (TRUE == $db->AddPostKarma($type, $_GET['pid'], $_GET['puid'], $uid))
-              echo "1";
+              echo makeUserLink($uid, $session->GetUserName());
             else
               echo "0";
           }
