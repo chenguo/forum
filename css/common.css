@@ -99,7 +99,7 @@ div.user_prof {
     float:left;
 }
 div.user_prof_name { font-size:medium; }
-img.user_prof_avatar { width:90%; max-height:80%; margin-top:1%; margin-bottom:1% }
+img.user_prof_avatar { width:70%; max-height:80%; margin-top:1%; margin-bottom:1% }
 div.user_karma { font-size:x-small; }
 div.user_karma_plus { display:inline; font-size:small; }
 div.user_karma_minus { display:inline; font-size:small; }

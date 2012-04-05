@@ -108,6 +108,10 @@ function prepContent($content, $tid)
                           "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
                           "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>",
                           $content);
+  $content = preg_replace("/\[vid\][^\]]*?youtu.be\/([0-9a-zA-Z_-]*).*?\[\/vid\]/i",
+                          "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
+                          "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>",
+                          $content);
 
   // Vimeo [vid] check.
   $content = preg_replace("/\[vid\][^\]]*?vimeo.com\/(\d*)\[\/vid\]/i",
