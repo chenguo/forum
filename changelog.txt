@@ -82,3 +82,4 @@ Ver     Date      Description
 0.54    04/01/12  Allow editing of thread title.
 0.55    04/04/12  Applying karma dynamically updates page; no more popup notice.
 0.55.1  04/04/12  Support youtube links of youtu.be format.
+0.55.2  04/04/12  Don't display the first <br> after a quote.

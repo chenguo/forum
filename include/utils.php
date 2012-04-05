@@ -136,21 +136,21 @@ function prepContent($content, $tid)
 
   // [quote] check.
   while (preg_match ("/\[quote\](.*?)\[\/quote\]/", $content) > 0)
-    $content = preg_replace("/\[quote\](.*?)\[\/quote\]/i",
+    $content = preg_replace("/\[quote\](.*?)\[\/quote\](<\/br>)?/i",
                             "<div class='quote'>$1</div>",
                             $content, 1);
 
-  while(preg_match ("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\]/", $content, $matches) > 0)
+  while(preg_match ("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\](\n)?/", $content, $matches) > 0)
     {
       $quote_pid = $matches[2];
       $page = GetPageCount($matches[3], DEFAULT_ITEMS_PER_PAGE);
       $link = makeLink("thread.php?tid=$tid&page=$page#post$quote_pid" , $matches[1] . " wrote:");
-      $content = preg_replace("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\]/i",
+      $content = preg_replace("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\](<\/br>)?/i",
                             "<div class='quote'><b>$link</b></br>$4</div>",
                               $content, 1);
                               }
   while(preg_match ("/\[quote author=([^\]]*)\](.*)\[\/quote\]/", $content) > 0)
-    $content = preg_replace("/\[quote author=([^\]]*)\](.*?)\[\/quote\]/i",
+    $content = preg_replace("/\[quote author=([^\]]*)\](.*?)\[\/quote\](<\/br>)?/i",
                             "<div class='quote'><b>$1 wrote</b></br>$2</div>",
                             $content, 1);
 
