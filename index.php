@@ -5,7 +5,7 @@ if (isset($_POST['username']) && isset($_POST['password']))
   {
     if ($session->Login($_POST['username'], $_POST['password']) == TRUE)
       {
-        header ("LOCATION: threads.php");
+        header ("LOCATION: ".Pages::BOARD);
       }
   }
 ?>

@@ -83,3 +83,4 @@ Ver     Date      Description
 0.55    04/04/12  Applying karma dynamically updates page; no more popup notice.
 0.55.1  04/04/12  Support youtube links of youtu.be format.
 0.55.2  04/04/12  Don't display the first <br> after a quote.
+0.56    04/05/12  Revamp main board view page.

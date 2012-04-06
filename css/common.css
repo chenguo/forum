@@ -27,13 +27,14 @@ table, td, th, tr{
     padding:0.3em;
     table-layout:fixed;
     background:#ffffff;
-    border-radius:.5em;
+/*    border-radius:.5em;
     -webkit-border-radius:.5em;
-    -moz-border-radius:.5em;
+    -moz-border-radius:.5em;*/
     font-size:small;
     font-family:sans-serif;
     overflow:auto;
 }
+
 div.banner {
     font-family:'FFFTusjBold';
     font-size:80px;
@@ -73,6 +74,7 @@ form { text-align:center; }
 .button:hover { cursor:pointer; }
 .clear { clear:both; }
 hr { width:97% }
+.time { font-size:x-small; }
 
 /* For list of threads */
 a.makenew{ text-decoration:none }
@@ -86,6 +88,32 @@ th.num { width:7% }
 th.thr_time { width:18% }
 .thr_page_link { font-size:x-small }
 .thr_flags { color:blue; font-weight:bold }
+
+/* For board view */
+div.board_header {
+    text-align:left;
+    background:white;
+    padding-top:1em;
+    padding-bottom:1em;
+    width:100% - 4px;
+    margin-top:1%;
+    margin-bottom:1%;
+    border:2px solid grey;
+    border-radius:7px;
+}
+div.board_new_thr { float:right; margin-right:2%; font-weight:bold; font-size:medium; }
+div.board_pages { float:left; margin-left:2%; font-weight:bold; }
+div.board_threads{ background:white; border:2px solid grey; border-radius:7px; padding:1%; }
+div.board_top { font-weight:bold; border-bottom:2px solid grey; padding:0%; padding-bottom:0.5em; }
+div.board_thr_title { width:50%; float:left; }
+div.board_thr_num { width:7%; float:left; }
+div.board_thr_time { width:18%; float:left; }
+div.board_thread_row { border-bottom:1px solid grey; width:100%; padding-top:0.5em; padding-bottom:0.5em;
+                     vertical-align:middle; height:100%; }
+div.board_thread_row:hover { background-color:#F0F0F0; }
+div.board_thread_row * { height:100%; }
+div.board_thr_page_links { display:inline; margin-right:0.3em; }
+div.board_thr_flags { display:inline; margin-left:0.3em; font-weight:bold; color:blue; }
 
 /* For user profiles */
 div.user_prof {
@@ -108,18 +136,18 @@ div.user_karma_minus { display:inline; font-size:small; }
 div.thread_title_bar {
     text-align:left;
     background:white;
-    padding-top:1%;
-    padding-bottom:1%;
+    padding-top:1em;
+    padding-bottom:1em;
     width:100% - 4px;
     margin-bottom:1%;
     font-weight:bold;
     border:2px solid grey;
     border-radius:7px;
 }
-div.post { width:100%; margin-bottom:2%; }
 div.thread_title { font-size:medium; float:right; margin-right:2%; }
 div.thread_board { display:inline; margin-left:2%; }
 div.thread_pages { display:inline; margin-left:3%; }
+div.post { width:100%; margin-bottom:2%; }
 div.post_content {
     width:79%;
     text-align:left;

@@ -36,73 +36,38 @@ class Forum
 
   /*******************************\
    *                             *
-   *      Thread Information     *
+   *       Board Information     *
    *                             *
   \*******************************/
 
-  // Get thread title
-  function GetThreadTitle($tid)
-  {
-    $thread = $this->db->GetThread($tid, FALSE /* Only title */);
-    return $thread['title'];
-  }
+  // Get board information for display.
 
   // Display threads in the forum.
-  function DisplayThreads($session, $page=1)
+  function GetBoardDisplayInfo($threads_per_page, $page=1)
   {
-    $threads_per_page = DEFAULT_ITEMS_PER_PAGE;
-    $uid = $session->GetUID();
-    $threads = $this->db->GetThreads($page, $threads_per_page);
+    $board_info = array();
+    $formatted_threads = array();
+    $uid = $this->session->GetUID();
 
     // Make a table for links to other pages and make thread link.
-    $page_links = $this->MakePageLinks ($page, $threads_per_page, $this->db->GetNumThreads(), "threads.php?");
-    $link_table = table( tableRow( tableCol ( $page_links, array('class'=>'noshow') )
-                                   . tableCol( makeLink("makethread.php", "new thread", "new_thr"), array('class'=>'noshow') )
-                                   . tableCol ("", array('class'=>'noshow'))
-                                   ),
-                         array('class'=>'thread_header')
-                         );
-    echo $link_table;
-
-    // Display posts in thread.
-    $title_row = HTMLTag("th", "title", array('class'=>'thr_title'))
-      . HTMLTag("th", "posts", array('class'=>'num'))
-      . HTMLTag("th", "views", array('class'=>'num'))
-      . HTMLTag("th", "created", array('class'=>'thr_time'))
-      . HTMLTag("th", "last post", array('class'=>'thr_time'));
-
-    echo "<table id='threads'>";
-    echo tableRow($title_row);
-    echo "\n";
+    $board_info['pages'] = $this->MakePageLinks ($page, $threads_per_page,
+                                                 $this->db->GetNumThreads(),
+                                                 Pages::BOARD."?");
+    $board_info['new_thr'] = makeLink(Pages::MAKETHR, "new thread", "");
 
     $posts_per_page = DEFAULT_ITEMS_PER_PAGE;
+    $threads = $this->db->GetThreads($page, $threads_per_page);
     foreach ($threads as $thread)
       {
-        // Get any thread flags.
-        $thread_flags = $this->GetThreadFlags($uid, $thread);
-        // Get the link to thread as well as links to pages in thread.
-        $thread_link = makeLink("thread.php?tid={$thread['tid']}", $thread['title'], 'thread')
-          . "</br>"
-          . $this->MakeThreadPageLinks($posts_per_page, $thread['posts'], "thread.php?tid={$thread['tid']}")
-          . " " . $this->GetThreadFlags($uid, $thread);
-
-        $create_time = GetTime(TIME_FULL, $thread['create_time']);
-        $post_time = GetTime(TIME_FULL, $thread['post_time']);
-
-        echo tableRow ( tableCol($thread_link)
-                        . tableCol($thread['posts'])
-                        . tableCol($thread['views'])
-                        . tableCol($this->db->GetUserName($thread['uid']) . "</br>" . fontSize($create_time, 1))
-                        . tableCol($this->db->GetUserName($thread['last_uid']) . "</br>" . fontSize($post_time, 1))
-                        );
-        echo "\n";
+        array_push($formatted_threads, $this->GetThreadInfo($thread));
       }
-    echo "</table>\n";
-    echo $link_table;
-    echo "</br>\n";
+
+    $board_info['threads'] = $formatted_threads;
+
+    return $board_info;
   }
 
-  // Make links to pages in a thread below thread.
+  // Make links to pages in a thread (for use below thread title)
   function MakeThreadPageLinks ($items_per_page, $max_items, $link)
   {
     $max_page = GetPageCount($max_items, $items_per_page);
@@ -120,6 +85,12 @@ class Forum
     return $page_links;
   }
 
+  /*******************************\
+   *                             *
+   *      Thread Information     *
+   *                             *
+  \*******************************/
+
   // For a particular user and thread, get notifications for user pertaining to that thread.
   function GetThreadFlags ($uid, $thread)
   {
@@ -130,15 +101,42 @@ class Forum
     if ($num_viewed < $thread['posts'])
       $flags .= "new";
 
-    return HTMLTag("label", $flags, array('class'=>'thr_flags'));
+    return $flags;
   }
 
-  // Get thread information.
-  function GetThreadInfo($tid, $posts_per_page=DEFAULT_ITEMS_PER_PAGE, $page=1)
+  // Get thread title.
+  function GetThreadTitle($tid)
+  {
+    $thread = $this->db->GetThread($tid, FALSE /* Only title */);
+    return $thread['title'];
+  }
+
+  // Get basic thread information for display of list of threads
+  function GetThreadInfo($thread)
+  {
+    $thread_info = array();
+    $posts_per_page = DEFAULT_ITEMS_PER_PAGE;
+
+    $thread_info['link'] = makeLink(Pages::THREAD."?tid={$thread['tid']}", $thread['title'], 'thread');
+    $thread_info['pages'] = $this->MakeThreadPageLinks($posts_per_page, $thread['posts'], Pages::THREAD."?tid={$thread['tid']}");
+    $thread_info['flags'] = $this->GetThreadFlags($this->session->GetUID(), $thread);
+    $thread_info['create_time'] = GetTime(TIME_FULL, $thread['create_time']);
+    $thread_info['post_time'] = GetTime(TIME_FULL, $thread['post_time']);
+    $thread_info['posts'] = $thread['posts'];
+    $thread_info['views'] = $thread['views'];
+    $thread_info['creator'] = $this->db->GetUserName($thread['uid']);
+    $thread_info['last_poster'] = $this->db->GetUserName($thread['last_uid']);
+
+    return $thread_info;
+  }
+
+  // Get thread information for display.
+  function GetThreadDisplayInfo($tid, $posts_per_page=DEFAULT_ITEMS_PER_PAGE, $page=1)
   {
     $thread_info = array();
     $formatted_posts = array();
 
+    // Get thread and list of post infos
     $thread = $this->db->GetThread($tid, TRUE /* update viewcount */);
     $posts = $this->db->GetPosts($tid, $page, $posts_per_page);
 
@@ -151,11 +149,12 @@ class Forum
     $last_post = end($posts);
     $this->db->UpdateUserPostView($this->session->GetUID(), $tid, $last_post['pid'], $last_post['tpid']);
 
-
+    // Populate thread info for display
     $thread_info['title'] = $thread['title'];
-    $thread_info['board'] = makeLink("threads.php", "board");
-    $thread_info['pages'] = $this->MakePageLinks($page, $posts_per_page, $thread['posts'], "thread.php?tid=$tid");
+    $thread_info['board'] = makeLink(Pages::BOARD, "board");
+    $thread_info['pages'] = $this->MakePageLinks($page, $posts_per_page, $thread['posts'], Pages::THREAD."?tid=$tid");
     $thread_info['posts'] = $formatted_posts;
+
     return $thread_info;
   }
 
@@ -219,9 +218,9 @@ class Forum
       {
         $user_info = $this->GetCachedUser($karma['uid']);
         if ($karma['type'] === 'plus')
-          array_push($plus_names, makeLink("user.php?uid={$user_info['uid']}", $user_info['name']));
+          array_push($plus_names, makeLink(Pages::USER."?uid={$user_info['uid']}", $user_info['name']));
         else
-          array_push($minus_names, makeLink("user.php?uid={$user_info['uid']}", $user_info['name']));
+          array_push($minus_names, makeLink(Pages::USER."?uid={$user_info['uid']}", $user_info['name']));
       }
 
     // Assemble positive and negative karma lists.
@@ -283,7 +282,7 @@ class Forum
   {
     $post = $this->db->GetPostMeta($pid);
     $page = GetPageCount($post['tpid'], DEFAULT_ITEMS_PER_PAGE);
-    $link = makeLink("thread.php?tid={$post['tid']}&page=$page#post$pid", $link_text);
+    $link = makeLink(Pages::THREAD."?tid={$post['tid']}&page=$page#post$pid", $link_text);
     return $link;
   }
 
@@ -318,12 +317,12 @@ class Forum
       . makeUserLink($this->session->GetUID(), $this->session->GetUserName())
       . "!";
     $sidebar_info['chat'] = $this->GenerateChat();
-    $sidebar_info['board'] = makeLink("threads.php", "board");
-    $sidebar_info['bookmark'] = makeLink("threads.php", "bookmarks");
-    $sidebar_info['privmsg'] = makeLink("threads.php", "private messages");
+    $sidebar_info['board'] = makeLink(Pages::BOARD, "board");
+    $sidebar_info['bookmark'] = makeLink(Pages::BOARD, "bookmarks");
+    $sidebar_info['privmsg'] = makeLink(Pages::BOARD, "private messages");
     $sidebar_info['cur_users'] = $cur_usr_str;
     $sidebar_info['day_users'] = $day_usr_str;
-    $sidebar_info['logout'] = makeLink("action.php?action=logout", "logout");
+    $sidebar_info['logout'] = makeLink(Pages::ACTION."?action=logout", "logout");
     $sidebar_info['version'] = "LOLBros beta " . makeLink("changelog.txt", "v" . VERSION);
 
     return $sidebar_info;
@@ -444,7 +443,7 @@ class Forum
       $thread = $this->db->GetThread($post_meta['tid']);
       $karma_list .= ($karma_action['type'] === "plus")? Karma::PLUSact : Karma::MINUSact;
       $recipient = $this->GetCachedUser($karma_action['puid']);
-      $karma_list .= " " . makeLink("user.php?uid={$recipient['uid']}", $recipient['name']) . " in " . $this->GetPostLink($karma_action['pid'], $thread['title'])
+      $karma_list .= " " . makeLink(Pages::USER."?uid={$recipient['uid']}", $recipient['name']) . " in " . $this->GetPostLink($karma_action['pid'], $thread['title'])
         . " at " . GetTime(TIME_FULL, $karma_action['time']) . "</br>";
     }
     $recent_karma = tableRow( HTMLTag("th", "Recent Karma Given", array('colspan'=>2) ) )
@@ -459,7 +458,7 @@ class Forum
       $thread = $this->db->GetThread($post_meta['tid']);
       $karma_list .= ($karma_action['type'] === "plus")? Karma::PLUSact : Karma::MINUSact;
       $giver = $this->GetCachedUser($karma_action['uid']);
-      $karma_list .= " by " . makeLink("user.php?uid={$giver['uid']}", $giver['name']) . " in " . $this->GetPostLink($karma_action['pid'], $thread['title'])
+      $karma_list .= " by " . makeLink(Pages."?uid={$giver['uid']}", $giver['name']) . " in " . $this->GetPostLink($karma_action['pid'], $thread['title'])
         . " at " . GetTime(TIME_FULL, $karma_action['time']) . "</br>";
     }
     $recent_karma .= tableRow( HTMLTag("th", "Recent Karma Received", array('colspan'=>2) ) )

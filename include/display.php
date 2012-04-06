@@ -15,6 +15,12 @@ class Display
     $this->session = $session;
   }
 
+  /*******************************\
+   *                             *
+   *       Common Display        *
+   *                             *
+  \*******************************/
+
   /*  Display general forum title. */
   function DisplayTitle($type = Title::COMMON, $id = -1)
   {
@@ -72,11 +78,151 @@ class Display
     echo "\n";
   }
 
-  // Display a board
-  function DisplayBoard()
-  {
+  /*******************************\
+   *                             *
+   *        Board Display        *
+   *                             *
+  \*******************************/
 
+  // Display a board
+  function DisplayBoard($page=1)
+  {
+    $threads_per_page = DEFAULT_ITEMS_PER_PAGE;
+    /* $board_info array fields:
+       pages: links to pages of the board
+       new_thr: link to make new threads page
+       threads: table of thread summary information
+    */
+    $board_info = $this->forum->GetBoardDisplayInfo($threads_per_page, $page);
+
+    // Header
+    echo $this->GenerateBoardHeader($board_info);
+    echo "\n";
+
+    // Display posts in thread.
+    $title_row =
+      HTMLTag("tr",
+              HTMLTag("th", "title", array('class'=>'board_thr_title'))
+              . HTMLTag("th", "posts", array('class'=>'board_thr_num'))
+              . HTMLTag("th", "views", array('class'=>'board_thr_num'))
+              . HTMLTag("th", "created", array('class'=>'board_thr_time'))
+              . HTMLTag("th", "last post", array('class'=>'board_thr_time'))
+              );
+    $title_row = HTMLTag("div",
+                         HTMLTag("div", "title", array('class'=>'board_thr_title'))
+                         . HTMLTag("div", "posts", array('class'=>'board_thr_num'))
+                         . HTMLTag("div", "views", array('class'=>'board_thr_num'))
+                         . HTMLTag("div", "created", array('class'=>'board_thr_time'))
+                         . HTMLTag("div", "last post", array('class'=>'board_thr_time'))
+                         . HTMLTag("div", "", array('class'=>'clear'))
+                         ,
+                         array('class'=>'board_top'));
+
+    $thread_list = "";
+    foreach ($board_info['threads'] as $thread_info)
+      {
+        $thread_list .= $this->GenerateBoardThreadRow($thread_info);
+      }
+
+    /*echo HTMLTag("div",
+                 HTMLTag("table",
+                         $title_row
+                         . $thread_list,
+                         array('class'=>'board_table'))
+                 ,
+                 array('class'=>'board_threads'));*/
+
+    echo HTMLTag("div",
+                 $title_row
+                 . $thread_list
+                 . HTMLTag("div", "", array('class'=>'board_bottom'))
+                 ,
+                 array('class'=>'board_threads'));
+
+    echo $this->GenerateBoardHeader($board_info);
+    echo "\n";
   }
+
+  // Generate header
+  function GenerateBoardHeader($board_info)
+  {
+    $board_header = HTMLTag("div",
+                            HTMLTag("div", $board_info['pages'], array('class'=>'board_pages'))
+                            . HTMLTag("div", $board_info['new_thr'], array('class'=>'board_new_thr'))
+                            // Clear float
+                            . HTMLTag("div", "", array('class'=>'clear'))
+                            ,
+                            array('class'=>'board_header'));
+
+    return $board_header;
+  }
+
+  /* Generate a row for thread info
+     $thread_info array fields
+     link: title link of thread
+     pages: links to pages in thread
+     flags: user flags
+     create_time: create time of thread
+     post_time: time of last post in thread
+     posts: number of posts
+     views: thread views
+     creator: creator of thread
+     last_poster: last poster in thread
+  */
+  function GenerateBoardThreadRow($thread_info)
+  {
+    /*$thread_row =
+      HTMLTag("tr",
+              HTMLTag("td",
+                      HTMLTag("div", $thread_info['link'])
+                      . HTMLTag("div", $thread_info['pages'], array('class'=>'board_thr_page_links'))
+                      . HTMLtag("div", $thread_info['flags'], array('class'=>'board_thr_flags'))
+                      ,
+                      array('class'=>'board_thr_title'))
+              . HTMLTag("td", $thread_info['posts'])
+              . HTMLTag("td", $thread_info['views'])
+              . HTMLtag("td", $thread_info['creator'])
+              . HTMLtag("td", $thread_info['last_poster']));
+    */
+    $board_thr_link = HTMLTag("div", $thread_info['link']);
+    $board_thr_page_links = "";
+    if ($thread_info['pages'] != "")
+      $board_thr_page_links = HTMLTag("div", $thread_info['pages'], array('class'=>'board_thr_page_links'));
+
+    $board_thr_flags = "";
+    if ($thread_info['flags'] != "")
+      $board_thr_flags = HTMLTag("div", $thread_info['flags'], array('class'=>'board_thr_flags'));
+
+    $thread_row =
+      HTMLTag("div",
+              HTMLTag("div",
+                      $board_thr_link . $board_thr_page_links . $board_thr_flags,
+                      array('class'=>'board_thr_title'))
+              . HTMLTag("div", $thread_info['posts'], array('class'=>'board_thr_num'))
+              . HTMLTag("div", $thread_info['views'], array('class'=>'board_thr_num'))
+              . HTMLtag("div",
+                        HTMLTag("div", $thread_info['creator'])
+                        . HTMLTag("div", $thread_info['create_time'], array('class'=>'time'))
+                        ,
+                        array('class'=>'board_thr_time'))
+              . HTMLtag("div",
+                        HTMLTag("div",$thread_info['last_poster'])
+                        . HTMLTag("div", $thread_info['post_time'], array('class'=>'time'))
+                        ,
+                        array('class'=>'board_thr_time'))
+              . HTMLTag("div", "", array('class'=>'clear'))
+              ,
+              array('class'=>'board_thread_row')
+              );
+
+    return $thread_row;
+  }
+
+  /*******************************\
+   *                             *
+   *        Thread Display       *
+   *                             *
+  \*******************************/
 
   /* Display a thread
      $thread_info array fields
@@ -86,7 +232,7 @@ class Display
   function DisplayThread($tid, $page=1)
   {
     $posts_per_page = DEFAULT_ITEMS_PER_PAGE;
-    $thread_info = $this->forum->GetThreadInfo($tid, $posts_per_page, $page);
+    $thread_info = $this->forum->GetThreadDisplayInfo($tid, $posts_per_page, $page);
 
     // Header
     echo $this->GenerateThreadTitle($thread_info);

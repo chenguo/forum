@@ -2,7 +2,7 @@
 require_once("./include/common_cfg.php");
 
 if (!$session->CheckLogin(TRUE))
-  header("LOCATION: index.php");
+  header("LOCATION: " . Pages::LOGIN);
 
 $page = 1;
 if (isset($_REQUEST['page']))
@@ -26,8 +26,8 @@ window.addEventListener('DOMContentLoaded', loadAction, false);
 <body>
 <?php
 $display->DisplayBanner();
-$display->DisplaySidebar($session);
-$forum->DisplayThreads($session, $page);
+$display->DisplaySidebar();
+$display->DisplayBoard($page);
 ?>
 </body>
 </html>
