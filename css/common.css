@@ -27,9 +27,6 @@ table, td, th, tr{
     padding:0.3em;
     table-layout:fixed;
     background:#ffffff;
-/*    border-radius:.5em;
-    -webkit-border-radius:.5em;
-    -moz-border-radius:.5em;*/
     font-size:small;
     font-family:sans-serif;
     overflow:auto;
@@ -76,6 +73,18 @@ form { text-align:center; }
 hr { width:97% }
 .time { font-size:x-small; }
 
+/* Login page */
+form.login_form {
+    background:white;
+    margin:10% auto;
+    width:20em;
+    border: 3px solid grey;
+    padding: 0.5em 0;
+    border-radius:7px;
+}
+form.login_form input { margin: 0.2em 0; text-align:center; }
+form.login_form .remember { display:inline; margin:0 0.2em; }
+
 /* For list of threads */
 a.makenew{ text-decoration:none }
 a.thread{ text-decoration:none }
@@ -98,18 +107,18 @@ div.board_header {
     width:100% - 4px;
     margin-top:1%;
     margin-bottom:1%;
-    border:2px solid grey;
+    border:3px solid grey;
     border-radius:7px;
 }
 div.board_new_thr { float:right; margin-right:2%; font-weight:bold; font-size:medium; }
 div.board_pages { float:left; margin-left:2%; font-weight:bold; }
-div.board_threads{ background:white; border:2px solid grey; border-radius:7px; padding:1%; }
+div.board_threads{ background-color:white; border:2px solid grey; border-radius:7px; padding:1%; }
 div.board_top { font-weight:bold; border-bottom:2px solid grey; padding:0%; padding-bottom:0.5em; }
 div.board_thr_title { width:50%; float:left; }
 div.board_thr_num { width:7%; float:left; }
 div.board_thr_time { width:18%; float:left; }
 div.board_thread_row { border-bottom:1px solid grey; width:100%; padding-top:0.5em; padding-bottom:0.5em;
-                     vertical-align:middle; height:100%; }
+                     vertical-align:middle; height:100%;}
 div.board_thread_row:hover { background-color:#F0F0F0; }
 div.board_thread_row * { height:100%; }
 div.board_thr_page_links { display:inline; margin-right:0.3em; }
@@ -121,7 +130,7 @@ div.user_prof {
     padding-top:2%;
     padding-bottom:2%;
     background:white;
-    border:2px solid grey;
+    border:3px solid grey;
     border-radius:7px;
     overflow-x:auto;
     float:left;
@@ -141,7 +150,7 @@ div.thread_title_bar {
     width:100% - 4px;
     margin-bottom:1%;
     font-weight:bold;
-    border:2px solid grey;
+    border:3px solid grey;
     border-radius:7px;
 }
 div.thread_title { font-size:medium; float:right; margin-right:2%; }
@@ -153,7 +162,7 @@ div.post_content {
     text-align:left;
     float:right;
     background:white;
-    border:2px solid grey;
+    border:3px solid grey;
     border-radius:7px;
 }
 div.post_text { overflow-x:auto; padding:2%; min-height:100px; }
@@ -174,12 +183,12 @@ form#new_post { margin-top:2%; width:100%; margin-bottom:5%;}
 form#new_post .button { margin:0.3em; }
 textarea.new_post {
     width:80%;
-    margin-left:10%;
-    margin-right:10%;
+    margin: 0 10%;
+    padding:0.3em;
     resize:vertical;
     min-height:20em;
     height:20em;
-    border:2px solid grey;
+    border:3px solid grey;
     border-radius:7px;
 }
 
@@ -204,7 +213,7 @@ div.sidebar_trigger {
     vertical-align:bottom;
     height:6.5em;
     width:2em;
-    border:2px solid grey;
+    border:3px solid grey;
     border-right:none;
     border-top-left-radius:5px;
     border-bottom-left-radius:5px;
@@ -231,8 +240,8 @@ div.sidebar {
 }
 div.sidebar_item {
     padding:0.4em;
-    border-left:2px solid;
-    border-right:2px solid;
+    border-left:3px solid;
+    border-right:3px solid;
     border-bottom:2px dotted;
     border-color:grey;
     background:white;
@@ -242,7 +251,7 @@ table.chat_table{ max-height:100%; }
 div.sidebar_users { max-height:15%; overflow-y:auto; }
 div#sidebar_welcome {
     font-weight:bold;
-    border-top:2px solid grey;
+    border-top:3px solid grey;
     border-top-left-radius:5px;
     border-top-right-radius:5px;
 }
@@ -251,7 +260,7 @@ div#sidebar_chat_msgs { text-align:left; border:1px solid grey; border-radius:3p
 form#chat_input { width:95%; }
 textarea#chat_post { width:100%; }
 div#sidebar_version {
-    border-bottom:2px solid grey;
+    border-bottom:3px solid grey;
     border-bottom-left-radius:5px;
     border-bottom-right-radius:5px;
 }

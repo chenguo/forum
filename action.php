@@ -10,11 +10,28 @@ if (!isset($_REQUEST['action']))
 
 $action = $_REQUEST['action'];
 
-// First check for logout
+// First check for logout/login
 if ($action === "logout")
   {
     $session->Logout();
-    header("Location: index.php");
+    header("Location: ".Pages::LOGIN);
+    exit();
+  }
+else if ($action === "login")
+  {
+    if (isset($_POST['username']) && isset($_POST['password']))
+      {
+        $cookie = FALSE;
+        if (isset($_POST['cookie']))
+          $cookie = TRUE;
+
+        if ($session->Login($_POST['username'], $_POST['password'], $cookie))
+          {
+            header("Location: ".Pages::LOGIN);
+            exit();
+          }
+      }
+    header("Location: ".Pages::LOGIN);
     exit();
   }
 

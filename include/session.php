@@ -20,15 +20,26 @@ class Session
     if (isset($_SESSION[$this->session_var]))
       {
         $this->uid = $_SESSION[$this->session_var];
-        if ($update == TRUE)
-          $this->db->UpdateUserTimestamp($_SESSION[$this->session_var]);
         $ret = TRUE;
+        }
+    else if (isset($_COOKIE['lolbros']) && isset($_COOKIE['lolbros_uid']))
+      {
+        if ($this->db->CheckCookie($_COOKIE['lolbros_uid'], $_COOKIE['lolbros']))
+          {
+            $this->uid = $_COOKIE['lolbros_uid'];
+            $_SESSION[$this->session_var] = $_COOKIE['lolbros_uid'];
+            $ret = TRUE;
+          }
       }
+
+    if ($ret && $update)
+      $this->db->UpdateUserTimestamp($_SESSION[$this->session_var]);
+
     return $ret;
   }
 
   /* Log user into the forum. */
-  function Login($user, $pw)
+  function Login($user, $pw, $cookie = FALSE)
   {
     $uid = $this->db->VerifyUser($user, $pw, TRUE);
     if ($uid >= 0)
@@ -36,6 +47,12 @@ class Session
         $this->uid = $uid;
         $_SESSION[$this->session_var] = $uid;
         $_SESSION['chat'] = "";
+        // Store for 60 days
+        if ($cookie)
+          {
+            setcookie('lolbros_uid', $uid, time() + 5184000);
+            setcookie('lolbros', md5($pw), time() + 5184000);
+          }
         return TRUE;
       }
     else
@@ -93,6 +110,8 @@ class Session
   function Logout()
   {
     $this->uid = -1;
+    setcookie('lolbros_uid', 0, 1);
+    setcookie('lolbros', 0, 1);
     session_unset();
     session_destroy();
   }

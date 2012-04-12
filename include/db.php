@@ -38,7 +38,16 @@ class DB
   {
     $result = $this->__SelectFromTable(Tables::USERS, array('uid'), array("uid=\"$uid\""));
     if (count($result) > 0)
-        return TRUE;
+      return TRUE;
+    return FALSE;
+  }
+
+  // Match a user's cookie to a username
+  function CheckCookie($uid, $cookie)
+  {
+    $result = $this->__SelectFromTable(Tables::USERS, array('uid'), array("uid=\"$uid\"","password=\"$cookie\""));
+    if (count($result) > 0)
+      return TRUE;
     return FALSE;
   }
 
