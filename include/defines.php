@@ -53,7 +53,7 @@ final class Pages
 
 define("CHAT_SEQ_MAX", 1024);
 define("BOARD_NAME", "LOL Bros, LOL");
-define("VERSION", 0.57);
+define("VERSION", 0.58);
 define("COMMON_CSS", "<link href='/css/common.css' type='text/css' rel='stylesheet'>\n");
 define("COMMON_JQUERY", "<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'></script>");
 define("TIME_FULL", "g:i a M/j/Y");

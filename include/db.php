@@ -111,11 +111,11 @@ class DB
   // Get the last post a user has viewed in a thread.
   function GetUserPostView($uid, $tid)
   {
-    $pview_info = $this->__SelectFromTable(Tables::PVIEW, array("tpid"), array("uid=$uid", "tid=$tid"));
+    $pview_info = $this->__SelectFromTable(Tables::PVIEW, array("tpid", "pid"), array("uid=$uid", "tid=$tid"));
     if (count($pview_info) == 0)
       return 0;
     else
-      return $pview_info[0]['tpid'];
+      return $pview_info[0];
   }
   // Update the last post a user has viewed in a thread.
   function UpdateUserPostView($uid, $tid, $pid, $tpid)

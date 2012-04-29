@@ -122,7 +122,8 @@ div.board_thread_row { border-bottom:1px solid grey; width:100%; padding-top:0.5
 div.board_thread_row:hover { background-color:#F0F0F0; }
 div.board_thread_row * { height:100%; }
 div.board_thr_page_links { display:inline; margin-right:0.3em; }
-div.board_thr_flags { display:inline; margin-left:0.3em; font-weight:bold; color:blue; }
+div.board_thr_flags { display:inline; margin-left:0.3em; font-weight:bold; font-size:x-small }
+div.board_thr_flags a {color:white; background:blue; text-decoration:none; padding:0 0.3em}
 
 /* For user profiles */
 div.user_prof {

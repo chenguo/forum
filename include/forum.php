@@ -97,10 +97,13 @@ class Forum
     $flags = "";
 
     // Check the last post the user has viewed
-    $num_viewed = $this->db->GetUserPostView($uid, $thread['tid']);
+    $user_post_view = $this->db->GetUserPostView($uid, $thread['tid']);
+    $num_viewed = $user_post_view['tpid'];
+    $page = floor($num_viewed / DEFAULT_ITEMS_PER_PAGE) + 1;
     if ($num_viewed < $thread['posts'])
-      $flags .= "new";
-
+      {
+        $flags .= makeLink(Pages::THREAD . "?tid={$thread['tid']}&page=$page#post{$user_post_view['pid']}", "new");
+      }
     return $flags;
   }
 
@@ -458,7 +461,7 @@ class Forum
       $thread = $this->db->GetThread($post_meta['tid']);
       $karma_list .= ($karma_action['type'] === "plus")? Karma::PLUSact : Karma::MINUSact;
       $giver = $this->GetCachedUser($karma_action['uid']);
-      $karma_list .= " by " . makeLink(Pages."?uid={$giver['uid']}", $giver['name']) . " in " . $this->GetPostLink($karma_action['pid'], $thread['title'])
+      $karma_list .= " by " . makeLink(Pages::USER."?uid={$giver['uid']}", $giver['name']) . " in " . $this->GetPostLink($karma_action['pid'], $thread['title'])
         . " at " . GetTime(TIME_FULL, $karma_action['time']) . "</br>";
     }
     $recent_karma .= tableRow( HTMLTag("th", "Recent Karma Received", array('colspan'=>2) ) )
