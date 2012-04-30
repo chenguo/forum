@@ -70,19 +70,6 @@ form.login_form {
 form.login_form input { margin: 0.2em 0; text-align:center; }
 form.login_form .remember { display:inline; margin:0 0.2em; }
 
-/* For list of threads */
-a.makenew{ text-decoration:none }
-a.thread{ text-decoration:none }
-div.posts{ text-align:center }
-*.noshow{ border-style:none; border:none; }
-table#threads {text-align:center}
-*.new_thr{ font-weight:bold; font-size:medium; }
-th.thr_title { width:50% }
-th.num { width:7% }
-th.thr_time { width:18% }
-.thr_page_link { font-size:x-small }
-.thr_flags { color:blue; font-weight:bold }
-
 /* For board view */
 div.board_header {
     text-align:left;
@@ -155,6 +142,8 @@ div.post_text { overflow-x:auto; padding:2%; min-height:100px; }
 div.post_karma_plus { padding-left:2%; font-size:x-small; }
 div.post_karma_minus { padding-left:2%; font-size:x-small; }
 div.post_footer { vertical-align:bottom; }
+div.post_sig { padding:0% 2%; }
+div.post_sig img {max-height:200px}
 div.post_time { float:left; padding-bottom:1%; padding-left:2%; font-size:x-small; }
 div.post_controls{ float:right; padding-bottom:1%; padding-top:1%; padding-right:2%; }
 

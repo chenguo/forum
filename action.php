@@ -100,9 +100,9 @@ if ($session->CheckLogin())
         exit();
       }
     // User profile: view recent activities
-    else if ($action === "user_prof_prof")
+    else if ($action === "user_prof_prof" && isset($_POST['uid']))
       {
-        $user_info = $db->GetUserProfile($uid, TRUE, FALSE);
+        $user_info = $db->GetUserProfile($_POST['uid'], TRUE, FALSE);
         echo $display->GenerateUserDetails($user_info);
         exit();
       }
@@ -112,9 +112,9 @@ if ($session->CheckLogin())
         echo $display->GenerateUserSettings($user_info);
         exit();
       }
-    else if ($action === "user_prof_recent")
+    else if ($action === "user_prof_recent" && isset($_POST['uid']))
       {
-        echo $display->GenerateUserRecent($uid);
+        echo $display->GenerateUserRecent($_POST['uid']);
         exit();
       }
     // User profile update

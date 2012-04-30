@@ -89,9 +89,9 @@ class DB
     if ($incr_view === TRUE)
       $this->__UpdateTable(Tables::USERS, array("views"=>"views+1"), array("uid=$uid"));
 
-    $fields = array('uid', 'name', 'posts', 'avatar', 't_online', 'plus', 'minus');
+    $fields = array('uid', 'name', 'posts', 'avatar', 't_online', 'plus', 'minus', 'signature');
     if ($full == TRUE)
-      array_push($fields, 'email', 'birth', '`join`', 'views', 'posts_display', 'threads_display', 'signature');
+      array_push($fields, 'email', 'birth', '`join`', 'views', 'posts_display', 'threads_display');
     $result = $this->__SelectFromTable(Tables::USERS, $fields, array("uid=$uid"));
     return $result[0];
   }

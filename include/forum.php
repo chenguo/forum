@@ -268,7 +268,6 @@ class Forum
         else
           $post_controls .= makeButton("edit", array('onclick'=>"editPost({$post['pid']}, \"edit_edit\", 0)"));
       }
-
     // If user hasn't modified karma of this post yet, display karma buttons.
     else if ($this->db->PostKarmaChangeAllowed($post['pid'], $session_id))
       {
@@ -357,60 +356,6 @@ class Forum
     return $this->db->GetUserProfile($uid,
                                      FALSE,  // only get basic info
                                      FALSE); // don't increment profile view count
-  }
-
-  /* Display user profile page. */
-  function DisplayUserPage($uid, $session_user)
-  {
-    /* Get full user profile and increment view count. */
-    $user_info = $this->db->GetUserProfile($uid, TRUE, TRUE);
-
-    $user_profile = $this->GenerateUserProfile($user_info);
-    $user_details = $this->GenerateUserDetails($user_info);
-
-    echo "<div id='common'>";
-    echo "<table id='user_profile'>";
-    echo tableRow( tableCol ($user_profile, array('class'=>'profile')) . tableCol($user_details) );
-    echo $this->DisplayUserRecentPosts($user_info);
-    echo $this->DisplayUserRecentKarma($user_info);
-    echo "</table></br>\n";
-
-    if ($uid == $session_user)
-      {
-        echo "<div id='profile_control'>";
-        echo makeButton("edit profile", array('onclick'=>"editProfile(\"edit\")"));
-        echo "</div>";
-      }
-
-    echo "</br></br></div>";
-  }
-
-  /* Generate quick profile of user. */
-  function GenerateUserProfile($user_info)
-  {
-    $user_profile = "<table id='subprofile' class='noshow'>"
-      . tableRow( tableCol(makeUserLink($user_info['uid'], $user_info['name']) . "</br>"
-                           . fontSize($user_info['posts'], 2) . fontSize(" posts", 1) ) )
-      . tableRow( tableCol(showImg($user_info['avatar'], array('class'=>'profile_img', 'id'=>'profile_img') ) ) )
-      . tableRow( tableCol( fontSize($user_info['plus'], 2) . fontSize(" " . Karma::PLUSpl, 1) . "</br>"
-                            . fontSize($user_info['minus'], 2) . fontSize(" " . Karma::MINUSpl, 1) ) )
-      . "</table>";
-    return $user_profile;
-  }
-
-  // Generate table of user details.
-  function GenerateUserDetails($user_info)
-  {
-    $user_details = "<label id='msg'></label>";
-    $user_details .= "<table class='noshow' id='prof_details'>"
-      . tableRow( tableCol("email") . tableCol("<div id='email_field'>" . $user_info['email'] . "</div>") )
-      . tableRow( tableCol("profile views") . tableCol($user_info['views']) )
-      . tableRow( tableCol("birthday") . tableCol($user_info['birth']) )
-      . tableRow( tableCol("joined on") . tableCol($user_info['join']) )
-      . tableRow( tableCol("last login") . tableCol($user_info['t_online']) )
-      . "</table>";
-
-    return $user_details;
   }
 
   // Display a user's recent posts.

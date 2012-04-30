@@ -322,7 +322,7 @@ class Display
     $post = HTMLTag("div",
                     // User profile
                     $this->GenerateUserProfile($user_info)
-                    . $this->GeneratePostContent($post_info)
+                    . $this->GeneratePostContent($post_info, $user_info)
                     // Clear float
                     . HTMLTag("div", "", array('class'=>'clear'))
                     ,
@@ -331,7 +331,7 @@ class Display
   }
 
   // Create a post footer
-  function GeneratePostContent($post_info)
+  function GeneratePostContent($post_info, $user_info)
   {
     $pid = $post_info['pid'];
     $content = HTMLTag("div",
@@ -339,6 +339,9 @@ class Display
                        HTMLTag("div", $post_info['content'], array('class'=>'post_text',
                                                                    'id'=>"post{$pid}_text"))
                        . "<hr>"
+                       // Signature
+                       . HTMLTag("div", prepContent($user_info['signature'], FALSE)
+                                 , array('class'=>"post_sig user{$user_info['uid']}_sig}"))
                        // Post karma
                        . HTMLTag("div", $post_info['karma']['plus_karma'], array('class'=>'post_karma_plus'))
                        . HTMLTag("div", $post_info['karma']['minus_karma'], array('class'=>'post_karma_minus'))
@@ -366,10 +369,15 @@ class Display
     $user_info = $this->db->GetUserProfile($uid, TRUE, TRUE);
 
     $buttons = "";
-    $buttons = makeButton("profile", array('class'=>'user_prof_btn', 'onclick'=>"userProfView(\"profile\", $uid)"));
+    $buttons = makeButton("profile", array('class'=>'user_prof_btn',
+                                           'onclick'=>"userProfView(\"profile\", $uid)"));
     if ($uid == $this->session->GetUID())
-      $buttons .=  makeButton("edit profile", array('class'=>'user_prof_btn', 'onclick'=>"userProfView(\"edit\", $uid)"));
-    $buttons .= makeButton("recent", array('class'=>'user_prof_btn', 'onclick'=>"userProfView(\"recent\", $uid)"))
+      {
+        $buttons .=  makeButton("edit profile", array('class'=>'user_prof_btn',
+                                                      'onclick'=>"userProfView(\"edit\", $uid)"));
+      }
+    $buttons .= makeButton("recent", array('class'=>'user_prof_btn',
+                                           'onclick'=>"userProfView(\"recent\", $uid)"))
       . makeButton("message", array('class'=>'user_prof_btn'));
 
     // Display basic user profile
@@ -413,33 +421,27 @@ class Display
                         . HTMLTag("th", "", array('class'=>'prof_detail_value'))
                         );
 
-    // Email
-    $email = tableRow( tableCol("email")
-                        . tableCol("<input type='text' id='email' value={$user_info['email']}>"));
-    // Avatar
-    $avatar = tableRow( tableCol("avatar")
-                        . tableCol("<input type='text' id='avatar' value={$user_info['avatar']}>"));
-    // Posts per page
-    $posts_disp = tableRow( tableCol("posts per page")
-                        . tableCol("<input type='text' id='post_disp' value={$user_info['posts_display']}>"));
-    // Threads per page
-    $threads_disp = tableRow( tableCol("threads per page")
-                               . tableCol("<input type='text' id='thr_disp' value={$user_info['threads_display']}>"));
-    // Signature
-    $signature = tableRow( tableCol("signature")
-                           . tableCol(HTMLTag("textarea", $user_info['signature'], array('class'=>'prof_edit_sig', 'maxlength'=>'255'))));
     $basic_settings =
       table($header
-            . $email
-            . $posts_disp
-            . $threads_disp
-            . $avatar
-            . $signature
+            // email
+            . tableRow( tableCol("email")
+                        . tableCol("<input type='text' id='email' value={$user_info['email']}>"))
+            // posts per page
+            . tableRow( tableCol("posts per page")
+                        . tableCol("<input type='text' id='post_disp' value={$user_info['posts_display']}>"))
+            // threads per page
+            . tableRow( tableCol("threads per page")
+                        . tableCol("<input type='text' id='thr_disp' value={$user_info['threads_display']}>"))
+            // avatar
+            . tableRow( tableCol("avatar")
+                        . tableCol("<input type='text' id='avatar' value={$user_info['avatar']}>"))
+            // signature
+            . tableRow( tableCol("signature")
+                        . tableCol(HTMLTag("textarea", $user_info['signature'], array('class'=>'prof_edit_sig', 'maxlength'=>'255'))))
             ,
             array('class'=>'noshow prof_edit_table'));
     $save_button = makeButton("save", array('onclick'=>"userProfSave({$user_info['uid']})", 'class'=>'settings_btn'));
     $cancel_button = makeButton("cancel", array('onclick'=>"userProfCancel({$user_info['uid']})", 'class'=>'settings_btn'));
-
 
     // Password
     $password_table =
@@ -463,10 +465,7 @@ class Display
     $recent_posts_array = $this->forum->GenerateUserRecentPosts($uid);
     $rows = "";
     foreach ($recent_posts_array as $post)
-      {
-        $rows .= tableRow( tableCol($post['time']) . tableCol($post['post']) . tableCol($post['content']));
-      }
-
+      $rows .= tableRow( tableCol($post['time']) . tableCol($post['post']) . tableCol($post['content']));
     $recent_posts = HTMLTag("h2", "Recent Posts") . table($rows);
 
     $recent_karma_given_array = $this->forum->GenerateUserRecentKarmaGiven($uid);

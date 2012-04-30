@@ -93,16 +93,16 @@ function prepContent($content, $embed_vid)
   // [img] check.
   $content = preg_replace("/\[img\](.*?)\[\/img\]/i","<div class='img_container'><img src='$1' alt='[IMAGE]'></div>", $content);
 
-  // [youtube] check.
-  $content = preg_replace("/\[youtube\].*?youtube.*?v\/([0-9a-zA-Z_-]*).*?\[\/youtube\]/i",
-                          "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
-                          "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>", $content);
-  $content = preg_replace("/\[youtube\].*?youtube.*?v=([0-9a-zA-Z_-]*).*?\[\/youtube\]/i",
-                          "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
-                          "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>", $content);
-
   if ($embed_vid)
     {
+      // [youtube] check.
+      $content = preg_replace("/\[youtube\].*?youtube.*?v\/([0-9a-zA-Z_-]*).*?\[\/youtube\]/i",
+                              "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
+                              "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>", $content);
+      $content = preg_replace("/\[youtube\].*?youtube.*?v=([0-9a-zA-Z_-]*).*?\[\/youtube\]/i",
+                              "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
+                              "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>", $content);
+
       // [vimeo] check.
       $content = preg_replace("/\[vimeo\].*?vimeo.com\/(\d*)\[\/vimeo\]/i",
                               "<iframe src='http://player.vimeo.com/video/$1?title=0&amp;byline=0&amp;portrait=0' width='400' height='225' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>",
