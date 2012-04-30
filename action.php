@@ -99,6 +99,73 @@ if ($session->CheckLogin())
         //echo "Chat send new req: $new_seq\n";
         exit();
       }
+    // User profile: view recent activities
+    else if ($action === "user_prof_prof")
+      {
+        $user_info = $db->GetUserProfile($uid, TRUE, FALSE);
+        echo $display->GenerateUserDetails($user_info);
+        exit();
+      }
+    else if ($action === "user_prof_edit" && $uid === $session->GetUID())
+      {
+        $user_info = $db->GetUserProfile($uid, TRUE, FALSE);
+        echo $display->GenerateUserSettings($user_info);
+        exit();
+      }
+    else if ($action === "user_prof_recent")
+      {
+        echo $display->GenerateUserRecent($uid);
+        exit();
+      }
+    // User profile update
+    else if (($action === "user_prof_save" || $action === "user_prof_cancel")
+             && $uid === $session->GetUID())
+      {
+        if ($action === "user_prof_save")
+          {
+            $new_user_info = array();
+            if (isset($_POST['email']))
+              $new_user_info['email'] = "\"" . $_POST['email'] . "\"";
+            if (isset($_POST['thr_disp']))
+              $new_user_info['threads_display'] = $_POST['thr_disp'];
+            if (isset($_POST['post_disp']))
+              $new_user_info['posts_display'] = $_POST['post_disp'];
+            if (isset($_POST['avatar']))
+              $new_user_info['avatar'] = "\"" . $_POST['avatar'] . "\"";
+            if (isset($_POST['sig']))
+              {
+                $new_user_info['signature'] = $_POST['sig'];
+              }
+            $user_info = $db->UpdateUserProfile($uid, $new_user_info);
+          }
+        else // user_prof_cancel
+          {
+            $user_info = $db->GetUserProfile($uid, TRUE, FALSE);
+          }
+
+        echo json_encode(array('email'=>$user_info['email'],
+                               'avatar'=>$user_info['avatar'],
+                               'post_disp'=>$user_info['posts_display'],
+                               'thr_disp'=>$user_info['threads_display'],
+                               'sig'=>$user_info['signature']));
+        exit();
+      }
+    else if ($action === "user_prof_pw" && isset($_POST['cur_pw']) && isset($_POST['new_pw']))
+      {
+        if ($session->CheckPassword($_POST['cur_pw']))
+          {
+            $update_fields = array('password'=>"\"" . md5($_POST['new_pw']) . "\"");
+            $user_info = $db->UpdateUserProfile($uid, $update_fields);
+            // 0 for success
+            echo "0";
+          }
+        else
+          {
+            // 1 for authentication failure
+            echo "1";
+          }
+        exit();
+      }
 
     // All other actions require a pid.
     $pid;
@@ -219,5 +286,4 @@ if ($session->CheckLogin())
           }
       }
   }
-
 ?>

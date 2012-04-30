@@ -167,7 +167,7 @@ class Forum
     $formatted_post = array();
     $formatted_post['pid'] = $post['pid'];
     $formatted_post['uid'] = $post['uid'];
-    $formatted_post['content'] = prepContent($post['content'], $post['tid']);
+    $formatted_post['content'] = prepContent($post['content'], TRUE);
     $formatted_post['controls'] = $this->GetPostControls($post);
     $formatted_post['time'] = $this->GetPostTime($post);
     $formatted_post['karma'] = $this->GetPostKarma($post);
@@ -414,59 +414,72 @@ class Forum
   }
 
   // Display a user's recent posts.
-  function DisplayUserRecentPosts($user_info)
+  function GenerateUserRecentPosts($uid)
   {
-    $posts = $this->db->GetUserRecentPosts($user_info['uid']);
-    $post_links = "";
+    $posts = $this->db->GetUserRecentPosts($uid);
+    $recent_posts = array();
     foreach ($posts as $post)
     {
+      $post_array = array();
       $thread = $this->db->GetThread($post['tid']);
-      $post_links .= $this->GetPostLink($post['pid'], $thread['title'])
-        . " at " . GetTime(TIME_FULL, $post['time']) . ":   "
-        . substr($post['content'], 0, 50);
+      $post_array['post'] = $this->GetPostLink($post['pid'], $thread['title']);
+      $post_array['time'] = GetTime(TIME_FULL, $post['time']);
+      $post_array['content'] = substr($post['content'], 0, 50);
       if (strlen($post['content']) > 50)
-        $post_links .= "...";
-      $post_links .= "</br>";
+        $post_array['content'] .= "...";
+      array_push($recent_posts, $post_array);
     }
-
-    $recent_posts = tableRow( HTMLTag("th", "Recent Posts", array('colspan'=>2) ) )
-      . tableRow( tableCol($post_links, array('colspan'=>2, 'class'=>'recent_posts')) );
     return $recent_posts;
   }
 
-  // Display a user's recent karma activities.
-  function DisplayUserRecentKarma($user_info)
+  // Generate user's recent karma given history
+  function GenerateUserRecentKarmaGiven($uid)
   {
-    // Karma given.
-    $karma_actions = $this->db->GetUserRecentKarmaGiven($user_info['uid']);
-    $karma_list = "";
-    foreach ($karma_actions as $karma_action)
-    {
-      $post_meta = $this->db->GetPostMeta($karma_action['pid']);
-      $thread = $this->db->GetThread($post_meta['tid']);
-      $karma_list .= ($karma_action['type'] === "plus")? Karma::PLUSact : Karma::MINUSact;
-      $recipient = $this->GetCachedUser($karma_action['puid']);
-      $karma_list .= " " . makeLink(Pages::USER."?uid={$recipient['uid']}", $recipient['name']) . " in " . $this->GetPostLink($karma_action['pid'], $thread['title'])
-        . " at " . GetTime(TIME_FULL, $karma_action['time']) . "</br>";
-    }
-    $recent_karma = tableRow( HTMLTag("th", "Recent Karma Given", array('colspan'=>2) ) )
-      . tableRow( tableCol($karma_list, array('colspan'=>2, 'class'=>'recent_karma')) );
+    $karma_actions = $this->db->GetUserRecentKarmaGiven($uid);
+    $recent_karma_given = array();
 
-    // Karma received.
-    $karma_actions = $this->db->GetUserRecentKarmaReceived($user_info['uid']);
-    $karma_list = "";
     foreach ($karma_actions as $karma_action)
-    {
-      $post_meta = $this->db->GetPostMeta($karma_action['pid']);
-      $thread = $this->db->GetThread($post_meta['tid']);
-      $karma_list .= ($karma_action['type'] === "plus")? Karma::PLUSact : Karma::MINUSact;
-      $giver = $this->GetCachedUser($karma_action['uid']);
-      $karma_list .= " by " . makeLink(Pages::USER."?uid={$giver['uid']}", $giver['name']) . " in " . $this->GetPostLink($karma_action['pid'], $thread['title'])
-        . " at " . GetTime(TIME_FULL, $karma_action['time']) . "</br>";
-    }
-    $recent_karma .= tableRow( HTMLTag("th", "Recent Karma Received", array('colspan'=>2) ) )
-      . tableRow( tableCol($karma_list, array('colspan'=>2, 'class'=>'recent_karma')) );
-    return $recent_karma;
+      {
+        $karma_action_array = array();
+
+        $post_meta = $this->db->GetPostMeta($karma_action['pid']);
+        $thread = $this->db->GetThread($post_meta['tid']);
+        $recip = $this->GetCachedUser($karma_action['puid']);
+
+        $karma_action_array['action'] = ($karma_action['type'] === "plus")? Karma::PLUSact : Karma::MINUSact;
+        $karma_action_array['recip'] = makeLink(Pages::USER."?uid={$recip['uid']}", $recip['name']);
+        $karma_action_array['thread'] = $this->GetPostLink($karma_action['pid'], $thread['title']);
+        $karma_action_array['time'] = GetTime(TIME_FULL, $karma_action['time']);
+
+        array_push($recent_karma_given, $karma_action_array);
+      }
+
+    return $recent_karma_given;
+  }
+
+  // Generate user's recent karma given history
+  function GenerateUserRecentKarmaRecvd($uid)
+  {
+    $karma_actions = $this->db->GetUserRecentKarmaReceived($uid);
+    $recent_karma_recvd = array();
+
+    foreach ($karma_actions as $karma_action)
+      {
+        $karma_action_array = array();
+
+        $post_meta = $this->db->GetPostMeta($karma_action['pid']);
+        $thread = $this->db->GetThread($post_meta['tid']);
+        $recip = $this->GetCachedUser($karma_action['puid']);
+
+        $karma_action_array['action'] = ($karma_action['type'] === "plus")? Karma::PLUSact : Karma::MINUSact;
+        $karma_action_array['recip'] = makeLink(Pages::USER."?uid={$recip['uid']}", $recip['name']);
+        $karma_action_array['thread'] = $this->GetPostLink($karma_action['pid'], $thread['title']);
+        $karma_action_array['time'] = GetTime(TIME_FULL, $karma_action['time']);
+
+        array_push($recent_karma_recvd, $karma_action_array);
+      }
+
+    return $recent_karma_recvd;
   }
 
   // Cache user lookup from database.

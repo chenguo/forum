@@ -7,12 +7,14 @@ class Display
   var $title;
   var $session;
   var $forum;
+  var $db;
 
-  function Display($forum, $session, $title)
+  function Display($forum, $db, $session, $title)
   {
     $this->forum = $forum;
     $this->title = $title;
     $this->session = $session;
+    $this->db = $db;
   }
 
   /*******************************\
@@ -316,9 +318,10 @@ class Display
   */
   function GeneratePost($post_info)
   {
+    $user_info = $this->forum->GetCachedUser($post_info['uid']);
     $post = HTMLTag("div",
                     // User profile
-                    $this->GenerateUserProfile($post_info['uid'])
+                    $this->GenerateUserProfile($user_info)
                     . $this->GeneratePostContent($post_info)
                     // Clear float
                     . HTMLTag("div", "", array('class'=>'clear'))
@@ -352,6 +355,153 @@ class Display
     return $content;
   }
 
+
+  /*******************************\
+   *                             *
+   *      User Page Display      *
+   *                             *
+  \*******************************/
+  function DisplayUserPage($uid)
+  {
+    $user_info = $this->db->GetUserProfile($uid, TRUE, TRUE);
+
+    $buttons = "";
+    $buttons = makeButton("profile", array('class'=>'user_prof_btn', 'onclick'=>"userProfView(\"profile\", $uid)"));
+    if ($uid == $this->session->GetUID())
+      $buttons .=  makeButton("edit profile", array('class'=>'user_prof_btn', 'onclick'=>"userProfView(\"edit\", $uid)"));
+    $buttons .= makeButton("recent", array('class'=>'user_prof_btn', 'onclick'=>"userProfView(\"recent\", $uid)"))
+      . makeButton("message", array('class'=>'user_prof_btn'));
+
+    // Display basic user profile
+    echo $this->GenerateUserProfile($user_info);
+    echo "\n";
+
+    // Display basic user information
+    $details = $this->GenerateUserDetails($user_info);
+    echo HTMLTag("div",
+                 HTMLTag("div", $buttons, array('class'=>'user_prof_btns'))
+                 . HTMLTag("div", $details, array('class'=>'user_prof_content'))
+                 ,
+                 array('class'=>'prof_details'));
+  }
+
+  // Generate a table of user details.
+  function GenerateUserDetails($user_info)
+  {
+    return
+      table(tableRow( HTMLTag("th", "", array('class'=>'prof_detail_label'))
+                      . HTMLTag("th", "", array('class'=>'prof_detail_value'))
+                      . HTMLTag("th", "", array('class'=>'prof_detail_btn'))
+                      )
+            . tableRow( tableCol("email") . tableCol($user_info['email']) )
+            . tableRow( tableCol("profile views") . tableCol($user_info['views']) )
+            . tableRow( tableCol("birthday") . tableCol($user_info['birth']) )
+            . tableRow( tableCol("joined on") . tableCol($user_info['join']) )
+            . tableRow( tableCol("last login") . tableCol($user_info['t_online']) )
+            . tableRow( tableCol("signature") . tableCol(prepContent($user_info['signature'], FALSE)) )
+            ,
+            array('class'=>'noshow', 'id'=>'prof_table'));
+  }
+
+  // Generate edit fields for user profile
+  function GenerateUserSettings($user_info)
+  {
+    $msg_div = HTMLTag("div", "", array('class'=>'prof_edit_msg'));
+
+    // Header row (not shown)
+    $header = tableRow( HTMLTag("th", "", array('class'=>'prof_detail_label'))
+                        . HTMLTag("th", "", array('class'=>'prof_detail_value'))
+                        );
+
+    // Email
+    $email = tableRow( tableCol("email")
+                        . tableCol("<input type='text' id='email' value={$user_info['email']}>"));
+    // Avatar
+    $avatar = tableRow( tableCol("avatar")
+                        . tableCol("<input type='text' id='avatar' value={$user_info['avatar']}>"));
+    // Posts per page
+    $posts_disp = tableRow( tableCol("posts per page")
+                        . tableCol("<input type='text' id='post_disp' value={$user_info['posts_display']}>"));
+    // Threads per page
+    $threads_disp = tableRow( tableCol("threads per page")
+                               . tableCol("<input type='text' id='thr_disp' value={$user_info['threads_display']}>"));
+    // Signature
+    $signature = tableRow( tableCol("signature")
+                           . tableCol(HTMLTag("textarea", $user_info['signature'], array('class'=>'prof_edit_sig', 'maxlength'=>'255'))));
+    $basic_settings =
+      table($header
+            . $email
+            . $posts_disp
+            . $threads_disp
+            . $avatar
+            . $signature
+            ,
+            array('class'=>'noshow prof_edit_table'));
+    $save_button = makeButton("save", array('onclick'=>"userProfSave({$user_info['uid']})", 'class'=>'settings_btn'));
+    $cancel_button = makeButton("cancel", array('onclick'=>"userProfCancel({$user_info['uid']})", 'class'=>'settings_btn'));
+
+
+    // Password
+    $password_table =
+      table($header
+            . tableRow( tableCol("current password")
+                        . tableCol("<input type='password' id='cur_pw'>"))
+            . tableRow( tableCol("new password")
+                        . tableCol("<input type='password' id='new_pw'>"))
+            . tableRow( tableCol("confirm new password")
+                        . tableCol("<input type='password' id='cnf_pw'>")),
+            array('class'=>'noshow prof_edit_table')
+            );
+    $pw_button = makeButton("change", array('onclick'=>"userProfPW({$user_info['uid']})", 'class'=>'settings_btn'));
+
+    return $msg_div . $basic_settings . $save_button . $cancel_button . $password_table . $pw_button;
+  }
+
+  // Generate a list of user's recent activities.
+  function GenerateUserRecent($uid)
+  {
+    $recent_posts_array = $this->forum->GenerateUserRecentPosts($uid);
+    $rows = "";
+    foreach ($recent_posts_array as $post)
+      {
+        $rows .= tableRow( tableCol($post['time']) . tableCol($post['post']) . tableCol($post['content']));
+      }
+
+    $recent_posts = HTMLTag("h2", "Recent Posts") . table($rows);
+
+    $recent_karma_given_array = $this->forum->GenerateUserRecentKarmaGiven($uid);
+    $rows = "";
+    foreach ($recent_karma_given_array as $karma_given)
+      {
+        $rows .= tableRow( tableCol($karma_given['action'])
+                           . tableCol($karma_given['recip'])
+                           . tableCol($karma_given['thread'])
+                           . tableCol($karma_given['time']));
+      }
+    $recent_karma_given = HTMLTag("h2", "Recent Karma Given") . table($rows);
+
+    $recent_karma_recvd_array = $this->forum->GenerateUserRecentKarmaRecvd($uid);
+    $rows2 = "";
+    foreach ($recent_karma_recvd_array as $karma_recvd)
+      {
+        $rows2 .= tableRow( tableCol($karma_recvd['action'])
+                           . tableCol($karma_recvd['recip'])
+                           . tableCol($karma_recvd['thread'])
+                           . tableCol($karma_recvd['time']));
+      }
+    $recent_karma_recvd = HTMLTag("h2", "Recent Karma Received") . table($rows2);
+
+    return $recent_posts . "\n"
+      . $recent_karma_given . "\n"
+      . $recent_karma_recvd . "\n";
+  }
+
+  /*******************************\
+   *                             *
+   *       Utility Display       *
+   *                             *
+  \*******************************/
+
   /* Display a user profile
      user_info array fields:
      uid:      user id
@@ -361,10 +511,12 @@ class Display
      t_online: last online time
      plus:     positive karma
      minus:    negative karma
+     posts_display: posts to show per page
+     threads_display: threads to show per page
+     signature: user signature
   */
-  function GenerateUserProfile($uid)
+  function GenerateUserProfile($user_info)
   {
-    $user_info = $this->forum->GetCachedUser($uid);
     $user_profile = HTMLTag("div",
                             // User name
                             HTMLTag("div", makeUserLink($user_info['uid'], $user_info['name']), array('class'=>'user_prof_name'))
@@ -384,7 +536,7 @@ class Display
                                       ,
                                       array('class'=>'user_karma'))
                             ,
-                            array('class'=>"user_prof user_prof_$uid"));
+                            array('class'=>"user_prof user_prof_{$user_info['uid']}"));
     return $user_profile;
   }
 }

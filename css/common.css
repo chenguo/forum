@@ -21,29 +21,14 @@ body{
     margin-right:4%;
     text-align:center;
 }
-table, td, th, tr{
-    border-collapse:collapse;
-    border:1px solid #AAA;
-    padding:0.3em;
-    table-layout:fixed;
-    background:#ffffff;
-    font-size:small;
-    font-family:sans-serif;
-    overflow:auto;
-}
 
 div.banner {
     font-family:'FFFTusjBold';
     font-size:80px;
     text-shadow: 0px 15px 11px #363536;
 }
-table.thread_header, table#threads, table.posts {
-    width:100%;
-}
-table.noshow, table.noshow td, table.noshow tr{
-    border-style:none;
-    border:none;
-}
+
+table.noshow, table.noshow td, table.noshow tr{ border-style:none; border:none; }
 div.quote{
     width:96%;
     margin-left:0%;
@@ -174,7 +159,7 @@ div.post_time { float:left; padding-bottom:1%; padding-left:2%; font-size:x-smal
 div.post_controls{ float:right; padding-bottom:1%; padding-top:1%; padding-right:2%; }
 
 /* Editing a post */
-div.post_edit { text-align:center; width:80%; margin-left:10%;}
+div.post_edit { text-align:center; width:80%; margin-left:10%; margin-top:1em}
 div.post_edit .title { width:100%; }
 div.post_edit textarea { width:100%; resize:vertical; }
 div.post_edit .button { margin:0.3em; margin-top:0.5em }
@@ -194,10 +179,30 @@ textarea.new_post {
 }
 
 /* For user profile page */
-table#user_profile { text-align:center; width:100%; margin-left:0% }
-.subprofile{ width:30%; }
-.recent_posts { text-align:left; padding-left: 1em }
-.recent_karma { text-align:left; padding-left: 1em }
+.prof_details {
+    width:79%;
+    text-align:center;
+    float:right;
+    background:white;
+    border:3px solid grey;
+    border-radius:7px;
+}
+div.user_prof_btns { margin:2%; }
+input.user_prof_btn { margin:0 0.2em; }
+div.user_prof_content { margin:2% 10%; width:80%; }
+table#prof_table { table-layout:fixed; text-align:left; width:100% }
+table#prof_table td { height:2em}
+table#prof_table th.prof_detail_label { width:35%; }
+table#prof_table th.prof_detail_value { width:45%; }
+table#prof_table th.prof_detail_btn { width:20%; }
+div.prof_edit_msg { font-weight:bold; margin:0.2em; }
+table.prof_edit_table { table-layout:fixed; text-align:left; width:100% }
+table.prof_edit_table input {width:40%}
+table.prof_edit_table input#avatar {width:100%}
+table.prof_edit_table th.prof_detail_label { width:35%; }
+table.prof_edit_table th.prof_detail_value { width:65%; }
+textarea.prof_edit_sig { width:100%; height:5em; resize:none; }
+input.settings_btn { margin:0.5em 0.2em; }
 
 /* For making new threads */
 form.newthr_form  { margin-left:10%; margin-right:10%; width:80% }

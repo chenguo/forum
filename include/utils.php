@@ -1,6 +1,6 @@
 <?php
 require_once("./include/defines.php");
-
+include_once("./include/common_cfg.php");
 
 // Throw exception.
 function throwException($message)
@@ -54,11 +54,9 @@ function tableCol($content, $options_array = array())
   return HTMLTag("td", $content, $options_array);
 }
 
-function tableRow($content, $options = "")
+function tableRow($content, $options_array = array())
 {
-  if ($options == "")
-    return "<tr>$content</tr>";
-  return "<tr$options>$content</tr>";
+  return HTMLTag("tr", $content, $options_array);
 }
 
 // Return HTML for Set fontsize.
@@ -71,15 +69,23 @@ function fontSize($content, $fontsize)
 function makeButton($text, $options_array = array())
 {
   $options = "";
+  $class = "button";
   if (count($options_array) > 0)
     foreach ($options_array as $optkey => $optval)
-      $options .= " $optkey='$optval'";
-  return "<input type='button' class='button' value='$text'$options>";
+      {
+        if ($optkey === "class")
+          $class .= " " . $optval;
+        else
+          $options .= " $optkey='$optval'";
+      }
+  return "<input type='button' class='$class' value='$text'$options>";
 }
 
 // Parse text for forum display. This sets up img tags, emoticons, etc.
-function prepContent($content, $tid)
+function prepContent($content, $embed_vid)
 {
+  global $db;
+
   // Disable HTML by replacing < and > with &#60 and &#62.
   $content = preg_replace("/</", "&#60", $content);
   $content = preg_replace("/>/", "&#62", $content);
@@ -95,33 +101,36 @@ function prepContent($content, $tid)
                           "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
                           "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>", $content);
 
-  // [vimeo] check.
-  $content = preg_replace("/\[vimeo\].*?vimeo.com\/(\d*)\[\/vimeo\]/i",
-                          "<iframe src='http://player.vimeo.com/video/$1?title=0&amp;byline=0&amp;portrait=0' width='400' height='225' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>",
-                          $content);
+  if ($embed_vid)
+    {
+      // [vimeo] check.
+      $content = preg_replace("/\[vimeo\].*?vimeo.com\/(\d*)\[\/vimeo\]/i",
+                              "<iframe src='http://player.vimeo.com/video/$1?title=0&amp;byline=0&amp;portrait=0' width='400' height='225' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>",
+                              $content);
 
-  // Youtube [vid] check.
-  $content = preg_replace("/\[vid\][^]]*?youtube.*?v\/([0-9a-zA-Z_-]*).*?\[\/vid\]/i",
-                          "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
-                          "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>", $content);
-  $content = preg_replace("/\[vid\][^\]]*?youtube.*?v=([0-9a-zA-Z_-]*).*?\[\/vid\]/i",
-                          "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
-                          "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>",
-                          $content);
-  $content = preg_replace("/\[vid\][^\]]*?youtu.be\/([0-9a-zA-Z_-]*).*?\[\/vid\]/i",
-                          "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
-                          "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>",
-                          $content);
+      // Youtube [vid] check.
+      $content = preg_replace("/\[vid\][^]]*?youtube.*?v\/([0-9a-zA-Z_-]*).*?\[\/vid\]/i",
+                              "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
+                              "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>", $content);
+      $content = preg_replace("/\[vid\][^\]]*?youtube.*?v=([0-9a-zA-Z_-]*).*?\[\/vid\]/i",
+                              "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
+                              "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>",
+                              $content);
+      $content = preg_replace("/\[vid\][^\]]*?youtu.be\/([0-9a-zA-Z_-]*).*?\[\/vid\]/i",
+                              "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
+                              "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>",
+                              $content);
 
-  // Vimeo [vid] check.
-  $content = preg_replace("/\[vid\][^\]]*?vimeo.com\/(\d*)\[\/vid\]/i",
-                          "<iframe src='http://player.vimeo.com/video/$1?title=0&amp;byline=0&amp;portrait=0' width='400' height='225' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>",
-                          $content);
+      // Vimeo [vid] check.
+      $content = preg_replace("/\[vid\][^\]]*?vimeo.com\/(\d*)\[\/vid\]/i",
+                              "<iframe src='http://player.vimeo.com/video/$1?title=0&amp;byline=0&amp;portrait=0' width='400' height='225' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>",
+                              $content);
 
-  // MLB [vid] check.
-  $content = preg_replace("/\[vid\][^\]]*?mlb.com.*?content_id=(\d+).*?\[\/vid\]/i",
-                          "<iframe src='http://mlb.mlb.com/shared/video/embed/embed.html?content_id=$1&width=640&height=360&property=mlb' width='640' height='360' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>",
-                          $content);
+      // MLB [vid] check.
+      $content = preg_replace("/\[vid\][^\]]*?mlb.com.*?content_id=(\d+).*?\[\/vid\]/i",
+                              "<iframe src='http://mlb.mlb.com/shared/video/embed/embed.html?content_id=$1&width=640&height=360&property=mlb' width='640' height='360' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>",
+                              $content);
+    }
 
   // [url] and other links check.
   $content = preg_replace("/\[url=(.*?)\](.*?)\[\/url\]/",
@@ -143,6 +152,8 @@ function prepContent($content, $tid)
   while(preg_match ("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\](\n)?/", $content, $matches) > 0)
     {
       $quote_pid = $matches[2];
+      $post_meta = $db->GetPostMeta($quote_pid);
+      $tid = $post_meta['tid'];
       $page = GetPageCount($matches[3], DEFAULT_ITEMS_PER_PAGE);
       $link = makeLink("thread.php?tid=$tid&page=$page#post$quote_pid" , $matches[1] . " wrote:");
       $content = preg_replace("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\](<\/br>)?/i",

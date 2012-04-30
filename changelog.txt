@@ -86,3 +86,4 @@ Ver     Date      Description
 0.56    04/05/12  Revamp main board view page.
 0.57    04/11/12  Implement "stay logged in" feature.
 0.58    04/21/12  "New" flag for threads link to last read post.
+0.60    04/29/12  User profile page revamped. User can now set signature and items per page.

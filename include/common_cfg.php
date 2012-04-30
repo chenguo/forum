@@ -21,6 +21,6 @@ $session = new Session($db);
 $forum = new Forum($db, $session);
 
 /* Instantiate display module */
-$display = new Display($forum, $session, BOARD_NAME);
+$display = new Display($forum, $db, $session, BOARD_NAME);
 
 ?>

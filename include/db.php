@@ -91,7 +91,7 @@ class DB
 
     $fields = array('uid', 'name', 'posts', 'avatar', 't_online', 'plus', 'minus');
     if ($full == TRUE)
-      array_push($fields, 'email', 'birth', '`join`', 'views');
+      array_push($fields, 'email', 'birth', '`join`', 'views', 'posts_display', 'threads_display', 'signature');
     $result = $this->__SelectFromTable(Tables::USERS, $fields, array("uid=$uid"));
     return $result[0];
   }
@@ -99,13 +99,13 @@ class DB
   // Update user's profile.
   function UpdateUserProfile($uid, $info_array)
   {
+    if (isset($info_array['signature']))
+      $info_array['signature'] = '"' . $this->insertPrep($info_array['signature']) . '"';
+
     if (count($info_array) > 0)
       $this->__UpdateTable(Tables::USERS, $info_array, array("uid=$uid"));
-    $tmp = $this->GetUserProfile($uid, TRUE);
-    $user = array();
-    $user['email'] = $tmp['email'];
-    $user['avatar'] = $tmp['avatar'];
-    return $user;
+    $user_info = $this->GetUserProfile($uid, TRUE);
+    return $user_info;
   }
 
   // Get the last post a user has viewed in a thread.

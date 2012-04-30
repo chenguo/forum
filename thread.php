@@ -41,14 +41,5 @@ $display->DisplayBanner();
 $display->DisplaySidebar();
 $display->DisplayThread($thread_id, $page);
  ?>
-
-<!--Make post form
-<form name='post' action='action.php' method='post' onsubmit="button.disabled = true; return true;">
-<textarea class='post_text' rows='10' cols='80' name='content' id='newpost_form'></textarea></br>
-<input type='hidden' name='tid' value='<?php echo $thread_id ?>'>
-<input type='hidden' name='action' value='post'>
-<input type='submit' value='submit' class='button'>
-</form></br>-->
-
 </body>
 </html>
