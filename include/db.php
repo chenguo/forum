@@ -340,10 +340,11 @@ class DB
   function NewPost($tid, $content, $uid)
   {
     /* Make the post. */
+    $pid;
     try
       {
         $this->__BEGIN();
-        $this->__NewPost($tid, $content, $uid, GetTime(TIME_MYSQL));
+        $pid = $this->__NewPost($tid, $content, $uid, GetTime(TIME_MYSQL));
         $this->__COMMIT();
       }
     catch (Exception $e)
@@ -352,7 +353,7 @@ class DB
         $this->__ROLLBACK();
         return FALSE;
       }
-    return TRUE;
+    return $pid;
   }
 
   // Update post already in the database.
@@ -518,6 +519,8 @@ class DB
 
     /* Update user. */
     mysql_query("UPDATE " . Tables::USERS . " SET posts=posts+1 WHERE uid={$uid}") or throwException("update user: " . mysql_error());
+
+    return $pid;
   }
 
   // Select entries from TABLE

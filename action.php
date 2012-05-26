@@ -48,11 +48,11 @@ if ($session->CheckLogin())
     if ($action === "post" && isset($_POST['content']) && strlen($_POST['content']) > 0
         && isset($_POST['tid']) && $_POST['tid'] > 0)
       {
-        $forum->MakePost($_POST['tid'], $_POST['content'], $uid);
-        $posts_per_page = DEFAULT_ITEMS_PER_PAGE;
+        $pid = $forum->MakePost($_POST['tid'], $_POST['content'], $uid);
+        $posts_per_page = $session->posts_per_page;
         $num_posts = $db->GetThreadNumPosts($_POST['tid']);
         $last_page = GetPageCount($num_posts, $posts_per_page);
-        header("LOCATION: thread.php?tid={$_POST['tid']}&page=$last_page");
+        header("LOCATION: thread.php?tid={$_POST['tid']}&page=$last_page#post$pid");
         exit();
       }
     // Preview new post

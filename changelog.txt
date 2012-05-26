@@ -90,3 +90,5 @@ Ver     Date      Description
 0.61    04/29/12  User signature displayed with user posts.
 0.62    05/25/12  Re-organize CSS into files for each page. Upgrade user page slightly.
 0.63    05/25/12  Posts-per-page and threads-per-page settings now take effect.
+0.64    05/26/12  Fix bug where after posting with non-default posts-per-page, wrong page is shown. Add
+                  feature where page focuses on new post.
