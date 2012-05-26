@@ -82,6 +82,8 @@ function makeButton($text, $options_array = array())
 }
 
 // Parse text for forum display. This sets up img tags, emoticons, etc.
+// TODO: repeatedly going through the post text must be pretty inefficient... Worth it to move
+// to char-by-char manual matching?
 function prepContent($content, $embed_vid)
 {
   global $db;
@@ -96,48 +98,59 @@ function prepContent($content, $embed_vid)
 
   if ($embed_vid)
     {
-      // [youtube] check.
-      $content = preg_replace("/\[youtube\].*?youtube.*?v\/([0-9a-zA-Z_-]*).*?\[\/youtube\]/i",
-                              "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
-                              "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>", $content);
-      $content = preg_replace("/\[youtube\].*?youtube.*?v=([0-9a-zA-Z_-]*).*?\[\/youtube\]/i",
-                              "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
-                              "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>", $content);
-
-      // [vimeo] check.
-      $content = preg_replace("/\[vimeo\].*?vimeo.com\/(\d*)\[\/vimeo\]/i",
-                              "<iframe src='http://player.vimeo.com/video/$1?title=0&amp;byline=0&amp;portrait=0' width='400' height='225' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>",
-                              $content);
-
-      // Youtube [vid] check.
-      $content = preg_replace("/\[vid\][^]]*?youtube.*?v\/([0-9a-zA-Z_-]*).*?\[\/vid\]/i",
-                              "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
-                              "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>", $content);
-      $content = preg_replace("/\[vid\][^\]]*?youtube.*?v=([0-9a-zA-Z_-]*).*?\[\/vid\]/i",
-                              "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
-                              "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>",
-                              $content);
-      $content = preg_replace("/\[vid\][^\]]*?youtu.be\/([0-9a-zA-Z_-]*).*?\[\/vid\]/i",
-                              "<iframe class='youtube-player' type='text/html' width='640' height='385' ".
-                              "src='http://www.youtube.com/embed/$1' frameborder='0'></iframe>",
-                              $content);
+      $embed_opts = "frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen";
 
       // Vimeo [vid] check.
-      $content = preg_replace("/\[vid\][^\]]*?vimeo.com\/(\d*)\[\/vid\]/i",
-                              "<iframe src='http://player.vimeo.com/video/$1?title=0&amp;byline=0&amp;portrait=0' width='400' height='225' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>",
+      $content = preg_replace("/\[(vid|vimeo)\][^\]]*?vimeo.com\/(.*\/)*(\d*)\[\/\\1\]/i",
+                              "<iframe src='http://player.vimeo.com/video/$3?title=0&amp;byline=0&amp;portrait=0' width='500' height='281' $embed_opts></iframe>",
                               $content);
+
+      // Youtube url types
+      // http://youtu.be/code
+      // http://www.youtube.com/watch?v=code
+      // http://www.youtube.com/v/code
+      // http://www.youtube.com/embed/code
+
+      // Youtube videos. Use create function for the seeking time resolution instead of anonymous, since host only has PHP 5.2
+      $content = preg_replace_callback("/\[(vid|youtube)\].*?youtu(\.?)be[^&]*?([0-9a-zA-Z_-]{8,})(&[^#]*)?(#t=(\d+m)?(\d+))?.*?\[\/\\1\]/",
+                                       create_function('$match',
+                                                       '$str = "";'
+                                                       //. 'foreach ($match as $key => $val) { $str .= "$key::$val</br>"; }'
+                                                       . '$time = 0;'
+                                                       . 'if (isset($match[7])) $time = $match[7];'
+                                                       . 'if (isset($match[6])) $time = $match[6] * 60 + $match[7];'
+                                                       . '$str .= "<iframe class=\'youtube-player\' type=\'text/html\' width=\'640\' height=\'385\' '
+                                                       . 'src=\'http://www.youtube.com/embed/$match[3]?rel=0&start=$time\' frameborder=\'0\' '
+                                                       . 'webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>";'
+                                                       . 'return $str;'),
+                                       $content);
 
       // MLB [vid] check.
       $content = preg_replace("/\[vid\][^\]]*?mlb.com.*?content_id=(\d+).*?\[\/vid\]/i",
-                              "<iframe src='http://mlb.mlb.com/shared/video/embed/embed.html?content_id=$1&width=640&height=360&property=mlb' width='640' height='360' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>",
+                              "<iframe src='http://mlb.mlb.com/shared/video/embed/embed.html?content_id=$1&width=640&height=360&property=mlb' width='640' height='360' $embed_opts></iframe>",
                               $content);
     }
 
   // [url] and other links check.
-  $content = preg_replace("/\[url=(.*?)\](.*?)\[\/url\]/",
-                          "<a href=\"$1\">$2</a>", $content);
-  $content = preg_replace("/(\s|^|\])([\w\.:\/]*([\w-][\w-]+\.[\w-][\w-]+)([^\[\s]*)([^\[\s\.,!]))/",
-                          "$1<a href=\"$2\">$2</a>", $content);
+  $content = preg_replace_callback("/\[url=(.*?)\](.*?)\[\/url\]/",
+                                   create_function('$match',
+                                                   '$str = "";'
+                                                   //. 'foreach ($match as $key => $val) { $str .= "$key::$val</br>"; }'
+                                                   . 'if (preg_match("/.*\/\//", $match[1]) == FALSE)'
+                                                   . '$match[1] = "http://" . $match[1];'
+                                                   . '$str .= "<a href=\"$match[1]\">$match[2]</a>";'
+                                                   . 'return $str;'),
+                                   $content);
+  $content = preg_replace_callbacK("/(\s|^|\])(([\w-:\/]+\.[\w-][\w-]+)([^\[\s]*)([^\[\s\.,!]))/",
+                                   create_function('$match',
+                                                   '$str = "";'
+                                                   //. 'foreach ($match as $key => $val) { $str .= "$key::$val</br>"; }'
+                                                   . '$link = $match[2];'
+                                                   . 'if (preg_match("/.*\/\//", $link) == FALSE)'
+                                                   . '$link = "http://" . $link;'
+                                                   . '$str .= "$match[1]<a href=\"$link\">$match[2]</a>";'
+                                                   . 'return $str;'),
+                                   $content);
 
   // Newline.
   $content = preg_replace("/(\r)?\n/", "</br>", $content);
@@ -167,10 +180,7 @@ function prepContent($content, $embed_vid)
                             $content, 1);
 
   // [s|u|b|i] check.
-  $content = preg_replace("/\[b\](.*?)\[\/b\]/", "<b>$1</b>", $content);
-  $content = preg_replace("/\[i\](.*?)\[\/i\]/", "<i>$1</i>", $content);
-  $content = preg_replace("/\[s\](.*?)\[\/s\]/", "<s>$1</s>", $content);
-  $content = preg_replace("/\[u\](.*?)\[\/u\]/", "<u>$1</u>", $content);
+  $content = preg_replace("/\[([bisu])\](.*?)\[\/\\1\]/", "<$1>$2</$1>", $content);
 
   return $content;
 }
