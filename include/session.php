@@ -5,6 +5,8 @@ class Session
   var $session_var = "21d6f40cfb511982e4424e0e250a9557";
   var $db;
   var $uid = -1;
+  var $posts_per_page = DEFAULT_ITEMS_PER_PAGE;
+  var $threads_per_page = DEFAULT_ITEMS_PER_PAGE;
 
   function Session($db_handle)
   {
@@ -32,8 +34,18 @@ class Session
           }
       }
 
-    if ($ret && $update)
-      $this->db->UpdateUserTimestamp($_SESSION[$this->session_var]);
+    if ($this->uid < 0)
+      $ret = FALSE;
+    if ($ret)
+      {
+        // Get user settings
+        $settings = $this->db->GetUserSettings($this->uid);
+        $this->posts_per_page = $settings['posts_display'];
+        $this->threads_per_page = $settings['threads_display'];
+
+        if ($update)
+          $this->db->UpdateUserTimestamp($_SESSION[$this->session_var]);
+      }
 
     return $ret;
   }

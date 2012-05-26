@@ -43,7 +43,7 @@ class Forum
   // Get board information for display.
 
   // Display threads in the forum.
-  function GetBoardDisplayInfo($threads_per_page, $page=1)
+  function GetBoardDisplayInfo($threads_per_page, $posts_per_page, $page=1)
   {
     $board_info = array();
     $formatted_threads = array();
@@ -55,7 +55,6 @@ class Forum
                                                  Pages::BOARD."?");
     $board_info['new_thr'] = makeLink(Pages::MAKETHR, "new thread");
 
-    $posts_per_page = DEFAULT_ITEMS_PER_PAGE;
     $threads = $this->db->GetThreads($page, $threads_per_page);
     foreach ($threads as $thread)
       {
@@ -100,10 +99,11 @@ class Forum
     // Check the last post the user has viewed
     $user_post_view = $this->db->GetUserPostView($uid, $thread['tid']);
     $num_viewed = $user_post_view['tpid'];
-    $page = floor($num_viewed / DEFAULT_ITEMS_PER_PAGE) + 1;
+    $posts_per_page = $this->session->posts_per_page;
+    $page = floor($num_viewed / $posts_per_page) + 1;
     if ($num_viewed < $thread['posts'])
       {
-        $flags .= makeLink(Pages::THREAD . "?tid={$thread['tid']}&page=$page#post{$user_post_view['pid']}", array('class'=>'new'));
+        $flags .= makeLink(Pages::THREAD . "?tid={$thread['tid']}&page=$page#post{$user_post_view['pid']}", "new");
       }
     return $flags;
   }
@@ -119,7 +119,7 @@ class Forum
   function GetThreadInfo($thread)
   {
     $thread_info = array();
-    $posts_per_page = DEFAULT_ITEMS_PER_PAGE;
+    $posts_per_page = $this->session->posts_per_page;
 
     $thread_info['link'] = makeLink(Pages::THREAD."?tid={$thread['tid']}", $thread['title'], array('class'=>'thread'));
     $thread_info['pages'] = $this->MakeThreadPageLinks($posts_per_page, $thread['posts'], Pages::THREAD."?tid={$thread['tid']}");
@@ -281,10 +281,10 @@ class Forum
   }
 
   // Get link to a particular post.
-  function GetPostLink($pid, $link_text, $session = "")
+  function GetPostLink($pid, $link_text)
   {
     $post = $this->db->GetPostMeta($pid);
-    $page = GetPageCount($post['tpid'], DEFAULT_ITEMS_PER_PAGE);
+    $page = GetPageCount($post['tpid'], $this->session->posts_per_page);
     $link = makeLink(Pages::THREAD."?tid={$post['tid']}&page=$page#post$pid", $link_text);
     return $link;
   }

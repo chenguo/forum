@@ -9,7 +9,7 @@ function throwException($message)
 }
 
 // Return an HTML link.
-function makeLink($link, $desc, $options_array=array())
+function makeLink($link, $desc, $options_array=array(''))
 {
   $options = "";
   foreach ($options_array as $optkey => $optval)
@@ -85,6 +85,7 @@ function makeButton($text, $options_array = array())
 function prepContent($content, $embed_vid)
 {
   global $db;
+  global $session;
 
   // Disable HTML by replacing < and > with &#60 and &#62.
   $content = preg_replace("/</", "&#60", $content);
@@ -154,7 +155,7 @@ function prepContent($content, $embed_vid)
       $quote_pid = $matches[2];
       $post_meta = $db->GetPostMeta($quote_pid);
       $tid = $post_meta['tid'];
-      $page = GetPageCount($matches[3], DEFAULT_ITEMS_PER_PAGE);
+      $page = GetPageCount($matches[3], $session->posts_per_page);
       $link = makeLink("thread.php?tid=$tid&page=$page#post$quote_pid" , $matches[1] . " wrote:");
       $content = preg_replace("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\](<\/br>)?/i",
                             "<div class='quote'><b>$link</b></br>$4</div>",

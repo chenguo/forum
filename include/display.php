@@ -115,7 +115,8 @@ class Display
   // Display a board
   function DisplayBoard($page=1)
   {
-    $threads_per_page = DEFAULT_ITEMS_PER_PAGE;
+    $threads_per_page = $this->session->threads_per_page;
+    $posts_per_page = $this->session->posts_per_page;
     /* $board_info array fields:
        pages: links to pages of the board
        new_thr: link to make new threads page
@@ -259,7 +260,7 @@ class Display
   */
   function DisplayThread($tid, $page=1)
   {
-    $posts_per_page = DEFAULT_ITEMS_PER_PAGE;
+    $posts_per_page = $this->session->posts_per_page;
     $thread_info = $this->forum->GetThreadDisplayInfo($tid, $posts_per_page, $page);
 
     // Header

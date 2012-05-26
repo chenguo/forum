@@ -93,7 +93,20 @@ class DB
     if ($full == TRUE)
       array_push($fields, 'email', 'birth', '`join`', 'views', 'posts_display', 'threads_display');
     $result = $this->__SelectFromTable(Tables::USERS, $fields, array("uid=$uid"));
-    return $result[0];
+    if ($result)
+      return $result[0];
+    else
+      return FALSE;
+  }
+
+  // Get the settings specific part of the user profile
+  function GetUserSettings($uid)
+  {
+    $result = $this->__SelectFromTable(Tables::USERS, array('posts_display', 'threads_display'), array("uid=$uid"));
+    if ($result)
+      return $result[0];
+    else
+      return FALSE;
   }
 
   // Update user's profile.

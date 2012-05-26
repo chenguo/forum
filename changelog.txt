@@ -89,3 +89,4 @@ Ver     Date      Description
 0.60    04/29/12  User profile page revamped. User can now set signature and items per page.
 0.61    04/29/12  User signature displayed with user posts.
 0.62    05/25/12  Re-organize CSS into files for each page. Upgrade user page slightly.
+0.63    05/25/12  Posts-per-page and threads-per-page settings now take effect.
