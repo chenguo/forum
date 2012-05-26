@@ -53,7 +53,7 @@ class Forum
     $board_info['pages'] = $this->MakePageLinks ($page, $threads_per_page,
                                                  $this->db->GetNumThreads(),
                                                  Pages::BOARD."?");
-    $board_info['new_thr'] = makeLink(Pages::MAKETHR, "new thread", "");
+    $board_info['new_thr'] = makeLink(Pages::MAKETHR, "new thread");
 
     $posts_per_page = DEFAULT_ITEMS_PER_PAGE;
     $threads = $this->db->GetThreads($page, $threads_per_page);
@@ -73,15 +73,16 @@ class Forum
     $max_page = GetPageCount($max_items, $items_per_page);
     $page_links = "";
     if ($max_page > 1)
-      $page_links .= makeLink("$link", "1", "thr_page_link") . " " . makeLink("$link&page=2", "2", "thr_page_link");
+      $page_links .= makeLink("$link", "1", array('class'=>'thr_page_link')). " "
+                              . makeLink("$link&page=2", "2", array('class'=>'thr_page_link'));
     if ($max_page > 2)
-      $page_links .= " " . makeLink("$link&page=3", "3", "thr_page_link");
+      $page_links .= " " . makeLink("$link&page=3", "3", array('class'=>'thr_page_link'));
     if ($max_page > 3)
-      $page_links .= " " . makeLink("$link&page=4", "4", "thr_page_link");
+      $page_links .= " " . makeLink("$link&page=4", "4", array('class'=>'thr_page_link'));
     if ($max_page > 4)
-      $page_links .= " " . makeLink("$link&page=5", "5", "thr_page_link");
+      $page_links .= " " . makeLink("$link&page=5", "5", array('class'=>'thr_page_link'));
     if ($max_page > 5)
-      $page_links .= " " . makeLink("$link&page=$max_page", "last", "thr_page_link");
+      $page_links .= " " . makeLink("$link&page=$max_page", "last", array('class'=>'thr_page_link'));
     return $page_links;
   }
 
@@ -102,7 +103,7 @@ class Forum
     $page = floor($num_viewed / DEFAULT_ITEMS_PER_PAGE) + 1;
     if ($num_viewed < $thread['posts'])
       {
-        $flags .= makeLink(Pages::THREAD . "?tid={$thread['tid']}&page=$page#post{$user_post_view['pid']}", "new");
+        $flags .= makeLink(Pages::THREAD . "?tid={$thread['tid']}&page=$page#post{$user_post_view['pid']}", array('class'=>'new'));
       }
     return $flags;
   }
@@ -120,7 +121,7 @@ class Forum
     $thread_info = array();
     $posts_per_page = DEFAULT_ITEMS_PER_PAGE;
 
-    $thread_info['link'] = makeLink(Pages::THREAD."?tid={$thread['tid']}", $thread['title'], 'thread');
+    $thread_info['link'] = makeLink(Pages::THREAD."?tid={$thread['tid']}", $thread['title'], array('class'=>'thread'));
     $thread_info['pages'] = $this->MakeThreadPageLinks($posts_per_page, $thread['posts'], Pages::THREAD."?tid={$thread['tid']}");
     $thread_info['flags'] = $this->GetThreadFlags($this->session->GetUID(), $thread);
     $thread_info['create_time'] = GetTime(TIME_FULL, $thread['create_time']);
@@ -185,18 +186,18 @@ class Forum
     if ($max_page > 1)
       {
         if ($page > 3)
-          $page_links .= makeLink("$link&page=1", "<<", "page_link") . "  ";
+          $page_links .= makeLink("$link&page=1", "<<", array('class'=>'page_link')) . "  ";
         if ($page > 2)
-          $page_links .= makeLink("$link&page=" . ($page-2), $page - 2, "page_link") . " ";
+          $page_links .= makeLink("$link&page=" . ($page-2), $page - 2, array('class'=>'page_link')) . " ";
         if ($page > 1)
-          $page_links .= makeLink("$link&page=" . ($page-1), $page - 1, "page_link") . " ";
+          $page_links .= makeLink("$link&page=" . ($page-1), $page - 1, array('class'=>'page_link')) . " ";
         $page_links .= "$page";
         if ($page < $max_page)
-          $page_links .= " " . makeLink("$link&page=" . ($page+1), $page + 1, "page_link");
+          $page_links .= " " . makeLink("$link&page=" . ($page+1), $page + 1, array('class'=>'page_link'));
         if ($page < $max_page - 1)
-          $page_links .= " " . makeLink("$link&page=" . ($page+2), $page + 2, "page_link");
+          $page_links .= " " . makeLink("$link&page=" . ($page+2), $page + 2, array('class'=>'page_link'));
         if ($page < $max_page - 2)
-          $page_links .= "  " . makeLink("$link&page=" . $max_page, ">>", "page_link");
+          $page_links .= "  " . makeLink("$link&page=" . $max_page, ">>", array('class'=>'page_link'));
       }
     return $page_links;
   }

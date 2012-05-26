@@ -9,11 +9,12 @@ function throwException($message)
 }
 
 // Return an HTML link.
-function makeLink($link, $desc, $class="")
+function makeLink($link, $desc, $options_array=array())
 {
-  if (strcmp($class, "") != 0)
-    $class = " class='$class'";
-  return "<a href='$link'$class>$desc</a>";
+  $options = "";
+  foreach ($options_array as $optkey => $optval)
+    $options .= " $optkey='$optval'";
+  return "<a href='$link'$options>$desc</a>";
 }
 
 /* Make link to a user page. */
@@ -36,9 +37,8 @@ function showImg($link, $options_array = array())
 function HTMLTag($tag, $value, $options_array = array())
 {
   $options = "";
-  if (count($options_array) > 0)
-    foreach ($options_array as $optkey => $optval)
-      $options .= " $optkey='$optval'";
+  foreach ($options_array as $optkey => $optval)
+    $options .= " $optkey='$optval'";
   return "<$tag$options>$value</$tag>";
 }
 

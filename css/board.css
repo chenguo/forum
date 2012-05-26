@@ -1,0 +1,14 @@
+.brd_new_thr { float:right; margin-right:2%; font-weight:bold; font-size:medium; }
+.brd_pages { float:left; margin-left:2%; font-weight:bold; }
+.brd_threads{ background-color:white; border:2px solid grey; border-radius:7px; padding:1%; }
+.brd_head { font-weight:bold; border-bottom:2px solid grey; padding:0%; padding-bottom:0.5em; }
+.brd_thr_title { width:50%; float:left; }
+.brd_thr_num { width:7%; float:left;}
+.brd_thr_time { width:18%; float:left; }
+.brd_thread_row { border-bottom:1px solid grey; width:100%; padding-top:0.5em; padding-bottom:0.5em;
+                    vertical-align:middle; height:100%;}
+.brd_thread_row:hover { background-color:#F0F0F0; }
+.brd_thread_row * { height:100%; }
+.brd_thr_page_links { display:inline; margin-right:0.3em; }
+.brd_thr_flags { display:inline; margin-left:0.3em; font-weight:bold; font-size:x-small }
+.brd_thr_flags a {color:white; background:blue; text-decoration:none; padding:0 0.3em}

@@ -1,0 +1,5 @@
+/* For making new threads */
+form.newthr_form  { margin-left:10%; margin-right:10%; width:80% }
+input.newthr_title { margin-left:10%; margin-right:10%; width:80% }
+textarea.newthr_body { margin-left:10%; margin-right:10%; width:80%; resize:vertical }
+

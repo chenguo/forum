@@ -51,9 +51,17 @@ final class Pages
   const USER = "user.php";
 }
 
+final class Profile
+{
+  const PROFILE = 1;
+  const EDIT_PROF = 2;
+  const RECENT = 3;
+  const MSG = 4;
+}
+
 define("CHAT_SEQ_MAX", 1024);
 define("BOARD_NAME", "LOL Bros, LOL");
-define("VERSION", 0.61);
+define("VERSION", 0.62);
 define("COMMON_CSS", "<link href='/css/common.css' type='text/css' rel='stylesheet'>\n");
 define("COMMON_JQUERY", "<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'></script>");
 define("TIME_FULL", "g:i a M/j/Y");

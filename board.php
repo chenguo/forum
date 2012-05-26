@@ -17,6 +17,7 @@ if (isset($_REQUEST['page']))
 <html>
 <head>
 <?php $display->DisplayTitle(); ?>
+<link rel="stylesheet" type="text/css" href="css/board.css"/>
 <script src='include/jsfunc.js'></script>
 <script>
 window.addEventListener('DOMContentLoaded', loadAction, false);

@@ -8,7 +8,7 @@
 function showSidebar()
 {
   document.getElementById("sidebar").style.visibility = "visible";
-  document.getElementById("sidebar_trigger").style.visibility = "hidden";
+  document.getElementById("sbtrig").style.visibility = "hidden";
 }
 // Hide sidebar when mouse leavse it
 function hideSidebar(e)
@@ -23,7 +23,7 @@ function hideSidebar(e)
       target = target.parentNode;
     }
   document.getElementById("sidebar").style.visibility = "hidden";
-  document.getElementById("sidebar_trigger").style.visibility = "visible";
+  document.getElementById("sbtrig").style.visibility = "visible";
 }
 
 // On loading a page, prepare chat
@@ -228,15 +228,17 @@ function karma(type, pid, puid)
 function userProfView(view, uid)
 {
   var func = function(result) {
-    $(".user_prof_content").html(result);
+    $(".usrp_content").html(result);
   }
   var data = "uid="+uid+"&action=";
   if (view == "profile")
-    data += "user_prof_prof";
+    data += "usrp_prof";
   else if (view == "edit")
-    data += "user_prof_edit";
+    data += "usrp_edit";
+  else if (view == "pw")
+    data += "usrp_pw";
   else if (view == "recent")
-    data += "user_prof_recent";
+    data += "usrp_recent";
 
   $.ajax({
     url: "action.php",
@@ -258,9 +260,9 @@ function userProfSave(uid)
     $("textarea.prof_edit_sig").html(json_result.sig);
 
     $("img.user_prof_avatar").attr("src", json_result.avatar);
-    $("div.prof_edit_msg").html("profile successfully updated");
+    $("div.usrp_edit_msg").html("profile successfully updated");
   }
-  var data = "uid="+uid+"&action=user_prof_save";
+  var data = "uid="+uid+"&action=usrp_save";
   data += "&email="+encodeURIComponent($("input#email").val());
   data += "&avatar="+encodeURIComponent($("input#avatar").val());
   data += "&post_disp="+$("input#post_disp").val();
@@ -286,9 +288,9 @@ function userProfCancel(uid)
     $("input#thr_disp").val(json_result.thr_disp);
     $("textarea.prof_edit_sig").val(json_result.sig);
 
-    $("div.prof_edit_msg").html("profile settings restored");
+    $("div.usrp_edit_msg").html("profile settings restored");
   }
-  var data = "uid="+uid+"&action=user_prof_cancel";
+  var data = "uid="+uid+"&action=usrp_cancel";
   $.ajax({
     url: "action.php",
     type: "POST",
@@ -306,18 +308,18 @@ function userProfPW(uid)
 
   if (new_pass.localeCompare(cnf_pass) != 0)
   {
-    $("div.prof_edit_msg").html("password update failed: new password not confirmed");
+    $("div.usrp_pw_msg").html("password update failed: new password not confirmed");
   }
   else
   {
     var func = function(result) {
       if (result == 0)
-        $("div.prof_edit_msg").html("password successfully updated");
+        $("div.usrp_pw_msg").html("password successfully updated");
       else
-        $("div.prof_edit_msg").html("password update failed: authentication failure");
+        $("div.usrp_pw_msg").html("password update failed: authentication failure");
     }
 
-    var data = "uid="+uid+"&action=user_prof_pw&cur_pw="+cur_pass+"&new_pw="+new_pass;
+    var data = "uid="+uid+"&action=usrp_pw_change&cur_pw="+cur_pass+"&new_pw="+new_pass;
 
     $.ajax({
       url: "action.php",

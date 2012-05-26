@@ -52,7 +52,6 @@ class Display
 
   /* Display sidebar
      welcome:  welcome message
-
    */
   function DisplaySidebar()
   {
@@ -60,21 +59,21 @@ class Display
 
     // Hover area to trigger sidebar
     echo HTMLTag("div",
-                 HTMLTag("div", "sidebar", array('class'=>'sidebar_trigger_text'))
+                 HTMLTag("div", "sidebar", array('class'=>'sbtrig_txt'))
                  ,
-                 array('class'=>'sidebar_trigger', 'onmouseover'=>'showSidebar()', 'id'=>'sidebar_trigger'));
+                 array('class'=>'sbtrig', 'onmouseover'=>'showSidebar()', 'id'=>'sbtrig'));
 
     // Actual sidebar
     echo HTMLTag("div",
-                 HTMLTag("div", $sidebar_info['welcome'], array('class'=>'sidebar_item', 'id'=>'sidebar_welcome'))
-                 . HTMLTag("div", $sidebar_info['chat'], array('class'=>'sidebar_item', 'id'=>'sidebar_chat'))
-                 . HTMLTag("div", $sidebar_info['board'], array('class'=>'sidebar_item'))
-                 . HTMLTag("div", $sidebar_info['bookmark'], array('class'=>'sidebar_item'))
-                 . HTMLTag("div", $sidebar_info['privmsg'], array('class'=>'sidebar_item'))
-                 . HTMLTag("div", $sidebar_info['cur_users'], array('class'=>'sidebar_item sidebar_users'))
-                 . HTMLTag("div", $sidebar_info['day_users'], array('class'=>'sidebar_item sidebar_users'))
-                 . HTMLTag("div", $sidebar_info['logout'], array('class'=>'sidebar_item'))
-                 . HTMLTag("div", $sidebar_info['version'], array('class'=>'sidebar_item', 'id'=>'sidebar_version'))
+                 HTMLTag("div", $sidebar_info['welcome'], array('class'=>'sb_head', 'id'=>'sb_welc'))
+                 //. HTMLTag("div", $sidebar_info['chat'], array('class'=>'sidebar_item', 'id'=>'sidebar_chat'))
+                 . HTMLTag("div", $sidebar_info['board'], array('class'=>'sb_elem'))
+                 . HTMLTag("div", $sidebar_info['bookmark'], array('class'=>'sb_elem'))
+                 . HTMLTag("div", $sidebar_info['privmsg'], array('class'=>'sb_elem'))
+                 . HTMLTag("div", $sidebar_info['cur_users'], array('class'=>'sb_elem sb_usrs'))
+                 . HTMLTag("div", $sidebar_info['day_users'], array('class'=>'sb_elem sb_usrs'))
+                 . HTMLTag("div", $sidebar_info['logout'], array('class'=>'sb_elem'))
+                 . HTMLTag("div", $sidebar_info['version'], array('class'=>'sb_elem sb_last', 'id'=>'sb_ver'))
                  ,
                  array('class'=>'sidebar', 'id'=>'sidebar', 'onmouseout'=>'hideSidebar(event)'));
     echo "\n";
@@ -129,23 +128,23 @@ class Display
     echo "\n";
 
     // Display posts in thread.
-    $title_row =
+    /*$title_row =
       HTMLTag("tr",
-              HTMLTag("th", "title", array('class'=>'board_thr_title'))
-              . HTMLTag("th", "posts", array('class'=>'board_thr_num'))
-              . HTMLTag("th", "views", array('class'=>'board_thr_num'))
-              . HTMLTag("th", "created", array('class'=>'board_thr_time'))
-              . HTMLTag("th", "last post", array('class'=>'board_thr_time'))
-              );
+              HTMLTag("th", "title", array('class'=>'brd_thr_title'))
+              . HTMLTag("th", "posts", array('class'=>'brd_thr_num'))
+              . HTMLTag("th", "views", array('class'=>'brd_thr_num'))
+              . HTMLTag("th", "created", array('class'=>'brd_thr_time'))
+              . HTMLTag("th", "last post", array('class'=>'brd_thr_time'))
+              );*/
     $title_row = HTMLTag("div",
-                         HTMLTag("div", "title", array('class'=>'board_thr_title'))
-                         . HTMLTag("div", "posts", array('class'=>'board_thr_num'))
-                         . HTMLTag("div", "views", array('class'=>'board_thr_num'))
-                         . HTMLTag("div", "created", array('class'=>'board_thr_time'))
-                         . HTMLTag("div", "last post", array('class'=>'board_thr_time'))
+                         HTMLTag("div", "title", array('class'=>'brd_thr_title'))
+                         . HTMLTag("div", "posts", array('class'=>'brd_thr_num'))
+                         . HTMLTag("div", "views", array('class'=>'brd_thr_num'))
+                         . HTMLTag("div", "created", array('class'=>'brd_thr_time'))
+                         . HTMLTag("div", "last post", array('class'=>'brd_thr_time'))
                          . HTMLTag("div", "", array('class'=>'clear'))
                          ,
-                         array('class'=>'board_top'));
+                         array('class'=>'brd_head'));
 
     $thread_list = "";
     foreach ($board_info['threads'] as $thread_info)
@@ -166,7 +165,7 @@ class Display
                  . $thread_list
                  . HTMLTag("div", "", array('class'=>'board_bottom'))
                  ,
-                 array('class'=>'board_threads'));
+                 array('class'=>'brd_threads'));
 
     echo $this->GenerateBoardHeader($board_info);
     echo "\n";
@@ -176,12 +175,12 @@ class Display
   function GenerateBoardHeader($board_info)
   {
     $board_header = HTMLTag("div",
-                            HTMLTag("div", $board_info['pages'], array('class'=>'board_pages'))
-                            . HTMLTag("div", $board_info['new_thr'], array('class'=>'board_new_thr'))
+                            HTMLTag("div", $board_info['pages'], array('class'=>'brd_pages'))
+                            . HTMLTag("div", $board_info['new_thr'], array('class'=>'brd_new_thr'))
                             // Clear float
                             . HTMLTag("div", "", array('class'=>'clear'))
                             ,
-                            array('class'=>'board_header'));
+                            array('class'=>'title_bar'));
 
     return $board_header;
   }
@@ -216,32 +215,32 @@ class Display
     $board_thr_link = HTMLTag("div", $thread_info['link']);
     $board_thr_page_links = "";
     if ($thread_info['pages'] != "")
-      $board_thr_page_links = HTMLTag("div", $thread_info['pages'], array('class'=>'board_thr_page_links'));
+      $board_thr_page_links = HTMLTag("div", $thread_info['pages'], array('class'=>'brd_thr_page_links'));
 
     $board_thr_flags = "";
     if ($thread_info['flags'] != "")
-      $board_thr_flags = HTMLTag("div", $thread_info['flags'], array('class'=>'board_thr_flags'));
+      $board_thr_flags = HTMLTag("div", $thread_info['flags'], array('class'=>'brd_thr_flags'));
 
     $thread_row =
       HTMLTag("div",
               HTMLTag("div",
                       $board_thr_link . $board_thr_page_links . $board_thr_flags,
-                      array('class'=>'board_thr_title'))
-              . HTMLTag("div", $thread_info['posts'], array('class'=>'board_thr_num'))
-              . HTMLTag("div", $thread_info['views'], array('class'=>'board_thr_num'))
+                      array('class'=>'brd_thr_title'))
+              . HTMLTag("div", $thread_info['posts'], array('class'=>'brd_thr_num'))
+              . HTMLTag("div", $thread_info['views'], array('class'=>'brd_thr_num'))
               . HTMLtag("div",
                         HTMLTag("div", $thread_info['creator'])
                         . HTMLTag("div", $thread_info['create_time'], array('class'=>'time'))
                         ,
-                        array('class'=>'board_thr_time'))
+                        array('class'=>'brd_thr_time'))
               . HTMLtag("div",
                         HTMLTag("div",$thread_info['last_poster'])
                         . HTMLTag("div", $thread_info['post_time'], array('class'=>'time'))
                         ,
-                        array('class'=>'board_thr_time'))
+                        array('class'=>'brd_thr_time'))
               . HTMLTag("div", "", array('class'=>'clear'))
               ,
-              array('class'=>'board_thread_row')
+              array('class'=>'brd_thread_row')
               );
 
     return $thread_row;
@@ -299,11 +298,11 @@ class Display
   function GenerateThreadTitle($thread_info)
   {
     return HTMLTag("div",
-                   HTMLTag("div", $thread_info['title'], array('class'=>'thread_title'))
-                   . HTMLTag("div", $thread_info['board'], array('class'=>'thread_board'))
-                   . HTMLTag("div", $thread_info['pages'], array('class'=>'thread_pages'))
+                   HTMLTag("div", $thread_info['title'], array('class'=>'thr_ttl'))
+                   . HTMLTag("div", $thread_info['board'], array('class'=>'thr_brd'))
+                   . HTMLTag("div", $thread_info['pages'], array('class'=>'thr_pg'))
                    ,
-                   array('class'=>'thread_title_bar'));
+                   array('class'=>'title_bar'));
   }
 
   /* Display a post
@@ -364,42 +363,59 @@ class Display
    *      User Page Display      *
    *                             *
   \*******************************/
-  function DisplayUserPage($uid)
+  function DisplayUserPage($uid, $subpage = Profile::PROFILE)
   {
     $user_info = $this->db->GetUserProfile($uid, TRUE, TRUE);
 
-    $buttons = "";
-    $buttons = makeButton("profile", array('class'=>'user_prof_btn',
-                                           'onclick'=>"userProfView(\"profile\", $uid)"));
-    if ($uid == $this->session->GetUID())
-      {
-        $buttons .=  makeButton("edit profile", array('class'=>'user_prof_btn',
-                                                      'onclick'=>"userProfView(\"edit\", $uid)"));
-      }
-    $buttons .= makeButton("recent", array('class'=>'user_prof_btn',
-                                           'onclick'=>"userProfView(\"recent\", $uid)"))
-      . makeButton("message", array('class'=>'user_prof_btn'));
-
-    // Display basic user profile
-    echo $this->GenerateUserProfile($user_info);
+    echo HTMLTag("div",
+                 // Display basic user profile
+                 $this->GenerateUserProfile($user_info)
+                 // Display links within user profile
+                 . $this->GenerateUserProfileLinks($uid)
+                 ,
+                 array('class'=>'usrp_leftcol'));
     echo "\n";
 
-    // Display basic user information
-    $details = $this->GenerateUserDetails($user_info);
-    echo HTMLTag("div",
-                 HTMLTag("div", $buttons, array('class'=>'user_prof_btns'))
-                 . HTMLTag("div", $details, array('class'=>'user_prof_content'))
-                 ,
-                 array('class'=>'prof_details'));
+    $page_content = "";
+    if ($subpage == Profile::PROFILE)
+      {
+        // Display basic user information
+        $page_content =
+          HTMLTag("div",
+                  $this->GenerateUserDetails($user_info)
+                  ,
+                  array('class'=>'usrp_content'));
+      }
+
+    echo $page_content;
+    echo "\n";
+  }
+
+  // Generate links to sub-areas of user profile
+  function GenerateUserProfileLinks($uid)
+  {
+    return HTMLTag("div",
+                   HTMLTag("ul",
+                           HTMLTag("li", makeLink("javascript:void(0)", "profile",
+                                                  array('onclick'=>"userProfView(\"profile\", $uid)")))
+                           . HTMLTag("li", makeLink("javascript:void(0)", "edit profile",
+                                                    array('onclick'=>"userProfView(\"edit\", $uid)")))
+                           . HTMLTag("li", makeLink("javascript:void(0)", "recent",
+                                                    array('onclick'=>"userProfView(\"recent\", $uid)")))
+                           . HTMLTag("li", makeLink("javascript:void(0)", "messages",
+                                                    array('onclick'=>"userProfView(\"message\", $uid)")))
+
+                           )
+                   ,
+                   array('class'=>'usrp_links'));
   }
 
   // Generate a table of user details.
   function GenerateUserDetails($user_info)
   {
-    return
-      table(tableRow( HTMLTag("th", "", array('class'=>'prof_detail_label'))
-                      . HTMLTag("th", "", array('class'=>'prof_detail_value'))
-                      . HTMLTag("th", "", array('class'=>'prof_detail_btn'))
+    $user_details_table =
+      table(tableRow( HTMLTag("th", "", array('class'=>'usrp_tbl_label'))
+                      . HTMLTag("th", "", array('class'=>'usrp_tbl_value'))
                       )
             . tableRow( tableCol("email") . tableCol($user_info['email']) )
             . tableRow( tableCol("profile views") . tableCol($user_info['views']) )
@@ -408,19 +424,23 @@ class Display
             . tableRow( tableCol("last login") . tableCol($user_info['t_online']) )
             . tableRow( tableCol("signature") . tableCol(prepContent($user_info['signature'], FALSE)) )
             ,
-            array('class'=>'noshow', 'id'=>'prof_table'));
+            array('class'=>'noshow usrp_tbl'));
+    return HTMLTag("div",
+                   $user_details_table,
+                   array('class'=>'usrp_container'));
   }
 
   // Generate edit fields for user profile
   function GenerateUserSettings($user_info)
   {
-    $msg_div = HTMLTag("div", "", array('class'=>'prof_edit_msg'));
+    $msg_div = HTMLTag("div", "", array('class'=>'usrp_edit_msg'));
 
     // Header row (not shown)
-    $header = tableRow( HTMLTag("th", "", array('class'=>'prof_detail_label'))
-                        . HTMLTag("th", "", array('class'=>'prof_detail_value'))
+    $header = tableRow( HTMLTag("th", "", array('class'=>'usrp_tbl_label'))
+                        . HTMLTag("th", "", array('class'=>'usrp_tbl_value'))
                         );
 
+    // Table of input fields for basic settings
     $basic_settings =
       table($header
             // email
@@ -439,11 +459,26 @@ class Display
             . tableRow( tableCol("signature")
                         . tableCol(HTMLTag("textarea", $user_info['signature'], array('class'=>'prof_edit_sig', 'maxlength'=>'255'))))
             ,
-            array('class'=>'noshow prof_edit_table'));
+            array('class'=>'noshow usrp_tbl'));
     $save_button = makeButton("save", array('onclick'=>"userProfSave({$user_info['uid']})", 'class'=>'settings_btn'));
     $cancel_button = makeButton("cancel", array('onclick'=>"userProfCancel({$user_info['uid']})", 'class'=>'settings_btn'));
 
-    // Password
+    return HTMLTag("div",
+                   $msg_div . $basic_settings . $save_button . $cancel_button,
+                   array('class'=>'usrp_container'));
+  }
+
+  // Generate controls to change user password
+  function GenerateUserPWChange($user_info)
+  {
+    $msg_div = HTMLTag("div", "", array('class'=>'usrp_pw_msg'));
+
+    // Header row (not shown)
+    $header = tableRow( HTMLTag("th", "", array('class'=>'usrp_tbl_label'))
+                        . HTMLTag("th", "", array('class'=>'usrp_tbl_value'))
+                        );
+
+    // Password change fields
     $password_table =
       table($header
             . tableRow( tableCol("current password")
@@ -452,47 +487,55 @@ class Display
                         . tableCol("<input type='password' id='new_pw'>"))
             . tableRow( tableCol("confirm new password")
                         . tableCol("<input type='password' id='cnf_pw'>")),
-            array('class'=>'noshow prof_edit_table')
+            array('class'=>'noshow usrp_tbl')
             );
     $pw_button = makeButton("change", array('onclick'=>"userProfPW({$user_info['uid']})", 'class'=>'settings_btn'));
-
-    return $msg_div . $basic_settings . $save_button . $cancel_button . $password_table . $pw_button;
+    return
+      HTMLTag("div",
+              $msg_div . $password_table . $pw_button,
+              array('class'=>'usrp_container'));
   }
 
-  // Generate a list of user's recent activities.
-  function GenerateUserRecent($uid)
+  // Generate a list of user's recent posts
+  function GenerateUserRecentPosts($uid)
   {
     $recent_posts_array = $this->forum->GenerateUserRecentPosts($uid);
     $rows = "";
+    // Tabularize posts
     foreach ($recent_posts_array as $post)
-      $rows .= tableRow( tableCol($post['time']) . tableCol($post['post']) . tableCol($post['content']));
-    $recent_posts = HTMLTag("h2", "Recent Posts") . table($rows);
+      $rows .= tableRow( tableCol($post['post'] . HTMLTag("div", $post['time'], array('class'=>'time'))) . tableCol($post['content']));
+    $recent_posts = HTMLTag("h2", "Recent Posts") . table($rows, array('class'=>'usrp_tbl'));
 
-    $recent_karma_given_array = $this->forum->GenerateUserRecentKarmaGiven($uid);
+    return HTMLTag("div", $recent_posts, array('class'=>'usrp_container'));
+  }
+
+  // Generate a list of user's recent posts
+  function GenerateUserRecentKarma($uid, $received)
+  {
+    $recent_karma = "";
+    $karma_array;
+    if ($received == 0)
+      $karma_array = $this->forum->GenerateUserRecentKarmaGiven($uid);
+    else
+      $karma_array = $this->forum->GenerateUserRecentKarmaRecvd($uid);
+
+    // Tabularize list of karma actions
     $rows = "";
-    foreach ($recent_karma_given_array as $karma_given)
+    foreach ($karma_array as $karma_info)
       {
-        $rows .= tableRow( tableCol($karma_given['action'])
-                           . tableCol($karma_given['recip'])
-                           . tableCol($karma_given['thread'])
-                           . tableCol($karma_given['time']));
+        $rows .= tableRow( tableCol($karma_info['action'])
+                           . tableCol($karma_info['recip'])
+                           . tableCol($karma_info['thread'])
+                           . tableCol(HTMLTag("div", $karma_info['time'], array('class'=>'time'))));
       }
-    $recent_karma_given = HTMLTag("h2", "Recent Karma Given") . table($rows);
 
-    $recent_karma_recvd_array = $this->forum->GenerateUserRecentKarmaRecvd($uid);
-    $rows2 = "";
-    foreach ($recent_karma_recvd_array as $karma_recvd)
-      {
-        $rows2 .= tableRow( tableCol($karma_recvd['action'])
-                           . tableCol($karma_recvd['recip'])
-                           . tableCol($karma_recvd['thread'])
-                           . tableCol($karma_recvd['time']));
-      }
-    $recent_karma_recvd = HTMLTag("h2", "Recent Karma Received") . table($rows2);
+    // Add a header
+    if ($received == 0)
+      $recent_karma = HTMLTag("h2", "Recent Karma Given") . table($rows, array('class'=>'usrp_tbl'));
+    else
+      $recent_karma = HTMLTag("h2", "Recent Karma Received") . table($rows, array('class'=>'usrp_tbl'));
 
-    return $recent_posts . "\n"
-      . $recent_karma_given . "\n"
-      . $recent_karma_recvd . "\n";
+    return HTMLTag("div", $recent_karma, array('class'=>'usrp_container'));
   }
 
   /*******************************\
@@ -518,24 +561,29 @@ class Display
   {
     $user_profile = HTMLTag("div",
                             // User name
-                            HTMLTag("div", makeUserLink($user_info['uid'], $user_info['name']), array('class'=>'user_prof_name'))
+                            HTMLTag("div",
+                                    makeUserLink($user_info['uid'], $user_info['name']),
+                                    array('class'=>'usrp_name'))
                             // User avatar
-                            . showImg($user_info['avatar'], array('class'=>'user_prof_avatar'))
+                            . showImg($user_info['avatar'], array('class'=>'usrp_avatar'))
                             // Post count
-                            . HTMLTag("div", $user_info['posts'] . " posts", array('class'=>'user_prof_posts'))
+                            . HTMLTag("div", $user_info['posts'] . " posts",
+                                      array('class'=>'usrp_posts'))
                             // Karma
                             . HTMLTag("div",
-                                      HTMLTag("div", $user_info['plus'], array('class'=>'user_karma_plus'))
+                                      HTMLTag("div", $user_info['plus'],
+                                              array('class'=>'usrp_karma_p'))
                                       . " " . Karma::PLUSpl
                                       ,
-                                      array('class'=>'user_karma'))
+                                      array('class'=>'usrp_karma'))
                             . HTMLTag("div",
-                                      HTMLTag("div", $user_info['minus'], array('class'=>'user_karma_minus'))
+                                      HTMLTag("div", $user_info['minus'],
+                                              array('class'=>'usrp_karma_m'))
                                       . " " . Karma::MINUSpl
                                       ,
-                                      array('class'=>'user_karma'))
+                                      array('class'=>'usrp_karma'))
                             ,
-                            array('class'=>"user_prof user_prof_{$user_info['uid']}"));
+                            array('class'=>"usrp user_prof_{$user_info['uid']}"));
     return $user_profile;
   }
 }

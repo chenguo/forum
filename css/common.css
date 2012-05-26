@@ -8,9 +8,11 @@
     font-weight: normal;
     font-style: normal;
 }
+
 a:link{color:black;}
 a:visited{color:black;}
 a:hover{font-weight:bold;}
+
 body{
     background-image:url(mario.jpg);
     background-repeat:no-repeat;
@@ -29,6 +31,7 @@ div.banner {
 }
 
 table.noshow, table.noshow td, table.noshow tr{ border-style:none; border:none; }
+
 div.quote{
     width:96%;
     margin-left:0%;
@@ -41,179 +44,62 @@ div.quote{
     background-color:#e5e5e5;
     overflow-x:auto;
 }
-
 table img.profile_img{ max-width:80%; max-height:180px; }
-form { text-align:center; }
+
 .button {
-    border-color:#000000;
-    border:1px solid;
-    background-color:#ffffff;
+    border:1px solid black;
+    border-radius:0.4em;
+    background-color:white;
+    color: black;
     width:6em;
     font-size:small;
     font-weight:bold;
-    border-radius:0.4em;
 }
 .button:hover { cursor:pointer; }
 .clear { clear:both; }
 hr { width:97% }
 .time { font-size:x-small; }
 
-/* Login page */
-form.login_form {
-    background:white;
-    margin:10% auto;
-    width:20em;
-    border: 3px solid grey;
-    padding: 0.5em 0;
-    border-radius:7px;
-}
-form.login_form input { margin: 0.2em 0; text-align:center; }
-form.login_form .remember { display:inline; margin:0 0.2em; }
-
-/* For board view */
-div.board_header {
-    text-align:left;
-    background:white;
-    padding-top:1em;
-    padding-bottom:1em;
-    width:100% - 4px;
-    margin-top:1%;
-    margin-bottom:1%;
-    border:3px solid grey;
-    border-radius:7px;
-}
-div.board_new_thr { float:right; margin-right:2%; font-weight:bold; font-size:medium; }
-div.board_pages { float:left; margin-left:2%; font-weight:bold; }
-div.board_threads{ background-color:white; border:2px solid grey; border-radius:7px; padding:1%; }
-div.board_top { font-weight:bold; border-bottom:2px solid grey; padding:0%; padding-bottom:0.5em; }
-div.board_thr_title { width:50%; float:left; }
-div.board_thr_num { width:7%; float:left; }
-div.board_thr_time { width:18%; float:left; }
-div.board_thread_row { border-bottom:1px solid grey; width:100%; padding-top:0.5em; padding-bottom:0.5em;
-                     vertical-align:middle; height:100%;}
-div.board_thread_row:hover { background-color:#F0F0F0; }
-div.board_thread_row * { height:100%; }
-div.board_thr_page_links { display:inline; margin-right:0.3em; }
-div.board_thr_flags { display:inline; margin-left:0.3em; font-weight:bold; font-size:x-small }
-div.board_thr_flags a {color:white; background:blue; text-decoration:none; padding:0 0.3em}
-
 /* For user profiles */
-div.user_prof {
-    width:19%;
-    padding-top:2%;
-    padding-bottom:2%;
+.usrp {
     background:white;
-    border:3px solid grey;
+    border:4px solid grey;
     border-radius:7px;
     overflow-x:auto;
-    float:left;
+    padding:1em 0;
 }
-div.user_prof_name { font-size:medium; }
-img.user_prof_avatar { width:70%; max-height:80%; margin-top:1%; margin-bottom:1% }
-div.user_karma { font-size:x-small; }
-div.user_karma_plus { display:inline; font-size:small; }
-div.user_karma_minus { display:inline; font-size:small; }
+.usrp_name { font-size:medium; }
+.usrp_avatar { width:70%; max-height:80%; margin-top:1%; margin-bottom:1% }
+.usrp_karma { font-size:x-small; }
+.usrp_karma_p { display:inline; font-size:small; }
+.usrp_karma_m { display:inline; font-size:small; }
 
-/* For individual threads */
-div.thread_title_bar {
+/* Common title/footer bar */
+.title_bar {
     text-align:left;
     background:white;
-    padding-top:1em;
-    padding-bottom:1em;
-    width:100% - 4px;
+    padding:1em 0;
+    width:100% - 8px;
     margin-bottom:1%;
     font-weight:bold;
-    border:3px solid grey;
+    border:4px solid grey;
     border-radius:7px;
 }
-div.thread_title { font-size:medium; float:right; margin-right:2%; }
-div.thread_board { display:inline; margin-left:2%; }
-div.thread_pages { display:inline; margin-left:3%; }
-div.post { width:100%; margin-bottom:2%; }
-div.post_content {
-    width:79%;
-    text-align:left;
-    float:right;
-    background:white;
-    border:3px solid grey;
-    border-radius:7px;
-}
-div.post_text { overflow-x:auto; padding:2%; min-height:100px; }
-div.post_karma_plus { padding-left:2%; font-size:x-small; }
-div.post_karma_minus { padding-left:2%; font-size:x-small; }
-div.post_footer { vertical-align:bottom; }
-div.post_sig { padding:0% 2%; }
-div.post_sig img {max-height:200px}
-div.post_time { float:left; padding-bottom:1%; padding-left:2%; font-size:x-small; }
-div.post_controls{ float:right; padding-bottom:1%; padding-top:1%; padding-right:2%; }
-
-/* Editing a post */
-div.post_edit { text-align:center; width:80%; margin-left:10%; margin-top:1em}
-div.post_edit .title { width:100%; }
-div.post_edit textarea { width:100%; resize:vertical; }
-div.post_edit .button { margin:0.3em; margin-top:0.5em }
-
-/* Making a new post */
-form#new_post { margin-top:2%; width:100%; margin-bottom:5%;}
-form#new_post .button { margin:0.3em; }
-textarea.new_post {
-    width:80%;
-    margin: 0 10%;
-    padding:0.3em;
-    resize:vertical;
-    min-height:20em;
-    height:20em;
-    border:3px solid grey;
-    border-radius:7px;
-}
-
-/* For user profile page */
-.prof_details {
-    width:79%;
-    text-align:center;
-    float:right;
-    background:white;
-    border:3px solid grey;
-    border-radius:7px;
-}
-div.user_prof_btns { margin:2%; }
-input.user_prof_btn { margin:0 0.2em; }
-div.user_prof_content { margin:2% 10%; width:80%; }
-table#prof_table { table-layout:fixed; text-align:left; width:100% }
-table#prof_table td { height:2em}
-table#prof_table th.prof_detail_label { width:35%; }
-table#prof_table th.prof_detail_value { width:45%; }
-table#prof_table th.prof_detail_btn { width:20%; }
-div.prof_edit_msg { font-weight:bold; margin:0.2em; }
-table.prof_edit_table { table-layout:fixed; text-align:left; width:100% }
-table.prof_edit_table input {width:40%}
-table.prof_edit_table input#avatar {width:100%}
-table.prof_edit_table th.prof_detail_label { width:35%; }
-table.prof_edit_table th.prof_detail_value { width:65%; }
-textarea.prof_edit_sig { width:100%; height:5em; resize:none; }
-input.settings_btn { margin:0.5em 0.2em; }
-
-/* For making new threads */
-form.newthr_form  { margin-left:10%; margin-right:10%; width:80% }
-input.newthr_title { margin-left:10%; margin-right:10%; width:80% }
-textarea.newthr_body { margin-left:10%; margin-right:10%; width:80%; resize:vertical }
 
 /* Sidebar */
-div.sidebar_trigger {
+.sbtrig {
     position:fixed;
     background-color:blue;
     color:white;
     right:0;
     top:20%;
-    vertical-align:bottom;
     height:6.5em;
     width:2em;
-    border:3px solid grey;
+    border:3px solid gray;
     border-right:none;
-    border-top-left-radius:5px;
-    border-bottom-left-radius:5px;
+    border-radius:10px 0 0 10px;
 }
-div.sidebar_trigger_text {
+.sbtrig_txt {
     font-weight:bold;
     padding:0.2em;
     text-transform:uppercase;
@@ -224,38 +110,45 @@ div.sidebar_trigger_text {
     position:relative;
     top:4.2em;
 }
-div.sidebar {
+.sidebar {
     vertical-align:center;
     text-align:center;
     right:1%;
     top:5%;
-    width:18%;
+    width:12em;
     position:fixed;
     visibility:hidden;
-}
-div.sidebar_item {
-    padding:0.4em;
-    border-left:3px solid;
-    border-right:3px solid;
-    border-bottom:2px dotted;
-    border-color:grey;
-    background:white;
     font-size:small;
 }
-table.chat_table{ max-height:100%; }
-div.sidebar_users { max-height:15%; overflow-y:auto; }
-div#sidebar_welcome {
+.sidebar a{font-weight:bold;}
+.sb_head {
+    padding:0.4em;
+    border:3px solid gray;
+    border-radius:10px 10px 0 0;
+    background:blue;
     font-weight:bold;
-    border-top:3px solid grey;
-    border-top-left-radius:5px;
-    border-top-right-radius:5px;
+    color:white;
 }
-div#sidebar_chat { max-height: 20% }
+.sb_head a:link{color:white}
+.sb_head a:visited{color:white;}
+.sb_elem {
+    padding:0.4em;
+    border-left:3px solid gray;
+    border-right:3px solid gray;
+    border-bottom:2px dotted gray;
+    background:white;
+}
+.sb_usrs { max-height:15%; overflow-y:auto; }
+#sb_ver {
+    font-size:x-small;
+}
+.sb_last {
+    border-bottom:3px solid gray;
+    border-radius:0 0 10px 10px;
+}
+/*div#sidebar_chat { max-height: 20% }
 div#sidebar_chat_msgs { text-align:left; border:1px solid grey; border-radius:3px; overflow-y:auto; }
 form#chat_input { width:95%; }
 textarea#chat_post { width:100%; }
-div#sidebar_version {
-    border-bottom:3px solid grey;
-    border-bottom-left-radius:5px;
-    border-bottom-right-radius:5px;
-}
+table.chat_table{ max-height:100%; }
+*/

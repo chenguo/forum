@@ -22,7 +22,7 @@ $uid = $_GET['uid'];
 <html>
 <head>
 <?php $display->DisplayTitle(Title::USER, $uid); ?>
-
+<link rel="stylesheet" text="text/css" href="css/user.css" />
 <script src='include/jsfunc.js'></script>
 <script type='text/javascript'>
 window.addEventListener('DOMContentLoaded', loadAction, false);

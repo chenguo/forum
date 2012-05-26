@@ -1,0 +1,49 @@
+/* Place the user profile */
+.usrp {
+    width:19%;
+    margin:1em 0;
+    float:left;
+}
+
+.thr_ttl { font-size:medium; float:right; margin-right:2%; }
+.thr_brd { display:inline; margin-left:2%; }
+.thr_pg { display:inline; margin-left:3%; }
+.post { width:100%; margin-bottom:2%; }
+.post_content {
+    width:79%;
+    text-align:left;
+    float:right;
+    background:white;
+    border:3px solid grey;
+    border-radius:7px;
+    margin:1em 0;
+}
+.post_text { overflow-x:auto; padding:2%; min-height:100px; }
+.post_karma_plus { padding-left:2%; font-size:x-small; }
+.post_karma_minus { padding-left:2%; font-size:x-small; }
+.post_footer { vertical-align:bottom; }
+.post_sig { padding:0% 2%; }
+.post_sig img {max-height:200px}
+.post_time { float:left; padding-bottom:1%; padding-left:2%; font-size:x-small; }
+.post_controls{ float:right; padding-bottom:1%; padding-top:1%; padding-right:2%; }
+
+/* Editing a post */
+.post_edit { text-align:center; width:80%; margin-left:10%; margin-top:1em}
+.post_edit .title { width:100%; }
+.post_edit textarea { width:100%; resize:vertical; }
+.post_edit .button { margin:0.3em; margin-top:0.5em }
+
+/* Making a new post */
+form#new_post { margin-top:2%; width:100%; margin-bottom:5%;}
+form#new_post .button { margin:0.3em; }
+textarea.new_post {
+    width:80%;
+    margin: 0 10%;
+    padding:0.3em;
+    resize:vertical;
+    min-height:20em;
+    height:20em;
+    border:3px solid grey;
+    border-radius:7px;
+}
+

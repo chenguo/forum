@@ -29,6 +29,7 @@ else
 <html>
 <head>
 <?php $display->DisplayTitle(Title::THREAD, $thread_id); ?>
+<link rel="stylesheet" type="text/css" href="css/thread.css" />
 <script src='include/jsfunc.js'></script>
 <script type='text/javascript'>
 window.addEventListener('DOMContentLoaded', loadAction, false);

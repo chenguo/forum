@@ -100,28 +100,32 @@ if ($session->CheckLogin())
         exit();
       }
     // User profile: view recent activities
-    else if ($action === "user_prof_prof" && isset($_POST['uid']))
+    else if ($action === "usrp_prof" && isset($_POST['uid']))
       {
         $user_info = $db->GetUserProfile($_POST['uid'], TRUE, FALSE);
         echo $display->GenerateUserDetails($user_info);
         exit();
       }
-    else if ($action === "user_prof_edit" && $uid === $session->GetUID())
+    else if ($action === "usrp_edit" && $uid === $session->GetUID())
       {
         $user_info = $db->GetUserProfile($uid, TRUE, FALSE);
         echo $display->GenerateUserSettings($user_info);
+        echo $display->GenerateUserPWChange($user_info);
         exit();
       }
-    else if ($action === "user_prof_recent" && isset($_POST['uid']))
+    else if ($action === "usrp_recent" && isset($_POST['uid']))
       {
-        echo $display->GenerateUserRecent($_POST['uid']);
+        echo $display->GenerateUserRecentPosts($_POST['uid']);
+        echo $display->GenerateUserRecentKarma($_POST['uid'], 0); // 0 for given
+        echo $display->GenerateUserRecentKarma($_POST['uid'], 1); // 1 for received
         exit();
       }
     // User profile update
-    else if (($action === "user_prof_save" || $action === "user_prof_cancel")
+    else if (($action === "usrp_save" || $action === "usrp_cancel")
              && $uid === $session->GetUID())
       {
-        if ($action === "user_prof_save")
+        // Get set of updated information
+        if ($action === "usrp_save")
           {
             $new_user_info = array();
             if (isset($_POST['email']))
@@ -150,7 +154,7 @@ if ($session->CheckLogin())
                                'sig'=>$user_info['signature']));
         exit();
       }
-    else if ($action === "user_prof_pw" && isset($_POST['cur_pw']) && isset($_POST['new_pw']))
+    else if ($action === "usrp_pw_change" && isset($_POST['cur_pw']) && isset($_POST['new_pw']))
       {
         if ($session->CheckPassword($_POST['cur_pw']))
           {

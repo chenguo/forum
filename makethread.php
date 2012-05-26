@@ -28,6 +28,7 @@ if (isset($_POST['title']) && strlen($_POST['title']) > 0
 <html>
 <head>
 <?php $display->DisplayTitle(); ?>
+<link rel="stylesheet" type="text/css" href="css/makethread.css">
 <script src='include/jsfunc.js'></script>
 <script type='text/javascript'>
 window.addEventListener('DOMContentLoaded', loadAction, false);

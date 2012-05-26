@@ -20,6 +20,7 @@ if (isset($_POST['username']) && isset($_POST['password']))
 <html>
 <head>
 <?php $display->DisplayTitle(); ?>
+<link rel="stylesheet" type="text/css" href="css/index.css" />
 <script type='text/javascript'>
 function clearField(field)
 {
