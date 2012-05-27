@@ -122,7 +122,7 @@ class Display
        new_thr: link to make new threads page
        threads: table of thread summary information
     */
-    $board_info = $this->forum->GetBoardDisplayInfo($threads_per_page, $page);
+    $board_info = $this->forum->GetBoardDisplayInfo($threads_per_page, $posts_per_page, $page);
 
     // Header
     echo $this->GenerateBoardHeader($board_info);

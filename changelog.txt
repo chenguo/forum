@@ -96,3 +96,4 @@ Ver     Date      Description
 0.66    05/26/12  Add expandable/hideable [hid] tag.
 0.66.1  05/26/12  Fix bug with nested text tags.
 0.67    05/26/12  Gametrailer embed support.
+0.67.1  05/26/12  Fix bug where only first page of board can be shown
