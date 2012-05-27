@@ -263,7 +263,7 @@ class Display
     $posts_per_page = $this->session->posts_per_page;
     $thread_info = $this->forum->GetThreadDisplayInfo($tid, $posts_per_page, $page);
 
-    // Header
+    // Header containing title and links
     echo $this->GenerateThreadTitle($thread_info);
     echo "\n";
 
@@ -274,7 +274,7 @@ class Display
         echo "\n";
       }
 
-    // Footer
+    // Footer containing title and links
     echo $this->GenerateThreadTitle($thread_info);
     echo "\n";
 

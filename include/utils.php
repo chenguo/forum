@@ -129,7 +129,7 @@ function prepContent($content, $embed_vid)
       $content = preg_replace("/\[vid\][^\]]*?mlb.com.*?content_id=(\d+).*?\[\/vid\]/i",
                               "<iframe src='http://mlb.mlb.com/shared/video/embed/embed.html?content_id=$1&width=640&height=360&property=mlb' width='640' height='360' $embed_opts></iframe>",
                               $content);
-    }
+    } /* embed videos */
 
   // [url] and other links check.
   $content = preg_replace_callback("/\[url=(.*?)\](.*?)\[\/url\]/",
@@ -181,6 +181,15 @@ function prepContent($content, $embed_vid)
 
   // [s|u|b|i] check.
   $content = preg_replace("/\[([bisu])\](.*?)\[\/\\1\]/", "<$1>$2</$1>", $content);
+
+  // [hid] check.
+  $content = preg_replace("/\[hide\](.*?)\[\/hide\]/",
+                          HTMLTag("div",
+                                  makeButton("+", array('onclick'=>'expUnhide(this)', 'class'=>'button_exp')) . " Click to expand"
+                                  . HTMLTag("div", "$1", array('class'=>'hidden'))
+                                  ,
+                                  array('class'=>'expandable')),
+                          $content);
 
   return $content;
 }

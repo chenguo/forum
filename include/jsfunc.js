@@ -329,3 +329,24 @@ function userProfPW(uid)
     });
   }
 }
+
+/*******************************\
+ *                             *
+ *  Expandable Area Functions  *
+ *                             *
+\*******************************/
+// Unhide hidden items
+function expUnhide(obj)
+{
+  if ("+" == $(obj).val())
+    {
+      // Button object is passed. It's sibling will be the hidden objet.
+      $(obj).next().css("display","block");
+      $(obj).val("-");
+    }
+  else
+    {
+      $(obj).next().css("display","none");
+      $(obj).val("+");
+    }
+}
