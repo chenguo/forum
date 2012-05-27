@@ -239,6 +239,10 @@ function userProfView(view, uid)
     data += "usrp_pw";
   else if (view == "recent")
     data += "usrp_recent";
+  else if (view == "favorite")
+    data += "usrp_fav";
+  else if (view == "message")
+    data += "usrp_msgs";
 
   $.ajax({
     url: "action.php",
@@ -335,7 +339,7 @@ function userProfPW(uid)
  *  Expandable Area Functions  *
  *                             *
 \*******************************/
-// Unhide hidden items
+// Hide/unhide expandable items
 function expUnhide(obj)
 {
   if ("+" == $(obj).val())
@@ -349,4 +353,51 @@ function expUnhide(obj)
       $(obj).next().css("display","none");
       $(obj).val("+");
     }
+}
+
+/*******************************\
+ *                             *
+ *  Favorite Threads Functions *
+ *                             *
+\*******************************/
+// Mark thread as favorite
+function threadMarkFav(fav,uid,tid)
+{
+  var favicon = $("img.favicon");
+  var func;
+  // Unset favorite status
+  if (fav == 0)
+    {
+      func = function(result) {
+        // Change image to empty.
+        $(favicon).each(function () {
+          $(this).off('click');
+          $(this).click(function(event) { threadMarkFav(1,uid,tid); });
+          $(this).attr("src", "/imgs/site/star_empty.png");
+          $(this).removeAttr("onclick");
+        });
+      }
+    }
+  // Set favorite status
+  else
+    {
+      func = function(result) {
+        // Change image to filled.
+        $(favicon).each(function () {
+          $(this).off('click');
+          $(this).click(function(event) { threadMarkFav(0,uid,tid); });
+          $(this).attr("src", "/imgs/site/star_filled.png");
+          $(this).removeAttr("onclick");
+        });
+      }
+    }
+
+  var data = "uid="+uid+"&action=thrMarkFav&tid="+tid+"&fav="+fav;
+
+  $.ajax({
+    url: "action.php",
+    type: "POST",
+    data: data,
+    success: func
+  });
 }

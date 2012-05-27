@@ -128,45 +128,8 @@ class Display
     echo $this->GenerateBoardHeader($board_info);
     echo "\n";
 
-    // Display posts in thread.
-    /*$title_row =
-      HTMLTag("tr",
-              HTMLTag("th", "title", array('class'=>'brd_thr_title'))
-              . HTMLTag("th", "posts", array('class'=>'brd_thr_num'))
-              . HTMLTag("th", "views", array('class'=>'brd_thr_num'))
-              . HTMLTag("th", "created", array('class'=>'brd_thr_time'))
-              . HTMLTag("th", "last post", array('class'=>'brd_thr_time'))
-              );*/
-    $title_row = HTMLTag("div",
-                         HTMLTag("div", "title", array('class'=>'brd_thr_title'))
-                         . HTMLTag("div", "posts", array('class'=>'brd_thr_num'))
-                         . HTMLTag("div", "views", array('class'=>'brd_thr_num'))
-                         . HTMLTag("div", "created", array('class'=>'brd_thr_time'))
-                         . HTMLTag("div", "last post", array('class'=>'brd_thr_time'))
-                         . HTMLTag("div", "", array('class'=>'clear'))
-                         ,
-                         array('class'=>'brd_head'));
-
-    $thread_list = "";
-    foreach ($board_info['threads'] as $thread_info)
-      {
-        $thread_list .= $this->GenerateBoardThreadRow($thread_info);
-      }
-
-    /*echo HTMLTag("div",
-                 HTMLTag("table",
-                         $title_row
-                         . $thread_list,
-                         array('class'=>'board_table'))
-                 ,
-                 array('class'=>'board_threads'));*/
-
-    echo HTMLTag("div",
-                 $title_row
-                 . $thread_list
-                 . HTMLTag("div", "", array('class'=>'board_bottom'))
-                 ,
-                 array('class'=>'brd_threads'));
+    echo $this->GenerateThreadsList($board_info['threads']);
+    echo "\n";
 
     echo $this->GenerateBoardHeader($board_info);
     echo "\n";
@@ -200,19 +163,6 @@ class Display
   */
   function GenerateBoardThreadRow($thread_info)
   {
-    /*$thread_row =
-      HTMLTag("tr",
-              HTMLTag("td",
-                      HTMLTag("div", $thread_info['link'])
-                      . HTMLTag("div", $thread_info['pages'], array('class'=>'board_thr_page_links'))
-                      . HTMLtag("div", $thread_info['flags'], array('class'=>'board_thr_flags'))
-                      ,
-                      array('class'=>'board_thr_title'))
-              . HTMLTag("td", $thread_info['posts'])
-              . HTMLTag("td", $thread_info['views'])
-              . HTMLtag("td", $thread_info['creator'])
-              . HTMLtag("td", $thread_info['last_poster']));
-    */
     $board_thr_link = HTMLTag("div", $thread_info['link']);
     $board_thr_page_links = "";
     if ($thread_info['pages'] != "")
@@ -246,6 +196,34 @@ class Display
 
     return $thread_row;
   }
+
+  // Generate a list of threads and their metainfo
+  function GenerateThreadsList($thrinfo_list)
+  {
+    // Display threads on board.
+    $title_row = HTMLTag("div",
+                         HTMLTag("div", "title", array('class'=>'brd_thr_title'))
+                         . HTMLTag("div", "posts", array('class'=>'brd_thr_num'))
+                         . HTMLTag("div", "views", array('class'=>'brd_thr_num'))
+                         . HTMLTag("div", "created", array('class'=>'brd_thr_time'))
+                         . HTMLTag("div", "last post", array('class'=>'brd_thr_time'))
+                         . HTMLTag("div", "", array('class'=>'clear'))
+                         ,
+                         array('class'=>'brd_head'));
+
+    $thread_list = "";
+    foreach ($thrinfo_list as $thread_info)
+      {
+        $thread_list .= $this->GenerateBoardThreadRow($thread_info);
+      }
+
+    return HTMLTag("div",
+                   $title_row . $thread_list
+                   . HTMLTag("div", "", array('class'=>'board_bottom'))
+                   ,
+                   array('class'=>'brd_threads'));
+  }
+
 
   /*******************************\
    *                             *
@@ -299,9 +277,16 @@ class Display
   function GenerateThreadTitle($thread_info)
   {
     return HTMLTag("div",
-                   HTMLTag("div", $thread_info['title'], array('class'=>'thr_ttl'))
-                   . HTMLTag("div", $thread_info['board'], array('class'=>'thr_brd'))
-                   . HTMLTag("div", $thread_info['pages'], array('class'=>'thr_pg'))
+                   HTMLTag("div",
+                           HTMLTag("div", $thread_info['board'], array('class'=>'thr_brd'))
+                           . HTMLTag("div", $thread_info['pages'], array('class'=>'thr_pg'))
+                           ,
+                           array('class'=>'ttl_left'))
+                   . HTMLTag("div",
+                             HTMLTag("div", $thread_info['title'], array('class'=>'thr_ttl'))
+                             . HTMLTag("div", $thread_info['fav'], array('class'=>'thr_fav'))
+                             ,
+                             array('class'=>'ttl_right'))
                    ,
                    array('class'=>'title_bar'));
   }
@@ -395,20 +380,30 @@ class Display
   // Generate links to sub-areas of user profile
   function GenerateUserProfileLinks($uid)
   {
-    return HTMLTag("div",
-                   HTMLTag("ul",
-                           HTMLTag("li", makeLink("javascript:void(0)", "profile",
-                                                  array('onclick'=>"userProfView(\"profile\", $uid)")))
-                           . HTMLTag("li", makeLink("javascript:void(0)", "edit profile",
-                                                    array('onclick'=>"userProfView(\"edit\", $uid)")))
-                           . HTMLTag("li", makeLink("javascript:void(0)", "recent",
-                                                    array('onclick'=>"userProfView(\"recent\", $uid)")))
-                           . HTMLTag("li", makeLink("javascript:void(0)", "messages",
-                                                    array('onclick'=>"userProfView(\"message\", $uid)")))
+    $cur_uid = $this->session->GetUID();
+    $links =
+      HTMLTag("li", makeLink("javascript:void(0)", "profile",
+                             array('onclick'=>"userProfView(\"profile\", $uid)")));
+    if ($cur_uid == $uid)
+      {
+        $links .=
+          HTMLTag("li", makeLink("javascript:void(0)", "edit profile",
+                                 array('onclick'=>"userProfView(\"edit\", $uid)")));
+      }
 
-                           )
-                   ,
-                   array('class'=>'usrp_links'));
+    $links .= HTMLTag("li", makeLink("javascript:void(0)", "recent",
+                                     array('onclick'=>"userProfView(\"recent\", $uid)")));
+
+    if ($cur_uid == $uid)
+      {
+        $links .=
+          HTMLTag("li", makeLink("javascript:void(0)", "favorites",
+                                 array('onclick'=>"userProfView(\"favorite\", $uid)")))
+          . HTMLTag("li", makeLink("javascript:void(0)", "messages",
+                                   array('onclick'=>"userProfView(\"message\", $uid)")));
+      }
+
+    return HTMLTag("div", HTMLTag("ul", $links), array('class'=>'usrp_links'));
   }
 
   // Generate a table of user details.
@@ -537,6 +532,24 @@ class Display
       $recent_karma = HTMLTag("h2", "Recent Karma Received") . table($rows, array('class'=>'usrp_tbl'));
 
     return HTMLTag("div", $recent_karma, array('class'=>'usrp_container'));
+  }
+
+  // Generate user's favorite threads.
+  function GenerateUserFavorites($uid)
+  {
+    $fav_list = $this->forum->GenerateUserFavorites($uid);
+    $threads_display = $this->GenerateThreadsList($fav_list);
+    return HTMLTag("div",
+                   HTMLTag("h2", "Favorite Threads") . $threads_display
+                   ,
+                   array('class'=>'usrp_container'));
+  }
+
+  // Generate user's private messages.
+  function GenerateUserPrivateMessages($uid)
+  {
+    return HTMLTag("div",
+                   HTMLTag("h2", "Private Messages"), array('class'=>'usrp_container'));
   }
 
   /*******************************\

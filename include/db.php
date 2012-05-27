@@ -124,26 +124,50 @@ class DB
   // Get the last post a user has viewed in a thread.
   function GetUserPostView($uid, $tid)
   {
-    $pview_info = $this->__SelectFromTable(Tables::PVIEW, array("tpid", "pid"), array("uid=$uid", "tid=$tid"));
+    $pview_info = $this->__SelectFromTable(Tables::USRTHR, array("tpid", "pid"), array("uid=$uid", "tid=$tid"));
     if (count($pview_info) == 0)
       return 0;
     else
       return $pview_info[0];
   }
+
   // Update the last post a user has viewed in a thread.
   function UpdateUserPostView($uid, $tid, $pid, $tpid)
   {
-    //echo "uid $uid  tid $tid  pid $pid  tpid $tpid</br>";
     // Check for given thread, what is the last post the user has viewed.
-    $update = FALSE;
-    $pview_info = $this->__SelectFromTable(Tables::PVIEW, array("tpid"), array("uid=$uid", "tid=$tid"));
+    $usrthr_info = $this->__SelectFromTable(Tables::USRTHR, array("tpid"), array("uid=$uid", "tid=$tid"));
 
     // Only update post viewed if thread hasn't been viewed before, or stored last viewed
     // post is older than passed in post.
-    if (count($pview_info) == 0)
-      $this->__InsertIntoTable(Tables::PVIEW, array('uid'=>$uid, 'tid'=>$tid, 'pid'=>$pid, 'tpid'=>$tpid));
-    else if ($pview_info[0]['tpid'] < $tpid)
-      $this->__UpdateTable(Tables::PVIEW, array('pid'=>$pid, 'tpid'=>$tpid), array("uid=$uid", "tid=$tid"));
+    if (count($usrthr_info) == 0)
+      $this->__InsertIntoTable(Tables::USRTHR, array('uid'=>$uid, 'tid'=>$tid, 'pid'=>$pid, 'tpid'=>$tpid));
+    else if ($usrthr_info[0]['tpid'] < $tpid)
+      $this->__UpdateTable(Tables::USRTHR, array('pid'=>$pid, 'tpid'=>$tpid), array("uid=$uid", "tid=$tid"));
+  }
+
+  // Update user favorite status for a thread
+  function UpdateUserThrFav($uid, $tid, $fav)
+  {
+    // For sanity, check current fav status.
+    $set_fav = $this->__SelectFromTable(Tables::USRTHR, array("fav"), array("uid=$uid", "tid=$tid"));
+
+    // Post hasn't been touched by user yet. Add new entry.
+    if (count($set_fav) == 0)
+      $this->__InsertIntoTable(Tables::USRTHR, array('uid'=>$uid, 'tid'=>$tid, 'fav'=>$fav));
+    // If favorite status is different, update.
+    else if ($set_fav[0]['fav'] != $fav)
+      $this->__UpdateTable(Tables::USRTHR, array('fav'=>$fav), array("uid=$uid", "tid=$tid"));
+  }
+
+  // Get user favorite threads.
+  function GetUserFavThreads($uid)
+  {
+    // Check if a thread is a user's favorite.
+    $threads = $this->__SelectFromTable(Tables::USRTHR, array("tid"), array("uid=$uid", "fav=1"));
+    $tid_list = array();
+    foreach ($threads as $thread)
+      array_push($tid_list, $thread['tid']);
+    return $tid_list;
   }
 
   // Get a user's most recent posts.
@@ -243,6 +267,16 @@ class DB
     return $this->GetThreadTitle($tid);
   }
 
+  // Get thread's user favorite status
+  function GetThreadUserFav($tid, $uid)
+  {
+    // Check if a thread is a user's favorite.
+    $usrthr_info = $this->__SelectFromTable(Tables::USRTHR, array("fav"), array("uid=$uid", "tid=$tid"));
+    if (isset($usrthr_info[0]['fav']))
+      return $usrthr_info[0]['fav'];
+    else
+      return FALSE;
+  }
 
   /* Add a new thread to the database. */
   function NewThread($title, $content, $uid)

@@ -37,7 +37,7 @@ final class Tables
   const POSTS = "posts";
   const THREADS = "threads";
   const USERS = "users";
-  const PVIEW = "post_view";
+  const USRTHR = "usrthr";
   const KARMA = "karma";
 }
 
@@ -61,9 +61,9 @@ final class Profile
 
 define("CHAT_SEQ_MAX", 1024);
 define("BOARD_NAME", "LOL Bros, LOL");
-define("VERSION", 0.67);
+define("VERSION", 0.70);
 define("COMMON_CSS", "<link href='/css/common.css' type='text/css' rel='stylesheet'>\n");
-define("COMMON_JQUERY", "<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'></script>");
+define("COMMON_JQUERY", "<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js'></script>");
 define("TIME_FULL", "g:i a M/j/Y");
 define("TIME_MYSQL", "Y-m-d H:i:s");
 define("TIME_CHAT", "g:i:s");

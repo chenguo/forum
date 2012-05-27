@@ -143,6 +143,7 @@ class Forum
     // Get thread and list of post infos
     $thread = $this->db->GetThread($tid, TRUE /* update viewcount */);
     $posts = $this->db->GetPosts($tid, $page, $posts_per_page);
+    $uid = $this->session->GetUID();
 
     // Format post info for output.
     foreach ($posts as $post)
@@ -151,14 +152,27 @@ class Forum
       }
     // Mark user as at least having read the last post on current page.
     $last_post = end($posts);
-    $this->db->UpdateUserPostView($this->session->GetUID(), $tid, $last_post['pid'], $last_post['tpid']);
+    $this->db->UpdateUserPostView($uid, $tid, $last_post['pid'], $last_post['tpid']);
+
+    // Favorite status.
+    $fav = "";
+    if ($this->db->GetThreadUserFav($tid, $uid))
+      {
+        $fav = makeLink("javascript:void(0)",
+                        showImg("/imgs/site/star_filled.png", array('class'=>'favicon', 'onclick'=>"threadMarkFav(0,$uid,$tid)")));
+      }
+    else
+      {
+        $fav = makeLink("javascript:void(0)",
+                        showImg("/imgs/site/star_empty.png", array('class'=>'favicon', 'onclick'=>"threadMarkFav(1,$uid,$tid)")));
+      }
 
     // Populate thread info for display
     $thread_info['title'] = $thread['title'];
     $thread_info['board'] = makeLink(Pages::BOARD, "board");
     $thread_info['pages'] = $this->MakePageLinks($page, $posts_per_page, $thread['posts'], Pages::THREAD."?tid=$tid");
     $thread_info['posts'] = $formatted_posts;
-
+    $thread_info['fav'] = $fav;
     return $thread_info;
   }
 
@@ -322,7 +336,7 @@ class Forum
     $sidebar_info['chat'] = $this->GenerateChat();
     $sidebar_info['board'] = makeLink(Pages::BOARD, "board");
     $sidebar_info['bookmark'] = makeLink(Pages::BOARD, "bookmarks");
-    $sidebar_info['privmsg'] = makeLink(Pages::BOARD, "private messages");
+    $sidebar_info['privmsg'] = makeLink(Pages::BOARD, "messages");
     $sidebar_info['cur_users'] = $cur_usr_str;
     $sidebar_info['day_users'] = $day_usr_str;
     $sidebar_info['logout'] = makeLink(Pages::ACTION."?action=logout", "logout");
@@ -426,6 +440,22 @@ class Forum
       }
 
     return $recent_karma_recvd;
+  }
+
+  // Construct a list of the user's favorite threads.
+  function GenerateUserFavorites($uid)
+  {
+    $threads_per_page = $this->session->threads_per_page;
+    $tid_list = $this->db->GetUserFavThreads($uid);
+    $formatted_threads = array();
+
+    foreach($tid_list as $tid)
+      {
+        $thread_info = $this->db->GetThread($tid);
+        array_push($formatted_threads, $this->GetThreadInfo($thread_info));
+      }
+
+    return $formatted_threads;
   }
 
   // Cache user lookup from database.

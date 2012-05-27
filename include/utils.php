@@ -9,7 +9,7 @@ function throwException($message)
 }
 
 // Return an HTML link.
-function makeLink($link, $desc, $options_array=array(''))
+function makeLink($link, $desc, $options_array=array())
 {
   $options = "";
   foreach ($options_array as $optkey => $optval)

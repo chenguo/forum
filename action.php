@@ -170,6 +170,23 @@ if ($session->CheckLogin())
           }
         exit();
       }
+    else if ($action === "usrp_msgs")
+      {
+        echo $display->GenerateUserPrivateMessages($uid);
+        exit();
+      }
+    else if ($action === "usrp_fav")
+      {
+        echo $display->GenerateUserFavorites($uid);
+        exit();
+      }
+    else if ($action === "thrMarkFav" && isset($_POST['fav']) && isset($_POST['tid']))
+      {
+        // Failures will be exceptions, so assume this succeeds.
+        $db->UpdateUserThrFav($uid, $_POST['tid'], $_POST['fav']);
+        echo "1";
+        exit();
+      }
 
     // All other actions require a pid.
     $pid;

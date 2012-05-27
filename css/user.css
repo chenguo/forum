@@ -10,7 +10,7 @@
 
 .usrp_links {
     margin:1em 0;
-    border:3px solid gray;
+    border:4px solid gray;
     border-radius:7px;
     background:white;
 }
@@ -28,7 +28,7 @@
 /* User profile table general settings */
 th.usrp_tbl_label { width:30% }
 th.usrp_tbl_value { width:70% }
-.usrp_container {background:white; border:3px solid grey; border-radius:7px; margin:1em 0}
+.usrp_container {background:white; border:4px solid grey; border-radius:7px; margin:1em 0}
 .usrp_tbl {margin:2% 10%; width:80%; text-align:left}
 
 /* User profile edit */
@@ -38,4 +38,15 @@ th.usrp_tbl_value { width:70% }
 .prof_edit_sig { width:100%; height:5em; resize:vertical; }
 .settings_btn {margin:0.5em 0.2em}
 
-
+/* User favorite threads */
+.brd_head { font-weight:bold; border-bottom:2px solid grey; padding:0%; padding-bottom:0.5em; }
+.brd_thr_title { width:50%; float:left; }
+.brd_thr_num { width:7%; float:left;}
+.brd_thr_time { width:18%; float:left; }
+.brd_thread_row { border-bottom:1px solid grey; width:100%; padding-top:0.5em; padding-bottom:0.5em;
+                    vertical-align:middle; height:100%;}
+.brd_thread_row:hover { background-color:#F0F0F0; }
+.brd_thread_row * { height:100%; }
+.brd_thr_page_links { display:inline; margin-right:0.3em; }
+.brd_thr_flags { display:inline; margin-left:0.3em; font-weight:bold; font-size:x-small }
+.brd_thr_flags a {color:white; background:blue; text-decoration:none; padding:0 0.3em}
