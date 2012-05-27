@@ -179,8 +179,8 @@ function prepContent($content, $embed_vid)
                             "<div class='quote'><b>$1 wrote</b></br>$2</div>",
                             $content, 1);
 
-  // [s|u|b|i] check.
-  $content = preg_replace("/\[([bisu])\](.*?)\[\/\\1\]/", "<$1>$2</$1>", $content);
+  // [b|i|s|u] check
+  $content = nestedTextTags($content);
 
   // [hid] check.
   $content = preg_replace("/\[hide\](.*?)\[\/hide\]/",
@@ -192,6 +192,17 @@ function prepContent($content, $embed_vid)
                           $content);
 
   return $content;
+}
+
+// Recursive function to replace [b|i|s|u] text codes
+function nestedTextTags($input)
+{
+  $str = "";
+  if (is_array($input))
+    $str = "<$input[1]>" . $input[2] . "</$input[1]>";
+  else
+    $str = $input;
+  return preg_replace_callback("/\[([bisu])\](.*?)\[\/\\1\]/", 'nestedTextTags', $str);
 }
 
 // Get the number of pages needed to display NITEMS at ITEMS_PER_PAGE.

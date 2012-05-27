@@ -94,3 +94,4 @@ Ver     Date      Description
                   feature where page focuses on new post.
 0.65    05/26/12  Improve embed code and link substitution. Seek time for youtube supported.
 0.66    05/26/12  Add expandable/hideable [hid] tag.
+0.66.1  05/26/12  Fix bug with nested text tags.
