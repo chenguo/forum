@@ -129,6 +129,11 @@ function prepContent($content, $embed_vid)
       $content = preg_replace("/\[vid\][^\]]*?mlb.com.*?content_id=(\d+).*?\[\/vid\]/i",
                               "<iframe src='http://mlb.mlb.com/shared/video/embed/embed.html?content_id=$1&width=640&height=360&property=mlb' width='640' height='360' $embed_opts></iframe>",
                               $content);
+
+      // Gametrailers [vid] embed.
+      $content = preg_replace("/\[vid\][^\]]*?gametrailers.com.*?(\d+)(#.*?)?\[\/vid\]/i",
+                              "<iframe src='http://media.mtvnservices.com/embed/mgid:moses:video:gametrailers.com:$1' width='512' height='288' $embed_opts></iframe>",
+                              $content);
     } /* embed videos */
 
   // [url] and other links check.
