@@ -23,7 +23,7 @@ class DB
   // Verify user against his password in the database.
   function VerifyUser($user, $pw, $update_time = FALSE)
   {
-    $result = $this->__SelectFromTable(Tables::USERS, array('uid', 'password'), array("name=\"$user\""));
+    $result = $this->__SelectFromTable(Tables::USERS, array('uid', 'password'), array("name=\"$user\""), 1);
     if (count($result) > 0 && $result[0]['password'] === md5($pw))
       {
         if ($update_time == TRUE)
@@ -36,7 +36,7 @@ class DB
   // Check if a user ID is valid.
   function CheckUID($uid)
   {
-    $result = $this->__SelectFromTable(Tables::USERS, array('uid'), array("uid=\"$uid\""));
+    $result = $this->__SelectFromTable(Tables::USERS, array('uid'), array("uid=\"$uid\""), 1);
     if (count($result) > 0)
       return TRUE;
     return FALSE;
@@ -45,7 +45,7 @@ class DB
   // Match a user's cookie to a username
   function CheckCookie($uid, $cookie)
   {
-    $result = $this->__SelectFromTable(Tables::USERS, array('uid'), array("uid=\"$uid\"","password=\"$cookie\""));
+    $result = $this->__SelectFromTable(Tables::USERS, array('uid'), array("uid=\"$uid\"","password=\"$cookie\""), 1);
     if (count($result) > 0)
       return TRUE;
     return FALSE;
@@ -61,7 +61,7 @@ class DB
   /* Return user name matching passed in user id. */
   function GetUserName($user_id, $link=TRUE)
   {
-    $result = $this->__SelectFromTable(Tables::USERS, array('name'), array("uid=\"$user_id\""));
+    $result = $this->__SelectFromTable(Tables::USERS, array('name'), array("uid=\"$user_id\""), 1);
     if (count($result) > 0)
       {
         $name = $result[0]['name'];
@@ -92,7 +92,7 @@ class DB
     $fields = array('uid', 'name', 'posts', 'avatar', 't_online', 'plus', 'minus', 'signature');
     if ($full == TRUE)
       array_push($fields, 'email', 'birth', '`join`', 'views', 'posts_display', 'threads_display');
-    $result = $this->__SelectFromTable(Tables::USERS, $fields, array("uid=$uid"));
+    $result = $this->__SelectFromTable(Tables::USERS, $fields, array("uid=$uid"), 1);
     if ($result)
       return $result[0];
     else
@@ -102,7 +102,7 @@ class DB
   // Get the settings specific part of the user profile
   function GetUserSettings($uid)
   {
-    $result = $this->__SelectFromTable(Tables::USERS, array('posts_display', 'threads_display'), array("uid=$uid"));
+    $result = $this->__SelectFromTable(Tables::USERS, array('posts_display', 'threads_display'), array("uid=$uid"), 1);
     if ($result)
       return $result[0];
     else
@@ -124,7 +124,7 @@ class DB
   // Get the last post a user has viewed in a thread.
   function GetUserPostView($uid, $tid)
   {
-    $pview_info = $this->__SelectFromTable(Tables::USRTHR, array("tpid", "pid"), array("uid=$uid", "tid=$tid"));
+    $pview_info = $this->__SelectFromTable(Tables::USRTHR, array("tpid", "pid"), array("uid=$uid", "tid=$tid"), 1);
     if (count($pview_info) == 0)
       return 0;
     else
@@ -135,7 +135,7 @@ class DB
   function UpdateUserPostView($uid, $tid, $pid, $tpid)
   {
     // Check for given thread, what is the last post the user has viewed.
-    $usrthr_info = $this->__SelectFromTable(Tables::USRTHR, array("tpid"), array("uid=$uid", "tid=$tid"));
+    $usrthr_info = $this->__SelectFromTable(Tables::USRTHR, array("tpid"), array("uid=$uid", "tid=$tid"), 1);
 
     // Only update post viewed if thread hasn't been viewed before, or stored last viewed
     // post is older than passed in post.
@@ -149,7 +149,7 @@ class DB
   function UpdateUserThrFav($uid, $tid, $fav)
   {
     // For sanity, check current fav status.
-    $set_fav = $this->__SelectFromTable(Tables::USRTHR, array("fav"), array("uid=$uid", "tid=$tid"));
+    $set_fav = $this->__SelectFromTable(Tables::USRTHR, array("fav"), array("uid=$uid", "tid=$tid"), 1);
 
     // Post hasn't been touched by user yet. Add new entry.
     if (count($set_fav) == 0)
@@ -240,21 +240,21 @@ class DB
         $data['views'] = "views+1";
         $this->__UpdateTable(Tables::THREADS, $data, array("tid=$thread_id"));
       }
-    $result = $this->__SelectFromTable(Tables::THREADS, array("*"), array("tid=$thread_id"));
+    $result = $this->__SelectFromTable(Tables::THREADS, array("*"), array("tid=$thread_id"), 1);
     return $result[0];
   }
 
   // Get thread title.
   function GetThreadTitle($thread_id)
   {
-    $result = $this->__SelectFromTable(Tables::THREADS, array("title"), array("tid=$thread_id"));
+    $result = $this->__SelectFromTable(Tables::THREADS, array("title"), array("tid=$thread_id"), 1);
     return $result[0]['title'];
   }
 
   // Get number of posts in a thread.
   function GetThreadNumPosts($thread_id)
   {
-    $result = $this->__SelectFromTable(Tables::THREADS, array("posts"), array("tid=$thread_id"));
+    $result = $this->__SelectFromTable(Tables::THREADS, array("posts"), array("tid=$thread_id"), 1);
     return $result[0]['posts'];
   }
 
@@ -271,7 +271,7 @@ class DB
   function GetThreadUserFav($tid, $uid)
   {
     // Check if a thread is a user's favorite.
-    $usrthr_info = $this->__SelectFromTable(Tables::USRTHR, array("fav"), array("uid=$uid", "tid=$tid"));
+    $usrthr_info = $this->__SelectFromTable(Tables::USRTHR, array("fav"), array("uid=$uid", "tid=$tid"), 1);
     if (isset($usrthr_info[0]['fav']))
       return $usrthr_info[0]['fav'];
     else
@@ -330,21 +330,21 @@ class DB
   // Get a single post by pid.
   function GetPost($pid)
   {
-    $result = $this->__SelectFromTable(Tables::POSTS, array("*"), array("pid=$pid"));
+    $result = $this->__SelectFromTable(Tables::POSTS, array("*"), array("pid=$pid"), 1);
     return $result[0];
   }
 
   // Get post meta information.
   function GetPostMeta($pid)
   {
-    $result = $this->__SelectFromTable(Tables::POSTS, array('tid', 'tpid', 'uid'), array("pid=$pid"));
+    $result = $this->__SelectFromTable(Tables::POSTS, array('tid', 'tpid', 'uid'), array("pid=$pid"), 1);
     return $result[0];
   }
 
   // Get posts poster uid.
   function GetPostUID($pid)
   {
-    $result = $this->__SelectFromTable(Tables::POSTS, array('uid'), array("pid=$pid"));
+    $result = $this->__SelectFromTable(Tables::POSTS, array('uid'), array("pid=$pid"), 1);
     return $result[0]['uid'];
   }
 
@@ -364,7 +364,7 @@ class DB
   // Check if a user can alter the karma of a particular post
   function PostKarmaChangeAllowed($pid, $uid)
   {
-    $result = $this->__SelectFromTable(Tables::KARMA, array('pid'), array("pid=$pid", "uid=$uid"));
+    $result = $this->__SelectFromTable(Tables::KARMA, array('pid'), array("pid=$pid", "uid=$uid"), 1);
     if (count($result) > 0)
       return FALSE;
     return TRUE;
@@ -494,7 +494,7 @@ class DB
       {
         if ($type !== "plus" && $type !== "minus")
           throwException("Undefined karma type: $type");
-        $result = mysql_query("SELECT pid FROM " . Tables::KARMA . " WHERE pid=$pid&&uid=$uid") or throwException("Could not check karma table: " . mysql_error());
+        $result = mysql_query("SELECT pid FROM " . Tables::KARMA . " WHERE pid=$pid&&uid=$uid LIMIT 1") or throwException("Could not check karma table: " . mysql_error());
         if (mysql_num_rows($result) > 0)
           throwException("User already applied karma to this post");
 
@@ -541,7 +541,7 @@ class DB
     $content = $this->insertPrep($content);
 
     /* Get post count in thread. */
-    $result = mysql_query("SELECT posts FROM " . Tables::THREADS . " WHERE tid=$tid") or throwException("getting tpid: " . mysql_error());
+    $result = mysql_query("SELECT posts FROM " . Tables::THREADS . " WHERE tid=$tid LIMIT 1") or throwException("getting tpid: " . mysql_error());
     $row = mysql_fetch_assoc($result);
     $tpid = $row['posts'] + 1;
 
@@ -558,13 +558,15 @@ class DB
   }
 
   // Select entries from TABLE
-  function __SelectFromTable($table, $col_array, $key_array)
+  function __SelectFromTable($table, $col_array, $key_array, $limit=-1)
   {
     $columns = implode (", ", $col_array);
     $query = "SELECT $columns FROM $table";
     if (count($key_array) > 0)
       $query .= " WHERE " . implode ("&&", $key_array);
-    $result = mysql_query($query) or die (/*mysql_error().*/ ' ' . $query);
+    if ($limit > 0)
+      $query .= " LIMIT $limit";
+    $result = mysql_query($query) or die (mysql_error() . ' ' . $query);
     $ret_array = array();
     while ($row = mysql_fetch_assoc($result))
       {
