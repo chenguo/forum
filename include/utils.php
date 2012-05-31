@@ -112,7 +112,7 @@ function prepContent($content, $embed_vid)
       // http://www.youtube.com/embed/code
 
       // Youtube videos. Use create function for the seeking time resolution instead of anonymous, since host only has PHP 5.2
-      $content = preg_replace_callback("/\[(vid|youtube)\].*?youtu(\.?)be[^&]*?([0-9a-zA-Z_-]{8,})(&[^#]*)?(#t=(\d+m)?(\d+))?.*?\[\/\\1\]/",
+      $content = preg_replace_callback("/\[(vid|youtube)\].*?youtu(\.?)be[^&]*?([0-9a-zA-Z_-]{8,})(&[^#\[]*)?(#t=(\d+m)?(\d+))?.*?\[\/\\1\]/",
                                        create_function('$match',
                                                        '$str = "";'
                                                        //. 'foreach ($match as $key => $val) { $str .= "$key::$val</br>"; }'
