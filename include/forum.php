@@ -384,8 +384,8 @@ class Forum
       $thread = $this->db->GetThread($post['tid']);
       $post_array['post'] = $this->GetPostLink($post['pid'], $thread['title']);
       $post_array['time'] = GetTime(TIME_FULL, $post['time']);
-      $post_array['content'] = substr($post['content'], 0, 50);
-      if (strlen($post['content']) > 50)
+      $post_array['content'] = disableHTML(substr($post['content'], 0, 200));
+      if (strlen($post['content']) > 200)
         $post_array['content'] .= "...";
       array_push($recent_posts, $post_array);
     }

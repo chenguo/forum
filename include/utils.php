@@ -81,17 +81,23 @@ function makeButton($text, $options_array = array())
   return "<input type='button' class='$class' value='$text'$options>";
 }
 
+// Disable HTML by replacing < and > with &#60 and &#62.
+function disableHTML($str)
+{
+  $str = preg_replace("/</", "&#60", $str);
+  $str = preg_replace("/>/", "&#62", $str);
+  return $str;
+}
+
 // Parse text for forum display. This sets up img tags, emoticons, etc.
-// TODO: repeatedly going through the post text must be pretty inefficient... Worth it to move
-// to char-by-char manual matching?
+// TODO: repeatedly going through the post text must be pretty inefficient... Try to make the regex more efficient
+// while still maintainable.
 function prepContent($content, $embed_vid)
 {
   global $db;
   global $session;
 
-  // Disable HTML by replacing < and > with &#60 and &#62.
-  $content = preg_replace("/</", "&#60", $content);
-  $content = preg_replace("/>/", "&#62", $content);
+  $content = disableHTML($content);
 
   // [img] check.
   $content = preg_replace("/\[img\](.*?)\[\/img\]/i","<div class='img_container'><img src='$1' alt='[IMAGE]'></div>", $content);

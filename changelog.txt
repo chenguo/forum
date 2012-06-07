@@ -103,3 +103,5 @@ Ver     Date      Description
 0.72    06/06/12  Support Soundcloud embed code with 'aud' tag.
 0.72.1  06/06/12  Fix more youtube embed bugs.
 0.72.2  06/06/12  Fix bug where user profile's karma received always shows recipient instead of giver.
+0.72.3  06/06/12  Disable HTML in user profile's "recent posts" section.
+
