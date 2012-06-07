@@ -101,4 +101,5 @@ Ver     Date      Description
 0.71    05/27/12  Optimize database by limiting returned results.
 0.71.1  05/30/12  Fix bug in parsing youtube embeds with options after v=VIDEO_CODE.
 0.72    06/06/12  Support Soundcloud embed code with 'aud' tag.
-
+0.72.1  06/06/12  Fix more youtube embed bugs.
+0.72.2  06/06/12  Fix bug where user profile's karma received always shows recipient instead of giver.

@@ -112,15 +112,15 @@ function prepContent($content, $embed_vid)
       // http://www.youtube.com/embed/code
 
       // Youtube videos. Use create function for the seeking time resolution instead of anonymous, since host only has PHP 5.2
-      $content = preg_replace_callback("/\[(vid|youtube)\].*?youtu(\.?)be[^&]*?([0-9a-zA-Z_-]{8,})(&[^#\[]*)?(#t=(\d+m)?(\d+))?.*?\[\/\\1\]/",
+      $content = preg_replace_callback("/\[(vid|youtube)\].*?youtu(\.be\/|be.com\/(v\/|watch.*?v=))([0-9a-zA-Z_-]{8,})(&[^#\[]*)?(#t=(\d+m)?(\d+))?.*?\[\/\\1\]/",
                                        create_function('$match',
                                                        '$str = "";'
                                                        //. 'foreach ($match as $key => $val) { $str .= "$key::$val</br>"; }'
                                                        . '$time = 0;'
-                                                       . 'if (isset($match[7])) $time = $match[7];'
-                                                       . 'if (isset($match[6])) $time = $match[6] * 60 + $match[7];'
+                                                       . 'if (isset($match[8])) $time = $match[8];'
+                                                       . 'if (isset($match[7])) $time = $match[7] * 60 + $match[8];'
                                                        . '$str .= "<iframe class=\'youtube-player\' type=\'text/html\' width=\'640\' height=\'385\' '
-                                                       . 'src=\'http://www.youtube.com/embed/$match[3]?rel=0&start=$time\' frameborder=\'0\' '
+                                                       . 'src=\'http://www.youtube.com/embed/$match[4]?rel=0&start=$time\' frameborder=\'0\' '
                                                        . 'webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>";'
                                                        . 'return $str;'),
                                        $content);

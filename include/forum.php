@@ -429,7 +429,7 @@ class Forum
 
         $post_meta = $this->db->GetPostMeta($karma_action['pid']);
         $thread = $this->db->GetThread($post_meta['tid']);
-        $recip = $this->GetCachedUser($karma_action['puid']);
+        $recip = $this->GetCachedUser($karma_action['uid']);
 
         $karma_action_array['action'] = ($karma_action['type'] === "plus")? Karma::PLUSact : Karma::MINUSact;
         $karma_action_array['recip'] = makeLink(Pages::USER."?uid={$recip['uid']}", $recip['name']);
