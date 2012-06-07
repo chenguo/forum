@@ -136,6 +136,11 @@ function prepContent($content, $embed_vid)
                               $content);
     } /* embed videos */
 
+  // Audio
+  $content = preg_replace("/\[aud\].*soundcloud.*(playlists|tracks)%2f(\w+).*?\[\/aud\]/i",
+                          "<iframe src='http://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2F$1%2F$2&show_artwork=true' width='100%' height=166' scrolling='no' frameborder='no'></iframe>",
+                          $content);
+
   // [url] and other links check.
   $content = preg_replace_callback("/\[url=(.*?)\](.*?)\[\/url\]/",
                                    create_function('$match',

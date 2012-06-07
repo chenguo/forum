@@ -100,3 +100,5 @@ Ver     Date      Description
 0.70    05/27/12  Add favorite threads feature.
 0.71    05/27/12  Optimize database by limiting returned results.
 0.71.1  05/30/12  Fix bug in parsing youtube embeds with options after v=VIDEO_CODE.
+0.72    06/06/12  Support Soundcloud embed code with 'aud' tag.
+
