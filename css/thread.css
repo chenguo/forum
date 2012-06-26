@@ -5,10 +5,11 @@
     float:left;
 }
 
-.thr_ttl { font-size:medium; display:inline-block; margin-right:1em; vertical-align:middle}
-.thr_fav { display:inline-block; vertical-align:middle; margin-right:2em}
-.thr_brd { display:inline; margin-left:2em; vertical-align:middle;}
-.thr_pg { display:inline; margin-left:2em; vertical-align:middle;}
+.title_bar {display:table; padding:0.5em;}
+.thr_brd {display:table-cell; vertical-align:middle; min-width:4em; padding:0.5em;}
+.thr_pg {display:table-cell; vertical-align:middle; min-width:10em; padding:0.5em;}
+.thr_ttl {display:table-cell; width:100%; vertical-align:middle; text-align:right; padding:0.5em; font-size:large}
+.thr_fav {display:table-cell; vertical-align:middle; padding:0.5em}
 
 .post { width:100%; margin-bottom:2%; }
 .post_content {

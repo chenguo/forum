@@ -141,10 +141,8 @@ class Display
     $board_header = HTMLTag("div",
                             HTMLTag("div", $board_info['pages'], array('class'=>'brd_pages'))
                             . HTMLTag("div", $board_info['new_thr'], array('class'=>'brd_new_thr'))
-                            // Clear float
-                            . HTMLTag("div", "", array('class'=>'clear'))
                             ,
-                            array('class'=>'title_bar'));
+                            array('class'=>'title_bar container'));
 
     return $board_header;
   }
@@ -163,11 +161,11 @@ class Display
   */
   function GenerateBoardThreadRow($thread_info)
   {
-    $board_thr_link = HTMLTag("div", $thread_info['link']);
-    $board_thr_page_links = "";
+    $board_thr_link = HTMLTag("div", $thread_info['link'], array('class'=>'brd_thr_link'));
+
+   $board_thr_page_links = "";
     if ($thread_info['pages'] != "")
       $board_thr_page_links = HTMLTag("div", $thread_info['pages'], array('class'=>'brd_thr_page_links'));
-
     $board_thr_flags = "";
     if ($thread_info['flags'] != "")
       $board_thr_flags = HTMLTag("div", $thread_info['flags'], array('class'=>'brd_thr_flags'));
@@ -189,7 +187,6 @@ class Display
                         . HTMLTag("div", $thread_info['post_time'], array('class'=>'time'))
                         ,
                         array('class'=>'brd_thr_time'))
-              . HTMLTag("div", "", array('class'=>'clear'))
               ,
               array('class'=>'brd_thread_row')
               );
@@ -207,21 +204,20 @@ class Display
                          . HTMLTag("div", "views", array('class'=>'brd_thr_num'))
                          . HTMLTag("div", "created", array('class'=>'brd_thr_time'))
                          . HTMLTag("div", "last post", array('class'=>'brd_thr_time'))
-                         . HTMLTag("div", "", array('class'=>'clear'))
                          ,
-                         array('class'=>'brd_head'));
+                         array('class'=>'brd_head')) . "<hr>";
 
     $thread_list = "";
     foreach ($thrinfo_list as $thread_info)
       {
-        $thread_list .= $this->GenerateBoardThreadRow($thread_info);
+        $thread_list .= $this->GenerateBoardThreadRow($thread_info) . "<hr>";
       }
 
     return HTMLTag("div",
                    $title_row . $thread_list
                    . HTMLTag("div", "", array('class'=>'board_bottom'))
                    ,
-                   array('class'=>'brd_threads'));
+                   array('class'=>'brd_threads container'));
   }
 
 
@@ -277,18 +273,12 @@ class Display
   function GenerateThreadTitle($thread_info)
   {
     return HTMLTag("div",
-                   HTMLTag("div",
-                           HTMLTag("div", $thread_info['board'], array('class'=>'thr_brd'))
-                           . HTMLTag("div", $thread_info['pages'], array('class'=>'thr_pg'))
-                           ,
-                           array('class'=>'ttl_left'))
-                   . HTMLTag("div",
-                             HTMLTag("div", $thread_info['title'], array('class'=>'thr_ttl'))
-                             . HTMLTag("div", $thread_info['fav'], array('class'=>'thr_fav'))
-                             ,
-                             array('class'=>'ttl_right'))
+                   HTMLTag("div", $thread_info['board'], array('class'=>'thr_brd'))
+                   . HTMLTag("div", $thread_info['pages'], array('class'=>'thr_pg'))
+                   . HTMLTag("div", $thread_info['title'], array('class'=>'thr_ttl'))
+                   . HTMLTag("div", $thread_info['fav'], array('class'=>'thr_fav'))
                    ,
-                   array('class'=>'title_bar'));
+                   array('class'=>'title_bar container'));
   }
 
   /* Display a post

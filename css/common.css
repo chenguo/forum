@@ -44,8 +44,14 @@ table.noshow, table.noshow td, table.noshow tr{ border-style:none; border:none; 
     background-color:#e5e5e5;
     overflow-x:auto;
 }
-table img.profile_img{ max-width:80%; max-height:180px; }
 
+/* misc */
+table img.profile_img{ max-width:80%; max-height:180px; }
+.clear {clear:both}
+hr {width:97%}
+.time {font-size:x-small}
+
+/* Buttons */
 .button {
     border:1px solid black;
     border-radius:0.4em;
@@ -56,9 +62,6 @@ table img.profile_img{ max-width:80%; max-height:180px; }
     font-weight:bold;
 }
 .button:hover {cursor:pointer}
-.clear {clear:both}
-hr {width:97%}
-.time {font-size:x-small}
 
 /* Favorite icon */
 img.favicon {width:2em; height:2em}
@@ -67,6 +70,15 @@ img.favicon {width:2em; height:2em}
 .expandable {border:1px solid black; border-radius:7px; padding:0.5em}
 .button_exp {width:1.5em}
 .hidden {display:none}
+
+/* Standard container */
+.container {
+    background:white;
+    padding:0.5em;
+    margin:1em;
+    border:4px solid grey;
+    border-radius:7px;
+}
 
 /* For user profiles */
 .usrp {
@@ -86,16 +98,9 @@ img.favicon {width:2em; height:2em}
 .title_bar {
     text-align:left;
     vertical-align:middle;
-    background:white;
-    padding:1em 0;
     width:100% - 8px;
-    margin:1em 0;
     font-weight:bold;
-    border:4px solid grey;
-    border-radius:7px;
 }
-.ttl_left {text-align:left; display:inline-block; width:50%; vertical-align:middle}
-.ttl_right {text-align:right; display:inline-block; width:50%; vertical-align:middle}
 
 /* Sidebar */
 .sbtrig {
