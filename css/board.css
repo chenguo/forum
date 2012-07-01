@@ -1,6 +1,6 @@
 .brd_new_thr { display:table-cell; vertical-align:middle; text-align:right; width:100%; font-size:medium; padding:0.5em }
 .brd_pages { display:table-cell; vertical-align:middle; text-align:left; min-width:10em; padding:0.5em}
-.brd_threads{ width:100%-8px; }
+.brd_threads{ width:auto }
 
 .brd_head { width:100%-1em; font-weight:bold; }
 .brd_thread_row { width:100%-1em; height:100% }

@@ -21,6 +21,7 @@ body{
     font-family:verdana;
     margin-left:4%;
     margin-right:4%;
+    padding:2%;
     text-align:center;
 }
 
@@ -74,7 +75,7 @@ img.favicon {width:2em; height:2em}
 /* Standard container */
 .container {
     background:white;
-    padding:0.5em;
+    padding:1em;
     margin:1em;
     border:4px solid grey;
     border-radius:7px;
@@ -82,14 +83,11 @@ img.favicon {width:2em; height:2em}
 
 /* For user profiles */
 .usrp {
-    background:white;
-    border:4px solid grey;
-    border-radius:7px;
     overflow-x:auto;
-    padding:1em 0;
+    padding:1em;
 }
 .usrp_name { font-size:medium; }
-.usrp_avatar { width:70%; max-height:80%; margin-top:1%; margin-bottom:1% }
+.usrp_avatar { width:70%; max-height:80%; margin:0.5em }
 .usrp_karma { font-size:x-small; }
 .usrp_karma_p { display:inline; font-size:small; }
 .usrp_karma_m { display:inline; font-size:small; }
@@ -98,7 +96,6 @@ img.favicon {width:2em; height:2em}
 .title_bar {
     text-align:left;
     vertical-align:middle;
-    width:100% - 8px;
     font-weight:bold;
 }
 

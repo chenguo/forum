@@ -329,8 +329,10 @@ class Display
                                  ,
                                  array('class'=>'post_footer'))
                        ,
-                       array('class'=>'post_content', 'id'=>"post{$post_info['pid']}"));
-    return $content;
+                       array('class'=>'post_content container', 'id'=>"post{$post_info['pid']}"));
+    $boxed_content = HTMLTag("div",
+                             $content, array('class'=>'content_box'));
+    return $boxed_content;
   }
 
 
@@ -587,8 +589,11 @@ class Display
                                       ,
                                       array('class'=>'usrp_karma'))
                             ,
-                            array('class'=>"usrp user_prof_{$user_info['uid']}"));
-    return $user_profile;
+                            array('class'=>"usrp user_prof_{$user_info['uid']} container"));
+    $boxed_profile = HTMLTag("div",
+                             $user_profile,
+                             array('class'=>'usrp_box'));
+    return $boxed_profile;
   }
 }
 
