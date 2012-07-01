@@ -4,28 +4,6 @@
  *                             *
 \*******************************/
 
-// Display sidebar when mouse is hovering over trigger region
-function showSidebar()
-{
-    document.getElementById("sidebar").style.visibility = "visible";
-    document.getElementById("sbtrig").style.visibility = "hidden";
-}
-// Hide sidebar when mouse leavse it
-function hideSidebar(e)
-{
-    if (!e) var e = window.event;
-    var src = (window.event)? e.SrcElement : e.target;
-    var target = (e.relatedTarget)? e.relatedTarget : e.toElement;
-    while (target.nodeName != "HTML")
-    {
-        if (target.className == "sidebar")
-            return;
-        target = target.parentNode;
-    }
-    document.getElementById("sidebar").style.visibility = "hidden";
-    document.getElementById("sbtrig").style.visibility = "visible";
-}
-
 // On loading a page, prepare chat
 function loadAction()
 {

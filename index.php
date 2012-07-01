@@ -1,15 +1,17 @@
 <?php
 ini_set('display_errors', 1); error_reporting( E_ALL | E_STRICT );
 require_once("include/common_cfg.php");
-require_once("src/page.php");
 
 class Index extends Page
 {
-  function Index ($session)
+  function Index ($forum, $session)
   {
+    if ( !($forum instanceof Forum) || !($session instanceof Session) )
+      exit("Page instantiantion failed: bad forum or session object");
+    $this->forum = $forum;
     $this->session = $session;
-    $this->css = array(CSS::COMMON, CSS::INDEX);
-    $this->js = array(JS::JQUERY, JS::INDEX);
+    $this->css = array(CSS::COMMON, CSS::INDEX, CSS::SIDEBAR);
+    $this->js = array(JS::JQUERY, JS::COMMON, JS::INDEX, JS::SIDEBAR);
   }
 
   protected function LoadAction()
@@ -46,24 +48,24 @@ class Index extends Page
     $password = Div( STag('input', array('type'=>'password', 'size'=>'20', 'name'=>'password',
                                          'maxlength'=>'32')),
                      array('class'=>'field') );
+    $button = Div( Stag('input', array('type'=>'submit', 'value'=>'log in', 'class'=>'button')));
     $remember = Div( STag('input', array('type'=>'checkbox', 'name'=>'cookie', 'value'=>'set')),
                      array('class'=>'remember') );
     $remember_txt = Div('remember me', array('class'=>'remember'));
-    $button = Div( Stag('input', array('type'=>'submit', 'value'=>'log in', 'class'=>'button')));
     $action = Stag('input', array('type'=>'hidden', 'name'=>'action', 'value'=>'login'));
 
     // Put the form together
     $form = Tag('form',
-                $username . $password . $remember . $remember_txt . $button . $action,
+                $username . $password . $button . $remember . $remember_txt . $action,
                 array('class'=>'login_form', 'action'=>Pages::LOGIN, 'method'=>'post'));
 
     // Put the body togethe
-    $body = $banner . $form;
+    $body = $banner . $form . $this->sidebar->Display();
     PL( Tag('body', $body) );
   }
 
 }
 
-$index = new Index($session);
+$index = new Index($forum, $session);
 $index->Display();
 ?>

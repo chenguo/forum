@@ -1,6 +1,5 @@
 <?php
-/*
- * Top level class for a web page. All page class inherit from this class.
+/* Top level class for a web page. All page class inherit from this class.
  *
  * Defined functions
  * Final:
@@ -21,10 +20,11 @@ ini_set('display_errors', 1); error_reporting( E_ALL | E_STRICT );
 
 abstract class Page
 {
-  protected $session;         // user session object
-  protected $sidebar;         // sidebar object
-  protected $css = array();   // array of CSS files to load
-  protected $js = array();    // array of Javascript files to load
+  protected $forum;             // forum object
+  protected $session;           // user session object
+  protected $sidebar;           // sidebar object
+  protected $css = array();     // array of CSS files to load
+  protected $js = array();      // array of Javascript files to load
 
   /* Constructor */
   function Page() { }

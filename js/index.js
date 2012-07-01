@@ -1,6 +1,6 @@
-window.onload=loadAction
+loadAction(indexLoadAction);
 
-function loadAction()
+function indexLoadAction()
 {
     // If browser hasn't populated the fields, replace them
     var user = $("input[name='username']");

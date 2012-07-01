@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1); error_reporting(E_ALL | E_STRICT);
+
 // Generate HTML tag pair
 function Tag ($tag, $content, $opts = array())
 {
@@ -18,9 +20,27 @@ function STag ($tag, $opts = array())
 }
 
 // Generate div tag
-function Div($content, $opts = array())
+function Div ($content, $opts = array())
 {
   return Tag('div', $content, $opts);
+}
+
+// Generate HTML link
+function hLink ($link, $desc, $opts = array())
+{
+  $options = '';
+  foreach ($opts as $key=>$val)
+    $options .= " $key='$val'";
+  return "<a href='$link'$options>$desc</a>";
+}
+
+// Generate HTML link for user page
+function UsrLink ($uid, $desc, $page = '')
+{
+  if ($page)
+    return hLink(Pages::USER . "?uid=$uid&view=$page", $desc);
+  else
+    return hLink(Pages::USER . "?uid=$uid", $desc);
 }
 
 // Include a CSS file

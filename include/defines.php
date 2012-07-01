@@ -62,14 +62,17 @@ final class Profile
 
 final class CSS
 {
-  const COMMON = "css/common.css";
-  const INDEX = "css/index.css";
+  const COMMON = 'css/common.css';
+  const INDEX = 'css/index.css';
+  const SIDEBAR = 'css/sidebar.css';
 }
 
 final class JS
 {
-  const JQUERY = "http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js";
-  const INDEX = "js/index.js";
+  const JQUERY = 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js';
+  const COMMON = 'js/common.js';
+  const INDEX = 'js/index.js';
+  const SIDEBAR = 'js/sidebar.js';
 }
 
 define("CHAT_SEQ_MAX", 1024);
