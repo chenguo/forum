@@ -436,7 +436,7 @@ class Display
             array('class'=>'noshow usrp_tbl'));
     return HTMLTag("div",
                    $user_details_table,
-                   array('class'=>'usrp_container'));
+                   array('class'=>'container'));
   }
 
   // Generate edit fields for user profile
@@ -474,7 +474,7 @@ class Display
 
     return HTMLTag("div",
                    $msg_div . $basic_settings . $save_button . $cancel_button,
-                   array('class'=>'usrp_container'));
+                   array('class'=>'container'));
   }
 
   // Generate controls to change user password
@@ -502,7 +502,7 @@ class Display
     return
       HTMLTag("div",
               $msg_div . $password_table . $pw_button,
-              array('class'=>'usrp_container'));
+              array('class'=>'container'));
   }
 
   // Generate a list of user's recent posts
@@ -515,7 +515,7 @@ class Display
       $rows .= tableRow( tableCol($post['post'] . HTMLTag("div", $post['time'], array('class'=>'time'))) . tableCol($post['content']));
     $recent_posts = HTMLTag("h2", "Recent Posts") . table($rows, array('class'=>'usrp_tbl'));
 
-    return HTMLTag("div", $recent_posts, array('class'=>'usrp_container'));
+    return HTMLTag("div", $recent_posts, array('class'=>'container'));
   }
 
   // Generate a list of user's recent posts
@@ -544,7 +544,7 @@ class Display
     else
       $recent_karma = HTMLTag("h2", "Recent Karma Received") . table($rows, array('class'=>'usrp_tbl'));
 
-    return HTMLTag("div", $recent_karma, array('class'=>'usrp_container'));
+    return HTMLTag("div", $recent_karma, array('class'=>'container'));
   }
 
   // Generate user's favorite threads.
@@ -554,17 +554,17 @@ class Display
     $threads_display = $this->GenerateThreadsList($fav_list);
     return HTMLTag("div",
                    HTMLTag("h2", "Favorite Threads"),
-                   array('class'=>'usrp_container container'))
+                   array('class'=>'container'))
       . HTMLTag("div",
                 $threads_display,
-                array('class'=>'usrp_container'));
+                array('class'=>''));
   }
 
   // Generate user's private messages.
   function GenerateUserPrivateMessages($uid)
   {
     return HTMLTag("div",
-                   HTMLTag("h2", "Private Messages"), array('class'=>'usrp_container'));
+                   HTMLTag("h2", "Private Messages"), array('class'=>'container'));
   }
 
   /*******************************\
