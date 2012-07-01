@@ -5,15 +5,20 @@ ini_set('display_errors', 1); error_reporting(E_ALL | E_STRICT);
 
 /* This page requires login access. */
 if (!$session->CheckLogin(TRUE))
-  {
-    header("LOCATION: index.php");
-  }
+{
+  header("LOCATION: index.php");
+}
 
 if (!isset($_GET['uid']) || $_GET['uid'] < 0)
-  {
-    header("LOCATION: threads.php");
-  }
+{
+  header("LOCATION: threads.php");
+}
 
+$view = Profile::PROFILE;
+if (isset($_REQUEST['view']))
+{
+  $view = $_REQUEST['view'];
+}
 $uid = $_GET['uid'];
 
 ?>
@@ -23,6 +28,7 @@ $uid = $_GET['uid'];
 <head>
 <?php $display->DisplayTitle(Title::USER, $uid); ?>
 <link rel="stylesheet" text="text/css" href="css/user.css" />
+<link rel="stylesheet" text="text/css" href="css/board.css" />
 <script src='include/jsfunc.js'></script>
 <script type='text/javascript'>
 window.addEventListener('DOMContentLoaded', loadAction, false);
@@ -56,7 +62,7 @@ function prof_edit_leave(obj)
 <?php
 $display->DisplayBanner();
 $display->DisplaySidebar();
-$display->DisplayUserPage($uid);
- ?>
+$display->DisplayUserPage($uid, $view);
+?>
 </body>
 </html>

@@ -335,8 +335,8 @@ class Forum
       . "!";
     $sidebar_info['chat'] = $this->GenerateChat();
     $sidebar_info['board'] = makeLink(Pages::BOARD, "board");
-    $sidebar_info['bookmark'] = makeLink(Pages::BOARD, "bookmarks");
-    $sidebar_info['privmsg'] = makeLink(Pages::BOARD, "messages");
+    $sidebar_info['bookmark'] = makeUserLink($this->session->GetUID(), "bookmarks", Profile::FAV);
+    $sidebar_info['privmsg'] = makeUserLink($this->session->GetUID(), "messages", Profile::MSG);
     $sidebar_info['cur_users'] = $cur_usr_str;
     $sidebar_info['day_users'] = $day_usr_str;
     $sidebar_info['logout'] = makeLink(Pages::ACTION."?action=logout", "logout");

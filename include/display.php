@@ -355,19 +355,40 @@ class Display
     echo "\n";
 
     $page_content = "";
-    if ($subpage == Profile::PROFILE)
-      {
-        // Display basic user information
-        $page_content =
-          HTMLTag("div",
-                  $this->GenerateUserDetails($user_info)
-                  ,
-                  array('class'=>'usrp_content'));
-      }
+    if ($subpage === Profile::EDIT_PROF)
+    {
+      // Display edit profile subpage
+      $page_content = $this->GenerateUserSettings($user_info)
+        . $this->GenerateUserPWChange($user_info);
+    }
+    else if ($subpage === Profile::RECENT)
+    {
+      $page_content = $this->GenerateUserRecentPosts($uid)
+        . $this->GenerateUserRecentKarma($uid, 0)
+        . $this->GenerateUserRecentKarma($uid, 1);
+    }
+    else if ($subpage === Profile::FAV)
+    {
+      $page_content = $this->GenerateUserFavorites($uid);
+    }
+    else if ($subpage === Profile::MSG)
+    {
+      $page_content = $this->GenerateUserPrivateMessages($uid);
+    }
+    else
+    {
+      // Default to displaying basic user information
+      $page_content = $this->GenerateUserDetails($user_info);
+    }
 
-    echo $page_content;
-    echo "\n";
-  }
+  $page_content =
+    HTMLTag("div",
+            $page_content,
+            array('class'=>'usrp_content'));
+
+  echo $page_content;
+  echo "\n";
+}
 
   // Generate links to sub-areas of user profile
   function GenerateUserProfileLinks($uid)
@@ -532,9 +553,11 @@ class Display
     $fav_list = $this->forum->GenerateUserFavorites($uid);
     $threads_display = $this->GenerateThreadsList($fav_list);
     return HTMLTag("div",
-                   HTMLTag("h2", "Favorite Threads") . $threads_display
-                   ,
-                   array('class'=>'usrp_container'));
+                   HTMLTag("h2", "Favorite Threads"),
+                   array('class'=>'usrp_container container'))
+      . HTMLTag("div",
+                $threads_display,
+                array('class'=>'usrp_container'));
   }
 
   // Generate user's private messages.

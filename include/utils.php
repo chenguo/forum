@@ -18,9 +18,12 @@ function makeLink($link, $desc, $options_array=array())
 }
 
 /* Make link to a user page. */
-function makeUserLink($uid, $name)
+function makeUserLink($uid, $desc, $page="")
 {
-  return makeLink("user.php?uid=$uid", $name);
+  if ($page)
+    return makeLink(Pages::USER . "?uid=$uid&view=$page", $desc);
+  else
+    return makeLink(Pages::USER . "?uid=$uid", $desc);
 }
 
 // Display HTML image.

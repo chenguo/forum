@@ -53,10 +53,11 @@ final class Pages
 
 final class Profile
 {
-  const PROFILE = 1;
-  const EDIT_PROF = 2;
-  const RECENT = 3;
-  const MSG = 4;
+  const PROFILE = "prof";
+  const EDIT_PROF = "edit";
+  const RECENT = "recent";
+  const FAV = "fav";
+  const MSG = "msg";
 }
 
 define("CHAT_SEQ_MAX", 1024);

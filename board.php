@@ -6,11 +6,11 @@ if (!$session->CheckLogin(TRUE))
 
 $page = 1;
 if (isset($_REQUEST['page']))
-  {
-    $page = intval($_REQUEST['page']);
-    if ($page < 1)
-      $page = 1;
-  }
+{
+  $page = intval($_REQUEST['page']);
+  if ($page < 1)
+    $page = 1;
+}
 ?>
 
 <!DOCTYPE html>
