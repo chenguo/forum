@@ -102,6 +102,9 @@ function prepContent($content, $embed_vid)
 
   $content = disableHTML($content);
 
+  // [code] check.
+  $content = preg_replace("/\[code\](.*?)\[\/code\]/is", "<code>$1</code>", $content);
+
   // [img] check.
   $content = preg_replace("/\[img\](.*?)\[\/img\]/i","<div class='img_container'><img src='$1' alt='[IMAGE]'></div>", $content);
 
@@ -221,7 +224,7 @@ function nestedTextTags($input)
     $str = "<$input[1]>" . $input[2] . "</$input[1]>";
   else
     $str = $input;
-  return preg_replace_callback("/\[([bisu])\](.*?)\[\/\\1\]/", 'nestedTextTags', $str);
+  return preg_replace_callback("/\[([bisu])\](.*?)\[\/\\1\]/i", 'nestedTextTags', $str);
 }
 
 // Get the number of pages needed to display NITEMS at ITEMS_PER_PAGE.
