@@ -5,8 +5,8 @@ require_once("./include/defines.php");
 require_once("./include/forum.php");
 require_once("./include/session.php");
 require_once("./include/display.php");
-require_once("src/util/util.php");
-require_once("src/util/html.php");
+require_once("src/util.php");
+require_once("src/html.php");
 
 /* Log in to database. */
 $db = new DB('localhost',     // host

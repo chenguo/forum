@@ -59,7 +59,7 @@ abstract class Page
   /* Generate page metadata */
   protected function Meta()
   {
-    return "";
+    return '';
   }
 
   /* Generate site banner */
