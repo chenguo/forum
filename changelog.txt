@@ -106,4 +106,4 @@ Ver     Date      Description
 0.72.3  06/06/12  Disable HTML in user profile's "recent posts" section.
 0.73    06/25/12  Rewrite much of board/thread CSS
 0.73.1  06/30/12  CSS tweaks for boad/thread
-
+0.73.2  06/30/12  Fix karma applying behavior (profiles increment karma counts, buttons disappear)

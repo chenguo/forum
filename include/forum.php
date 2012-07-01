@@ -286,8 +286,8 @@ class Forum
     // If user hasn't modified karma of this post yet, display karma buttons.
     else if ($this->db->PostKarmaChangeAllowed($post['pid'], $session_id))
       {
-        $post_controls .= makeButton(Karma::PLUS, array('onclick'=>"karma(\"karma_plus\", {$post['pid']}, {$post['uid']})"))
-          . " " . makeButton(Karma::MINUS, array('onclick'=>"karma(\"karma_minus\", {$post['pid']}, {$post['uid']})"));
+        $post_controls .= makeButton(Karma::PLUS, array('onclick'=>"karma(\"karma_plus\", {$post['pid']}, {$post['uid']})", 'class'=>'plus'))
+          . " " . makeButton(Karma::MINUS, array('onclick'=>"karma(\"karma_minus\", {$post['pid']}, {$post['uid']})", 'class'=>'minus'));
       }
 
     $post_controls .= " " . makeButton("quote", array('onclick'=>"quotePost({$post['pid']})"));
