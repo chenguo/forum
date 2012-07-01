@@ -81,33 +81,6 @@ class Display
 
   /*******************************\
    *                             *
-   *        Login Display        *
-   *                             *
-  \*******************************/
-
-  // Display login page
-  function DisplayLogin()
-  {
-    $form = HTMLTag("form",
-                    HTMLTag("div",
-                            "<input type='text' size='20' name='username' maxlength='32' value='username' onclick='clearField(this)'>",
-                            array('class'=>'field'))
-                    . HTMLTag("div",
-                              "<input type='password' size='20' name='password' maxlength='32' value='password' onclick='clearField(this)'>",
-                              array('class'=>'field'))
-                    . "<input type='hidden' name='action' value='login'>"
-                    . HTMLTag("div", "<input type='submit' value='log in' class='button'>")
-                    . HTMLTag("div", "<input type='checkbox' name='cookie' value='set'>", array('class'=>'remember'))
-                    . HTMLTag("div", "remember me", array('class'=>'remember'))
-                    ,
-                    array('class'=>'login_form', 'action'=>Pages::ACTION, 'method'=>'post'));
-    echo $form;
-  }
-
-
-
-  /*******************************\
-   *                             *
    *        Board Display        *
    *                             *
   \*******************************/

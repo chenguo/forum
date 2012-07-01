@@ -60,6 +60,18 @@ final class Profile
   const MSG = "msg";
 }
 
+final class CSS
+{
+  const COMMON = "css/common.css";
+  const INDEX = "css/index.css";
+}
+
+final class JS
+{
+  const JQUERY = "http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js";
+  const INDEX = "js/index.js";
+}
+
 define("CHAT_SEQ_MAX", 1024);
 define("BOARD_NAME", "LOL Bros, LOL");
 define("VERSION", 0.73);
