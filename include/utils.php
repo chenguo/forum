@@ -227,20 +227,4 @@ function nestedTextTags($input)
   return preg_replace_callback("/\[([bisu])\](.*?)\[\/\\1\]/i", 'nestedTextTags', $str);
 }
 
-// Get the number of pages needed to display NITEMS at ITEMS_PER_PAGE.
-function GetPageCount($nitems, $items_per_page)
-{
-  $max_pages = (($nitems % $items_per_page) == 0)? floor ($nitems / $items_per_page) : floor ($nitems / $items_per_page) + 1;
-  return $max_pages;
-}
-
-// Get current time.
-function GetTime($time_type = TIME_FULL, $time = 0)
-{
-  if ($time != 0)
-      return date($time_type, strtotime($time));
-  else
-      return date($time_type);
-}
-
 ?>

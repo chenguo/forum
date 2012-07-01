@@ -22,6 +22,7 @@ abstract class Page
 {
   protected $forum;             // forum object
   protected $session;           // user session object
+  protected $db;                // database object
   protected $sidebar;           // sidebar object
   protected $css = array();     // array of CSS files to load
   protected $js = array();      // array of Javascript files to load

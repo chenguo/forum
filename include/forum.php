@@ -34,38 +34,6 @@ class Forum
     return $this->db->GetOnlineUsers($time);
   }
 
-  /*******************************\
-   *                             *
-   *       Board Information     *
-   *                             *
-  \*******************************/
-
-  // Get board information for display.
-
-  // Display threads in the forum.
-  function GetBoardDisplayInfo($threads_per_page, $posts_per_page, $page=1)
-  {
-    $board_info = array();
-    $formatted_threads = array();
-    $uid = $this->session->GetUID();
-
-    // Make a table for links to other pages and make thread link.
-    $board_info['pages'] = $this->MakePageLinks ($page, $threads_per_page,
-                                                 $this->db->GetNumThreads(),
-                                                 Pages::BOARD."?");
-    $board_info['new_thr'] = makeLink(Pages::MAKETHR, "new thread");
-
-    $threads = $this->db->GetThreads($page, $threads_per_page);
-    foreach ($threads as $thread)
-      {
-        array_push($formatted_threads, $this->GetThreadInfo($thread));
-      }
-
-    $board_info['threads'] = $formatted_threads;
-
-    return $board_info;
-  }
-
   // Make links to pages in a thread (for use below thread title)
   function MakeThreadPageLinks ($items_per_page, $max_items, $link)
   {
@@ -113,25 +81,6 @@ class Forum
   {
     $thread = $this->db->GetThread($tid, FALSE /* Only title */);
     return $thread['title'];
-  }
-
-  // Get basic thread information for display of list of threads
-  function GetThreadInfo($thread)
-  {
-    $thread_info = array();
-    $posts_per_page = $this->session->posts_per_page;
-
-    $thread_info['link'] = makeLink(Pages::THREAD."?tid={$thread['tid']}", $thread['title'], array('class'=>'thread'));
-    $thread_info['pages'] = $this->MakeThreadPageLinks($posts_per_page, $thread['posts'], Pages::THREAD."?tid={$thread['tid']}");
-    $thread_info['flags'] = $this->GetThreadFlags($this->session->GetUID(), $thread);
-    $thread_info['create_time'] = GetTime(TIME_FULL, $thread['create_time']);
-    $thread_info['post_time'] = GetTime(TIME_FULL, $thread['post_time']);
-    $thread_info['posts'] = $thread['posts'];
-    $thread_info['views'] = $thread['views'];
-    $thread_info['creator'] = $this->db->GetUserName($thread['uid']);
-    $thread_info['last_poster'] = $this->db->GetUserName($thread['last_uid']);
-
-    return $thread_info;
   }
 
   // Get thread information for display.
@@ -188,32 +137,6 @@ class Forum
     $formatted_post['karma'] = $this->GetPostKarma($post);
 
     return $formatted_post;
-  }
-
-  // Make page links. Format: << < p-2 p-1 page p+1 p+2 > >>
-  function MakePageLinks ($page, $items_per_page, $max_items, $link)
-  {
-    $max_page = GetPageCount($max_items, $items_per_page);
-    $page_links = "";
-
-    // Only generate if there's multiple pages.
-    if ($max_page > 1)
-      {
-        if ($page > 3)
-          $page_links .= makeLink("$link&page=1", "<<", array('class'=>'page_link')) . "  ";
-        if ($page > 2)
-          $page_links .= makeLink("$link&page=" . ($page-2), $page - 2, array('class'=>'page_link')) . " ";
-        if ($page > 1)
-          $page_links .= makeLink("$link&page=" . ($page-1), $page - 1, array('class'=>'page_link')) . " ";
-        $page_links .= "$page";
-        if ($page < $max_page)
-          $page_links .= " " . makeLink("$link&page=" . ($page+1), $page + 1, array('class'=>'page_link'));
-        if ($page < $max_page - 1)
-          $page_links .= " " . makeLink("$link&page=" . ($page+2), $page + 2, array('class'=>'page_link'));
-        if ($page < $max_page - 2)
-          $page_links .= "  " . makeLink("$link&page=" . $max_page, ">>", array('class'=>'page_link'));
-      }
-    return $page_links;
   }
 
   /*******************************\

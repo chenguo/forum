@@ -64,6 +64,7 @@ final class CSS
 {
   const COMMON = 'css/common.css';
   const INDEX = 'css/index.css';
+  const BOARD = 'css/board.css';
   const SIDEBAR = 'css/sidebar.css';
 }
 

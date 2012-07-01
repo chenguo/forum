@@ -6,7 +6,6 @@ require_once('include/forum.php');
 require_once('include/session.php');
 require_once('include/display.php');
 require_once('src/html.php');
-require_once('src/page.php');
 require_once('src/util.php');
 
 /* Log in to database. */
