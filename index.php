@@ -31,7 +31,10 @@ class Index extends Page
       $ret = FALSE;
     }
     // Attempt log in.
-    else if ( isset($_POST['username']) && isset($_POST['password']) )
+    else if ( isset($_REQUEST['action'])
+              && $action === 'login'
+              && isset($_POST['username'])
+              && isset($_POST['password']) )
     {
       $cookie = isset($_POST['cookie'])? TRUE : FALSE;
       if ( $this->session->Login($_POST['username'], $_POST['password'], $cookie) )
