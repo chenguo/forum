@@ -38,14 +38,13 @@ class Board extends Page
     $ret = TRUE;
 
     // Make sure user is logged in.
-    if ( !$this->session->CheckLogin(TRUE) )
+    if ( !$this->session->CheckLogin(TRUE) || $this->session->GetUID() <= 0 )
     {
       header ("LOCATION: " . Pages::LOGIN);
       $ret = FALSE;
     }
-
     // Check for page requested
-    if ( isset($_REQUEST['page']) )
+    else if ( isset($_REQUEST['page']) )
     {
       if ( ($page = intval($_REQUEST['page'])) < 1 )
         $page = 1;

@@ -25,13 +25,13 @@ class Index extends Page
   {
     $ret = TRUE;
     // If user is logged in, immediately go to board.
-    if ( $this->session->CheckLogin() )
+    if ( $this->session->CheckLogin() && $this->session->GetUID() > 0 )
     {
       header ("LOCATION: " . Pages::BOARD);
       $ret = FALSE;
     }
     // Attempt log in.
-    if ( isset($_POST['username']) && isset($_POST['password']) )
+    else if ( isset($_POST['username']) && isset($_POST['password']) )
     {
       $cookie = isset($_POST['cookie'])? TRUE : FALSE;
       if ( $this->session->Login($_POST['username'], $_POST['password'], $cookie) )
