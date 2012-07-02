@@ -59,23 +59,6 @@ class Forum
    *                             *
   \*******************************/
 
-  // For a particular user and thread, get notifications for user pertaining to that thread.
-  function GetThreadFlags ($uid, $thread)
-  {
-    $flags = "";
-
-    // Check the last post the user has viewed
-    $user_post_view = $this->db->GetUserPostView($uid, $thread['tid']);
-    $num_viewed = $user_post_view['tpid'];
-    $posts_per_page = $this->session->posts_per_page;
-    $page = floor($num_viewed / $posts_per_page) + 1;
-    if ($num_viewed < $thread['posts'])
-      {
-        $flags .= makeLink(Pages::THREAD . "?tid={$thread['tid']}&page=$page#post{$user_post_view['pid']}", "new");
-      }
-    return $flags;
-  }
-
   // Get thread title.
   function GetThreadTitle($tid)
   {
@@ -108,18 +91,18 @@ class Forum
     if ($this->db->GetThreadUserFav($tid, $uid))
       {
         $fav = makeLink("javascript:void(0)",
-                        showImg("/imgs/site/star_filled.png", array('class'=>'favicon', 'onclick'=>"threadMarkFav(0,$uid,$tid)")));
+                        Img("/imgs/site/star_filled.png", array('class'=>'favicon', 'onclick'=>"threadMarkFav(0,$uid,$tid)")));
       }
     else
       {
         $fav = makeLink("javascript:void(0)",
-                        showImg("/imgs/site/star_empty.png", array('class'=>'favicon', 'onclick'=>"threadMarkFav(1,$uid,$tid)")));
+                        Img("/imgs/site/star_empty.png", array('class'=>'favicon', 'onclick'=>"threadMarkFav(1,$uid,$tid)")));
       }
 
     // Populate thread info for display
     $thread_info['title'] = $thread['title'];
     $thread_info['board'] = makeLink(Pages::BOARD, "board");
-    $thread_info['pages'] = $this->MakePageLinks($page, $posts_per_page, $thread['posts'], Pages::THREAD."?tid=$tid");
+    $thread_info['pages'] = MakePageLinks($page, $posts_per_page, $thread['posts'], Pages::THREAD."?tid=$tid");
     $thread_info['posts'] = $formatted_posts;
     $thread_info['fav'] = $fav;
     return $thread_info;

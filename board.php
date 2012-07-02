@@ -15,7 +15,7 @@ class Board extends Page
   function Board ($forum, $session, $db)
   {
     if ( !($forum instanceof Forum) || !($session instanceof Session) )
-      exit("Page instantiantion failed: bad forum or session object");
+      exit("Page instantiation failed: bad object");
 
     // Set up class variables.
     $this->forum = $forum;

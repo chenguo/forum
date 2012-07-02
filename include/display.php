@@ -127,18 +127,6 @@ class Display
     echo "\n";
   }
 
-  // Generate thread titlebar
-  function GenerateThreadTitle($thread_info)
-  {
-    return HTMLTag("div",
-                   HTMLTag("div", $thread_info['board'], array('class'=>'thr_brd'))
-                   . HTMLTag("div", $thread_info['pages'], array('class'=>'thr_pg'))
-                   . HTMLTag("div", $thread_info['title'], array('class'=>'thr_ttl'))
-                   . HTMLTag("div", $thread_info['fav'], array('class'=>'thr_fav'))
-                   ,
-                   array('class'=>'title_bar container'));
-  }
-
   /* Display a post
      post array fields:
      pid:      post id

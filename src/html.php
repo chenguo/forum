@@ -43,6 +43,16 @@ function UsrLink ($uid, $desc, $page = '')
     return hLink(Pages::USER . "?uid=$uid", $desc);
 }
 
+// Generate HTML to display user image
+function Img($link, $opts = array())
+{
+  $options = "";
+  if (count($opts) > 0)
+    foreach ($opts as $optkey => $optval)
+      $options .= " $optkey='$optval'";
+  return "<img src='$link'$options>";
+}
+
 // Include a CSS file
 function CSS ($files)
 {

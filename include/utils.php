@@ -26,16 +26,6 @@ function makeUserLink($uid, $desc, $page="")
     return makeLink(Pages::USER . "?uid=$uid", $desc);
 }
 
-// Display HTML image.
-function showImg($link, $options_array = array())
-{
-  $options = "";
-  if (count($options_array) > 0)
-    foreach ($options_array as $optkey => $optval)
-      $options .= " $optkey='$optval'";
-  return "<img src='$link'$options>";
-}
-
 // Make HTML tag.
 function HTMLTag($tag, $value, $options_array = array())
 {

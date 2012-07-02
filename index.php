@@ -9,7 +9,7 @@ class Index extends Page
   function Index ($forum, $session)
   {
     if ( !($forum instanceof Forum) || !($session instanceof Session) )
-      exit("Page instantiantion failed: bad forum or session object");
+      exit("Page instantiation failed: bad object");
 
     // Set up class variables
     $this->forum = $forum;
@@ -36,6 +36,7 @@ class Index extends Page
               && isset($_POST['username'])
               && isset($_POST['password']) )
     {
+      // Check for cookie
       $cookie = isset($_POST['cookie'])? TRUE : FALSE;
       if ( $this->session->Login($_POST['username'], $_POST['password'], $cookie) )
       {

@@ -31,7 +31,7 @@ abstract class Page
   function Page() { }
 
   /* Display the page. */
-  final public function Display()
+  final public function Display ()
   {
     if ( $this->LoadAction() )
     {
@@ -44,7 +44,7 @@ abstract class Page
   }
 
   /* Display HTML <head> */
-  final private function DisplayHead()
+  final private function DisplayHead ()
   {
     // HTML head: CSS files, javascript files, metadata, and title.
     $head = CSS($this->css) . JS($this->js) . $this->Meta() . $this->Title();
@@ -52,27 +52,27 @@ abstract class Page
   }
 
   /* Generate page title */
-  protected function Title()
+  protected function Title ()
   {
     return Tag('title', BOARD_NAME) . "\n";
   }
 
   /* Generate page metadata */
-  protected function Meta()
+  protected function Meta ()
   {
     return '';
   }
 
   /* Generate site banner */
-  protected function Banner()
+  protected function Banner ()
   {
     return Div(BOARD_NAME, array('class'=>'banner'));
   }
 
   /* Processing before beginning display, such as HTTP headers. */
-  abstract protected function LoadAction();
+  abstract protected function LoadAction ();
 
   /* Display HTML <body> */
-  abstract protected function DisplayBody();
+  abstract protected function DisplayBody ();
 }
 ?>
