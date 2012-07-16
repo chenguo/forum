@@ -1,4 +1,4 @@
-// Multiple callbacks at window.onload. Taken from simonwillison.net.
+// Multiple callbacks at window.onload. Based off of code from simonwillison.net.
 function loadAction(func)
 {
     var onload = window.onload;
@@ -14,4 +14,13 @@ function loadAction(func)
             func();
         }
     }
+}
+
+// Check if var has value
+function isUndef(v)
+{
+    if (typeof(v) == 'undefined' || typeof(v) == 'null')
+        return true;
+    else
+        return false;
 }

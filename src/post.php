@@ -10,7 +10,8 @@ class Post
   private $db;                  // database object
   private $post_info;           // post information
   /*
-    post array fields:
+    TODO: make final class out of this (pseudo-struct)
+    post info array fields:
     pid:      post id
     uid:      user id of poster
     content:  content of the post
@@ -20,6 +21,7 @@ class Post
     edit:     edit time
   */
 
+  /* Constructor */
   function Post ($forum, $session, $db, $post_info)
   {
     if ( !($forum instanceof Forum)
@@ -148,7 +150,10 @@ class Post
     $pid = $this->post_info['pid'];
 
     // Post text.
-    $content = Div( $this->post_info['content'], array('class'=>'post_text', 'id'=>"post{$pid}_text") );
+    $content = Div( $this->post_info['content'], array('class'=>'post_text') );
+
+    // Edit area.
+    $edit = Div('', array('class'=>'post_edit'));
 
     // User signature.
     $sig = Div( prepContent($usr_info['signature'], FALSE),
@@ -160,12 +165,12 @@ class Post
 
     // Post footer (time and controls).
     $footer = Div( Div( $this->post_info['time'], array('class'=>'post_time') )
-                   . Div( $this->post_info['controls'], array('class'=>'post_controls', 'id'=>"post{$pid}_controls") )
+                   . Div( $this->post_info['controls'], array('class'=>'post_controls') )
                    ,
                    array('class'=>'post_footer') );
 
-    return Div( Div($content . STag('hr') . $sig . $karma . $footer,
-                    array('class'=>'post_content container', 'id'=>"post$pid")),
+    return Div( Div($content . $edit . STag('hr') . $sig . $karma . $footer,
+                    array('class'=>'post_content container')),
                 array('class'=>'content_box') );
   }
 

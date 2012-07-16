@@ -35,7 +35,7 @@ class ThreadList
     PL( STag('/div') );
   }
 
-  /* Display threads list header */
+  /* Display threads list header row */
   private function DisplayHeader()
   {
     PL( Div( Div('title', array('class'=>'brd_thr_title'))

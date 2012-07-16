@@ -85,7 +85,7 @@ function disableHTML($str)
 // Parse text for forum display. This sets up img tags, emoticons, etc.
 // TODO: repeatedly going through the post text must be pretty inefficient... Try to make the regex more efficient
 // while still maintainable.
-function prepContent($content, $embed_vid)
+function prepContent($content, $embed_vid=TRUE)
 {
   global $db;
   global $session;

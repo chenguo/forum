@@ -1,3 +1,4 @@
+// Add sidebar load action to window.onload callbacks
 loadAction(sbLoadAction);
 
 function sbLoadAction()
