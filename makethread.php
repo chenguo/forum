@@ -1,5 +1,5 @@
 <?php
-require_once("./include/common_cfg.php");
+require_once ('src/common_cfg.php');
 
 /* This page requires login access. */
 if (!$session->CheckLogin())

@@ -1,7 +1,7 @@
 <?php
-require_once("./include/defines.php");
-require_once("./include/db.php");
-require_once("./include/session.php");
+require_once ('src/defines.php');
+require_once ('src/db.php');
+require_once ('src/session.php');
 ini_set('display_errors', 1); error_reporting(E_ALL | E_STRICT);
 
 class Forum

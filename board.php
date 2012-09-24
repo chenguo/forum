@@ -1,6 +1,6 @@
 <?php
 ini_set('display_errors', 1); error_reporting(E_ALL | E_STRICT);
-require_once("./include/common_cfg.php");
+require_once ('src/common_cfg.php');
 require_once ('src/sidebar.php');
 require_once ('src/page.php');
 require_once ('src/threadlist.php');
