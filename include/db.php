@@ -1,7 +1,7 @@
 <?php
 ini_set('display_errors', 1); error_reporting(E_ALL | E_STRICT);
 require_once("./include/defines.php");
-require_once("./include/utils.php");
+require_once("./src/html.php");
 
 /* Database interface class */
 class DB
@@ -66,7 +66,7 @@ class DB
       {
         $name = $result[0]['name'];
         if ($link == TRUE)
-          $name = makeUserLink($user_id, $name);
+          $name = UsrLink($user_id, $name);
         return $name;
       }
     return "";
@@ -162,12 +162,20 @@ class DB
   // Get user favorite threads.
   function GetUserFavThreads($uid)
   {
-    // Check if a thread is a user's favorite.
+    // Get thread IDs of user's favorite threads.
     $threads = $this->__SelectFromTable(Tables::USRTHR, array("tid"), array("uid=$uid", "fav=1"));
     $tid_list = array();
     foreach ($threads as $thread)
       array_push($tid_list, $thread['tid']);
-    return $tid_list;
+
+    // Construct query.
+    $query = "SELECT * FROM " . Tables::THREADS . " where tid="  . implode ("||tid=", $tid_list)
+      . " ORDER BY post_time DESC";
+    $result = mysql_query($query) or die (mysql_error());
+    $thread_list = array();
+    while ($row = mysql_fetch_assoc($result))
+      array_push($thread_list, $row);
+    return $thread_list;
   }
 
   // Get a user's most recent posts.

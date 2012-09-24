@@ -8,22 +8,14 @@ function throwException($message)
   throw new Exception("$message", null);
 }
 
-// Return an HTML link.
-function makeLink($link, $desc, $options_array=array())
-{
-  $options = "";
-  foreach ($options_array as $optkey => $optval)
-    $options .= " $optkey='$optval'";
-  return "<a href='$link'$options>$desc</a>";
-}
 
 /* Make link to a user page. */
 function makeUserLink($uid, $desc, $page="")
 {
   if ($page)
-    return makeLink(Pages::USER . "?uid=$uid&view=$page", $desc);
+    return hLink(Pages::USER . "?uid=$uid&view=$page", $desc);
   else
-    return makeLink(Pages::USER . "?uid=$uid", $desc);
+    return hLink(Pages::USER . "?uid=$uid", $desc);
 }
 
 // Make HTML tag.
@@ -36,10 +28,10 @@ function HTMLTag($tag, $value, $options_array = array())
 }
 
 // Return a table.
-function table($content, $options_array = array())
+/*function table($content, $options_array = array())
 {
   return HTMLTag("table", $content, $options_array);
-}
+  }*/
 
 // Return HTML for column of a row in a table.
 function tableCol($content, $options_array = array())
@@ -181,7 +173,7 @@ function prepContent($content, $embed_vid=TRUE)
       $post_meta = $db->GetPostMeta($quote_pid);
       $tid = $post_meta['tid'];
       $page = GetPageCount($matches[3], $session->posts_per_page);
-      $link = makeLink("thread.php?tid=$tid&page=$page#post$quote_pid" , $matches[1] . " wrote:");
+      $link = hLink("thread.php?tid=$tid&page=$page#post$quote_pid" , $matches[1] . " wrote:");
       $content = preg_replace("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\](<\/br>)?/i",
                             "<div class='quote'><b>$link</b></br>$4</div>",
                               $content, 1);

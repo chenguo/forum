@@ -1,7 +1,5 @@
 /* Place the user profile */
 .usrp_box{ width:20%; float:left;}
-.usrp {
-}
 
 .title_bar {display:table; padding:1%;}
 .thr_brd {display:table-cell; vertical-align:middle; min-width:4em; padding:0.5em;}

@@ -62,7 +62,7 @@ class Post
   /* Format post information in preparation for display. */
   private function FormatPost()
   {
-    $this->post_info['content'] = prepContent($this->post_info['content'], TRUE);
+    $this->post_info['content'] = PrepContent($this->post_info['content'], TRUE);
     $this->PostControls();
     $this->PostTime();
     $this->PostKarma();
@@ -79,18 +79,18 @@ class Post
     if ($session_id == $post['uid'])
     {
       if ($post['tpid'] == 1)
-        $post_controls .= makeButton("edit", array('onclick'=>"editPost({$post['pid']}, \"edit_edit\", 1)"));
+        $post_controls .= Button("edit", array('onclick'=>"editPost({$post['pid']}, \"edit_edit\", 1)"));
       else
-        $post_controls .= makeButton("edit", array('onclick'=>"editPost({$post['pid']}, \"edit_edit\", 0)"));
+        $post_controls .= Button("edit", array('onclick'=>"editPost({$post['pid']}, \"edit_edit\", 0)"));
     }
     // If user hasn't modified karma of this post yet, display karma buttons.
     else if ($this->db->PostKarmaChangeAllowed($post['pid'], $session_id))
     {
-      $post_controls .= makeButton(Karma::PLUS, array('onclick'=>"karma(\"karma_plus\", {$post['pid']}, {$post['uid']})", 'class'=>'plus'))
-        . " " . makeButton(Karma::MINUS, array('onclick'=>"karma(\"karma_minus\", {$post['pid']}, {$post['uid']})", 'class'=>'minus'));
+      $post_controls .= Button(Karma::PLUS, array('onclick'=>"karma(\"karma_plus\", {$post['pid']}, {$post['uid']})", 'class'=>'plus'))
+        . " " . Button(Karma::MINUS, array('onclick'=>"karma(\"karma_minus\", {$post['pid']}, {$post['uid']})", 'class'=>'minus'));
     }
 
-    $post_controls .= " " . makeButton("quote", array('onclick'=>"quotePost({$post['pid']})"));
+    $post_controls .= " " . Button("quote", array('onclick'=>"quotePost({$post['pid']})"));
 
     $this->post_info['controls'] = $post_controls;
   }
@@ -106,7 +106,7 @@ class Post
       $edit_time = "edited " . GetTime(TIME_FULL, $post['edit']);
     }
     // Edit time needs an id, since it can change dynamically.
-    $edit_time = HTMLTag("label", $edit_time, array('id'=>"edittime{$post['pid']}"));
+    $edit_time = Tag("label", $edit_time, array('id'=>"edittime{$post['pid']}"));
     $post_time = "posted " . GetTime(TIME_FULL, $post['time']);
 
     $this->post_info['time'] = $edit_time . "</br>" . $post_time;
@@ -126,9 +126,9 @@ class Post
     {
       $user_info = $this->forum->GetCachedUser($karma['uid']);
       if ($karma['type'] === 'plus')
-        array_push($plus_names, makeLink(Pages::USER."?uid={$user_info['uid']}", $user_info['name']));
+        array_push($plus_names, hLink(Pages::USER."?uid={$user_info['uid']}", $user_info['name']));
       else
-        array_push($minus_names, makeLink(Pages::USER."?uid={$user_info['uid']}", $user_info['name']));
+        array_push($minus_names, hLink(Pages::USER."?uid={$user_info['uid']}", $user_info['name']));
     }
 
     // Assemble positive and negative karma lists.
@@ -156,7 +156,7 @@ class Post
     $edit = Div('', array('class'=>'post_edit'));
 
     // User signature.
-    $sig = Div( prepContent($usr_info['signature'], FALSE),
+    $sig = Div( PrepContent($usr_info['signature'], FALSE),
                 array('class'=>"post_sig user{$usr_info['uid']}_sig") );
 
     // Post karma information

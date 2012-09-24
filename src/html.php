@@ -25,6 +25,30 @@ function Div ($content, $opts = array())
   return Tag('div', $content, $opts);
 }
 
+// Generate table tag
+function Table ($content, $opts = array())
+{
+  return Tag('table', $content, $opts);
+}
+
+// Generate table row tag
+function TabRow ($content, $opts = array())
+{
+  return Tag('tr', $content, $opts);
+}
+
+// Generate table header tag
+function TabHdr ($content, $opts = array())
+{
+  return Tag('th', $content, $opts);
+}
+
+// Generate table columnn tag
+function TabCol ($content, $opts = array())
+{
+  return Tag('td', $content, $opts);
+}
+
 // Generate HTML link
 function hLink ($link, $desc, $opts = array())
 {
@@ -53,6 +77,22 @@ function Img($link, $opts = array())
   return "<img src='$link'$options>";
 }
 
+// Make a button
+function Button($text, $options_array = array())
+{
+  $options = "";
+  $class = "button";
+  if (count($options_array) > 0)
+    foreach ($options_array as $optkey => $optval)
+    {
+      if ($optkey === "class")
+        $class .= " " . $optval;
+      else
+        $options .= " $optkey='$optval'";
+    }
+  return "<input type='button' class='$class' value='$text'$options>";
+}
+
 // Include a CSS file
 function CSS ($files)
 {
@@ -70,4 +110,13 @@ function JS ($files)
     $links .= "<script type='text/javascript' src='$file'></script>\n";
   return $links;
 }
+
+// Disable HTML by replacing < and > with &#60 and &#62.
+function DisableHTML($str)
+{
+  $str = preg_replace("/</", "&#60", $str);
+  $str = preg_replace("/>/", "&#62", $str);
+  return $str;
+}
+
 ?>

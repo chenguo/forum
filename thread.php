@@ -21,7 +21,9 @@ class Thread extends Page
     if ( !($forum instanceof Forum)
          || !($session instanceof Session)
          || !($db instanceof DB) )
+    {
       exit("Page instatiantion failed: bad object");
+    }
 
     // Set up class variables.
     $this->forum = $forum;
@@ -149,12 +151,12 @@ class Thread extends Page
     // Favorite status.
     if ($this->db->GetThreadUserFav($tid, $uid))
     {
-      $this->fav = makeLink("javascript:void(0)",
+      $this->fav = hLink("javascript:void(0)",
                       Img("/imgs/site/star_filled.png", array('class'=>'favicon', 'onclick'=>"threadMarkFav(0,$uid,$tid)")));
     }
     else
     {
-      $this->fav = makeLink("javascript:void(0)",
+      $this->fav = hLink("javascript:void(0)",
                             Img("/imgs/site/star_empty.png", array('class'=>'favicon', 'onclick'=>"threadMarkFav(1,$uid,$tid)")));
     }
   }
@@ -182,7 +184,7 @@ class Thread extends Page
    *                                       *
   \*****************************************/
 
-  /* Mux actions. */
+  /* Handle actions. */
   private function HandleAction()
   {
     if ( 0 > ($uid = $this->session->GetUID()) )
@@ -273,7 +275,9 @@ class Thread extends Page
   {
     // Ensure poster and user are different.
     if ($_GET['puid'] == $uid)
+    {
       echo "0";
+    }
     else
     {
       $type = ($action === "karma_plus")? "plus" : "minus";
@@ -304,14 +308,14 @@ class Thread extends Page
           $reply['title'] = $title;
       }
 
-      $reply['content'] = prepContent($post['content'], $this->tid);
+      $reply['content'] = PrepContent($post['content'], $this->tid);
       $reply['edit_time'] = 'edited ' . GetTime(TIME_FULL, $post['edit']);
       $reply['edit'] = ' ';
     }
     // Cancel case: echo back what's stored in DB for post content
     else if ($action === 'edit_cancel')
     {
-      $reply['content'] == prepContent($post['content'], $this->tid);
+      $reply['content'] == PrepContent($post['content'], $this->tid);
       if ($post['tpid'] == 1)
         $reply['title'] = $this->db->GetThreadTitle($this->tid);
       $reply['edit'] = ' ';
@@ -337,20 +341,20 @@ class Thread extends Page
         $title_flag = 1;
       }
 
-      $reply['content'] = prepContent($post['content'], $this->tid);
+      $reply['content'] = PrepContent($post['content'], $this->tid);
       // Construct form with buttons.
       $reply['edit'] =
-        HTMLTag("form",
-                $form,
-                array('name'=>'edit'))
-        . makeButton("submit", array('onclick'=>"editPost($pid, \"edit_submit\", $title_flag)"))
-        . makeButton("preview", array('onclick'=>"editPost($pid, \"edit_preview\", $title_flag)"))
-        . makeButton("cancel", array('onclick'=>"editPost($pid, \"edit_cancel\", $title_flag)"))
-        . HTMLTag('div', '', array('class'=>'edit_msg'));
+        Tag("form",
+            $form,
+            array('name'=>'edit'))
+        . Button("submit", array('onclick'=>"editPost($pid, \"edit_submit\", $title_flag)"))
+        . Button("preview", array('onclick'=>"editPost($pid, \"edit_preview\", $title_flag)"))
+        . Button("cancel", array('onclick'=>"editPost($pid, \"edit_cancel\", $title_flag)"))
+        . Tag('div', '', array('class'=>'edit_msg'));
     }
     else if ($action === 'edit_preview')
     {
-      $reply['content'] = prepContent($_POST['content'], $this->tid);
+      $reply['content'] = PrepContent($_POST['content'], $this->tid);
       if ($post['tpid'] == 1 && isset($_POST['title']))
         $reply['title'] = $_POST['title'];
     }

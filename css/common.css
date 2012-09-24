@@ -83,10 +83,7 @@ img.favicon {width:2em; height:2em}
 }
 
 /* For user profiles */
-.usrp {
-    overflow-x:auto;
-    padding:1em;
-}
+.usrp { overflow-x:auto; }
 .usrp_name { font-size:medium; }
 .usrp_avatar { width:70%; max-height:80%; margin:0.5em }
 .usrp_karma { font-size:x-small; }

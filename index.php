@@ -32,7 +32,7 @@ class Index extends Page
     }
     // Attempt log in.
     else if ( isset($_REQUEST['action'])
-              && $action === 'login'
+              && $_REQUEST['action']  === 'login'
               && isset($_POST['username'])
               && isset($_POST['password']) )
     {

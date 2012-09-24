@@ -75,27 +75,6 @@ if ($session->CheckLogin())
         //echo "Chat send new req: $new_seq\n";
         exit();
       }
-    // User profile: view recent activities
-    else if ($action === "usrp_prof" && isset($_POST['uid']))
-      {
-        $user_info = $db->GetUserProfile($_POST['uid'], TRUE, FALSE);
-        echo $display->GenerateUserDetails($user_info);
-        exit();
-      }
-    else if ($action === "usrp_edit" && $uid === $session->GetUID())
-      {
-        $user_info = $db->GetUserProfile($uid, TRUE, FALSE);
-        echo $display->GenerateUserSettings($user_info);
-        echo $display->GenerateUserPWChange($user_info);
-        exit();
-      }
-    else if ($action === "usrp_recent" && isset($_POST['uid']))
-      {
-        echo $display->GenerateUserRecentPosts($_POST['uid']);
-        echo $display->GenerateUserRecentKarma($_POST['uid'], 0); // 0 for given
-        echo $display->GenerateUserRecentKarma($_POST['uid'], 1); // 1 for received
-        exit();
-      }
     // User profile update
     else if (($action === "usrp_save" || $action === "usrp_cancel")
              && $uid === $session->GetUID())
@@ -145,53 +124,6 @@ if ($session->CheckLogin())
             echo "1";
           }
         exit();
-      }
-    else if ($action === "usrp_msgs")
-      {
-        echo $display->GenerateUserPrivateMessages($uid);
-        exit();
-      }
-    else if ($action === "usrp_fav")
-      {
-        echo $display->GenerateUserFavorites($uid);
-        exit();
-      }
-    else if ($action === "thrMarkFav" && isset($_POST['fav']) && isset($_POST['tid']))
-      {
-        // Failures will be exceptions, so assume this succeeds.
-        $db->UpdateUserThrFav($uid, $_POST['tid'], $_POST['fav']);
-        echo "1";
-        exit();
-      }
-
-    // All other actions require a pid.
-    $pid;
-    if (isset($_REQUEST['pid']))
-      {
-        $pid = $_REQUEST['pid'];
-        $post_uid = $db->GetPostUID($pid);
-        if ($post_uid < 0)
-          exit();
-      }
-    else
-      exit();
-
-    // Apply karma
-    if ($action === "karma_plus" || $action === "karma_minus")
-      {
-        // Ensure poster and user are different.
-        if ($_GET['puid'] == $uid)
-          {
-            echo "0";
-          }
-        else
-          {
-            $type = ($action === "karma_plus")? "plus" : "minus";
-            if (TRUE == $db->AddPostKarma($type, $_GET['pid'], $_GET['puid'], $uid))
-              echo makeUserLink($uid, $session->GetUserName());
-            else
-              echo "0";
-          }
       }
   }
 ?>

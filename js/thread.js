@@ -140,7 +140,51 @@ function karma(type, pid, puid)
     }
 
     $.ajax({
-        url: "action.php",
+        url: "thread.php",
+        data: data,
+        success: func
+    });
+}
+
+/*******************************\
+ *                             *
+ *  Favorite Threads Functions *
+ *                             *
+\*******************************/
+// Mark thread as favorite
+function threadMarkFav(fav,uid,tid)
+{
+    var favicon = $("img.favicon");
+    var func;
+    var img;
+    var new_fav;
+
+    if (fav == 0)
+    {
+        img = "/imgs/site/star_empty.png";
+        new_fav = 1;
+    }
+    else
+    {
+        img = "/imgs/site/star_filled.png";
+        new_fav = 0;
+    }
+
+    func = function(result) {
+        // Change action next time icon is cleared.
+        $(favicon).each(function () {
+            $(this).off('click');
+            $(this).click(function(event) { threadMarkFav(new_fav,uid,tid); });
+            $(this).attr("src", img);
+            $(this).removeAttr("onclick");
+        });
+    }
+
+    var data = "uid="+uid+"&action=thrMarkFav&tid="+tid+"&fav="+fav;
+
+    $.ajax({
+        url: "board.php",
+        type: "POST",
         data: data,
         success: func
     });

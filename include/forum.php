@@ -40,16 +40,16 @@ class Forum
     $max_page = GetPageCount($max_items, $items_per_page);
     $page_links = "";
     if ($max_page > 1)
-      $page_links .= makeLink("$link", "1", array('class'=>'thr_page_link')). " "
-                              . makeLink("$link&page=2", "2", array('class'=>'thr_page_link'));
+      $page_links .= hLink("$link", "1", array('class'=>'thr_page_link')). " "
+                              . hLink("$link&page=2", "2", array('class'=>'thr_page_link'));
     if ($max_page > 2)
-      $page_links .= " " . makeLink("$link&page=3", "3", array('class'=>'thr_page_link'));
+      $page_links .= " " . hLink("$link&page=3", "3", array('class'=>'thr_page_link'));
     if ($max_page > 3)
-      $page_links .= " " . makeLink("$link&page=4", "4", array('class'=>'thr_page_link'));
+      $page_links .= " " . hLink("$link&page=4", "4", array('class'=>'thr_page_link'));
     if ($max_page > 4)
-      $page_links .= " " . makeLink("$link&page=5", "5", array('class'=>'thr_page_link'));
+      $page_links .= " " . hLink("$link&page=5", "5", array('class'=>'thr_page_link'));
     if ($max_page > 5)
-      $page_links .= " " . makeLink("$link&page=$max_page", "last", array('class'=>'thr_page_link'));
+      $page_links .= " " . hLink("$link&page=$max_page", "last", array('class'=>'thr_page_link'));
     return $page_links;
   }
 
@@ -90,18 +90,18 @@ class Forum
     $fav = "";
     if ($this->db->GetThreadUserFav($tid, $uid))
       {
-        $fav = makeLink("javascript:void(0)",
+        $fav = hLink("javascript:void(0)",
                         Img("/imgs/site/star_filled.png", array('class'=>'favicon', 'onclick'=>"threadMarkFav(0,$uid,$tid)")));
       }
     else
       {
-        $fav = makeLink("javascript:void(0)",
+        $fav = hLink("javascript:void(0)",
                         Img("/imgs/site/star_empty.png", array('class'=>'favicon', 'onclick'=>"threadMarkFav(1,$uid,$tid)")));
       }
 
     // Populate thread info for display
     $thread_info['title'] = $thread['title'];
-    $thread_info['board'] = makeLink(Pages::BOARD, "board");
+    $thread_info['board'] = hLink(Pages::BOARD, "board");
     $thread_info['pages'] = MakePageLinks($page, $posts_per_page, $thread['posts'], Pages::THREAD."?tid=$tid");
     $thread_info['posts'] = $formatted_posts;
     $thread_info['fav'] = $fav;
@@ -114,7 +114,7 @@ class Forum
     $formatted_post = array();
     $formatted_post['pid'] = $post['pid'];
     $formatted_post['uid'] = $post['uid'];
-    $formatted_post['content'] = prepContent($post['content'], TRUE);
+    $formatted_post['content'] = PrepContent($post['content'], TRUE);
     $formatted_post['controls'] = $this->GetPostControls($post);
     $formatted_post['time'] = $this->GetPostTime($post);
     $formatted_post['karma'] = $this->GetPostKarma($post);
@@ -142,9 +142,9 @@ class Forum
       {
         $user_info = $this->GetCachedUser($karma['uid']);
         if ($karma['type'] === 'plus')
-          array_push($plus_names, makeLink(Pages::USER."?uid={$user_info['uid']}", $user_info['name']));
+          array_push($plus_names, hLink(Pages::USER."?uid={$user_info['uid']}", $user_info['name']));
         else
-          array_push($minus_names, makeLink(Pages::USER."?uid={$user_info['uid']}", $user_info['name']));
+          array_push($minus_names, hLink(Pages::USER."?uid={$user_info['uid']}", $user_info['name']));
       }
 
     // Assemble positive and negative karma lists.
@@ -169,7 +169,7 @@ class Forum
         $edit_time = "edited " . GetTime(TIME_FULL, $post['edit']);
       }
     // Edit time needs an id, since it can change dynamically.
-    $edit_time = HTMLTag("label", $edit_time, array('id'=>"edittime{$post['pid']}"));
+    $edit_time = Tag("label", $edit_time, array('id'=>"edittime{$post['pid']}"));
     $post_time = "posted " . GetTime(TIME_FULL, $post['time']);
 
     return $edit_time . "</br>" . $post_time;
@@ -185,18 +185,18 @@ class Forum
     if ($session_id == $post['uid'])
       {
         if ($post['tpid'] == 1)
-          $post_controls .= makeButton("edit", array('onclick'=>"editPost({$post['pid']}, \"edit_edit\", 1)"));
+          $post_controls .= Button("edit", array('onclick'=>"editPost({$post['pid']}, \"edit_edit\", 1)"));
         else
-          $post_controls .= makeButton("edit", array('onclick'=>"editPost({$post['pid']}, \"edit_edit\", 0)"));
+          $post_controls .= Button("edit", array('onclick'=>"editPost({$post['pid']}, \"edit_edit\", 0)"));
       }
     // If user hasn't modified karma of this post yet, display karma buttons.
     else if ($this->db->PostKarmaChangeAllowed($post['pid'], $session_id))
       {
-        $post_controls .= makeButton(Karma::PLUS, array('onclick'=>"karma(\"karma_plus\", {$post['pid']}, {$post['uid']})", 'class'=>'plus'))
-          . " " . makeButton(Karma::MINUS, array('onclick'=>"karma(\"karma_minus\", {$post['pid']}, {$post['uid']})", 'class'=>'minus'));
+        $post_controls .= Button(Karma::PLUS, array('onclick'=>"karma(\"karma_plus\", {$post['pid']}, {$post['uid']})", 'class'=>'plus'))
+          . " " . Button(Karma::MINUS, array('onclick'=>"karma(\"karma_minus\", {$post['pid']}, {$post['uid']})", 'class'=>'minus'));
       }
 
-    $post_controls .= " " . makeButton("quote", array('onclick'=>"quotePost({$post['pid']})"));
+    $post_controls .= " " . Button("quote", array('onclick'=>"quotePost({$post['pid']})"));
     return $post_controls;
   }
 
@@ -205,7 +205,7 @@ class Forum
   {
     $post = $this->db->GetPostMeta($pid);
     $page = GetPageCount($post['tpid'], $this->session->posts_per_page);
-    $link = makeLink(Pages::THREAD."?tid={$post['tid']}&page=$page#post$pid", $link_text);
+    $link = hLink(Pages::THREAD."?tid={$post['tid']}&page=$page#post$pid", $link_text);
     return $link;
   }
 
@@ -240,13 +240,13 @@ class Forum
       . makeUserLink($this->session->GetUID(), $this->session->GetUserName())
       . "!";
     $sidebar_info['chat'] = $this->GenerateChat();
-    $sidebar_info['board'] = makeLink(Pages::BOARD, "board");
+    $sidebar_info['board'] = hLink(Pages::BOARD, "board");
     $sidebar_info['bookmark'] = makeUserLink($this->session->GetUID(), "bookmarks", Profile::FAV);
     $sidebar_info['privmsg'] = makeUserLink($this->session->GetUID(), "messages", Profile::MSG);
     $sidebar_info['cur_users'] = $cur_usr_str;
     $sidebar_info['day_users'] = $day_usr_str;
-    $sidebar_info['logout'] = makeLink(Pages::ACTION."?action=logout", "logout");
-    $sidebar_info['version'] = "LOLBros beta " . makeLink("changelog.txt", "v" . VERSION);
+    $sidebar_info['logout'] = hLink(Pages::ACTION."?action=logout", "logout");
+    $sidebar_info['version'] = "LOLBros beta " . hLink("changelog.txt", "v" . VERSION);
 
     return $sidebar_info;
   }
@@ -255,13 +255,13 @@ class Forum
   function GenerateChat()
   {
     $chat = "chat</br>"
-      . HTMLTag("div", $this->session->GetChatText(), array('id'=>'sidebar_chat_msgs'))
-      . HTMLTag("form",
-                HTMLTag("textarea", "",
-                        array('rows'=>'2', 'name'=>'chat_post',
-                              'id'=>'chat_post',  'onkeyup'=>'sendKey(event)'))
-                ,
-                array('name'=>'chat_input', 'id'=>'chat_input'));
+      . Div($this->session->GetChatText(), array('id'=>'sidebar_chat_msgs'))
+      . Tag("form",
+            Tag("textarea", "",
+                array('rows'=>'2', 'name'=>'chat_post',
+                      'id'=>'chat_post',  'onkeyup'=>'sendKey(event)'))
+            ,
+            array('name'=>'chat_input', 'id'=>'chat_input'));
     return $chat;
   }
 
@@ -290,7 +290,7 @@ class Forum
       $thread = $this->db->GetThread($post['tid']);
       $post_array['post'] = $this->GetPostLink($post['pid'], $thread['title']);
       $post_array['time'] = GetTime(TIME_FULL, $post['time']);
-      $post_array['content'] = disableHTML(substr($post['content'], 0, 200));
+      $post_array['content'] = DisableHTML(substr($post['content'], 0, 200));
       if (strlen($post['content']) > 200)
         $post_array['content'] .= "...";
       array_push($recent_posts, $post_array);
@@ -313,7 +313,7 @@ class Forum
         $recip = $this->GetCachedUser($karma_action['puid']);
 
         $karma_action_array['action'] = ($karma_action['type'] === "plus")? Karma::PLUSact : Karma::MINUSact;
-        $karma_action_array['recip'] = makeLink(Pages::USER."?uid={$recip['uid']}", $recip['name']);
+        $karma_action_array['recip'] = hLink(Pages::USER."?uid={$recip['uid']}", $recip['name']);
         $karma_action_array['thread'] = $this->GetPostLink($karma_action['pid'], $thread['title']);
         $karma_action_array['time'] = GetTime(TIME_FULL, $karma_action['time']);
 
@@ -338,7 +338,7 @@ class Forum
         $recip = $this->GetCachedUser($karma_action['uid']);
 
         $karma_action_array['action'] = ($karma_action['type'] === "plus")? Karma::PLUSact : Karma::MINUSact;
-        $karma_action_array['recip'] = makeLink(Pages::USER."?uid={$recip['uid']}", $recip['name']);
+        $karma_action_array['recip'] = hLink(Pages::USER."?uid={$recip['uid']}", $recip['name']);
         $karma_action_array['thread'] = $this->GetPostLink($karma_action['pid'], $thread['title']);
         $karma_action_array['time'] = GetTime(TIME_FULL, $karma_action['time']);
 
@@ -372,7 +372,7 @@ class Forum
       $user_info = $this->user_cache[$uid];
     else
       {
-        $user_info = $this->db->GetUserProfile($uid);
+        $user_info = $this->db->GetUserProfile($uid, TRUE);
         $this->user_cache[$uid] = $user_info;
       }
     return $user_info;

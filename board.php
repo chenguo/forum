@@ -10,6 +10,7 @@ class Board extends Page
   private $page = 1;            // page number to display
   private $nthreads;            // threads per page to display
   private $nposts;              // posts per page (used to make links into threads)
+  private $uid;                 // User ID
 
   /* Constructor. */
   function Board ($forum, $session, $db)
@@ -43,12 +44,26 @@ class Board extends Page
       header ("LOCATION: " . Pages::LOGIN);
       $ret = FALSE;
     }
-    // Check for page requested
-    else if ( isset($_REQUEST['page']) )
+    else
     {
-      if ( ($page = intval($_REQUEST['page'])) < 1 )
-        $page = 1;
+      $this->uid = $this->session->GetUID();
     }
+
+    // Check for page requested
+    if ( isset($_REQUEST['page']) )
+    {
+      if ( intval($_REQUEST['page']) < 1 )
+        $this->page = 1;
+      else
+        $this->page = $_REQUEST['page'];
+    }
+
+    if ( isset($_REQUEST['action']) )
+    {
+      $this->HandleAction();
+      $ret = FALSE;
+    }
+
     return $ret;
   }
 
@@ -90,6 +105,20 @@ class Board extends Page
     return Div( $pages . $new_thr, array('class'=>'title_bar container') );
   }
 
+  /* Handle actions. */
+  private function HandleAction()
+  {
+    $action = $_REQUEST['action'];
+    if ($action === 'thrMarkFav'
+        && isset($_POST['fav'])
+        && isset($_POST['tid'])
+        && intval($_POST['tid']) > 0)
+    {
+      // Failures will be exceptions, so assume this succeeds.
+      $this->db->UpdateUserThrFav($this->uid, $_POST['tid'], $_POST['fav']);
+      echo "1";
+    }
+  }
 }
 
 $board = new Board($forum, $session, $db);

@@ -22,33 +22,45 @@ class ThreadList
   {
     PL( STag('div', array('class'=>'brd_threads container')) );
 
-    // Threads header
-    $this->DisplayHeader();
-
-    $thread_list = '';
-    foreach ($this->threads as $thread)
-    {
-      $this->DisplayThread ($thread, $page);
-    }
+    // Display list of threads.
+    PL( $this->GenerateThreadList($page) );
 
     PL( Div('', array('class'=>'board_bottom')) );
     PL( STag('/div') );
   }
 
-  /* Display threads list header row */
-  private function DisplayHeader()
+  /* Generate list of threads + header of table */
+  public function GenerateThreadList($page)
   {
-    PL( Div( Div('title', array('class'=>'brd_thr_title'))
-             . Div('posts', array('class'=>'brd_thr_num'))
-             . Div('views', array('class'=>'brd_thr_num'))
-             . Div('created', array('class'=>'brd_thr_time'))
-             . Div('last post', array('class'=>'brd_thr_time')) ),
-        array('class'=>'brd_head') );
-    PL( STag('hr') );
+    return $this->GenerateHeader()
+      . $this->GenerateThreads($page);
+  }
+
+  /* Display threads list header row */
+  private function GenerateHeader()
+  {
+    return Div( Div('title', array('class'=>'brd_thr_title'))
+                . Div('posts', array('class'=>'brd_thr_num'))
+                . Div('views', array('class'=>'brd_thr_num'))
+                . Div('created', array('class'=>'brd_thr_time'))
+                . Div('last post', array('class'=>'brd_thr_time')),
+                array('class'=>'brd_head'))
+      . STag('hr') . "\n";
+  }
+
+  /* Display all threads in list */
+  private function GenerateThreads($page)
+  {
+    $threads = "";
+    foreach ($this->threads as $thread)
+    {
+      $threads .= $this->GenerateThread ($thread, $page);
+    }
+    return $threads;
   }
 
   /* Display summary for a single thread. */
-  private function DisplayThread($thread, $page)
+  private function GenerateThread($thread, $page)
   {
     $thread_info = $this->ThreadInfo($thread, $page);
 
@@ -73,9 +85,10 @@ class ThreadList
                     array('class'=>'brd_thr_time') );
 
     // Print the thread summary
-    PL( Div($title . $posts . $views . $creator . $poster,
-            array('class'=>'brd_thread_row')) );
-    PL( Stag('hr') );
+    return Div($title . $posts . $views . $creator . $poster,
+               array('class'=>'brd_thread_row'))
+    . Stag('hr') . "\n";
+
   }
 
   /* Organize thread information for display. */
