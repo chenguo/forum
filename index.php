@@ -24,26 +24,35 @@ class Index extends Page
   protected function LoadAction()
   {
     $ret = TRUE;
+
+    // Attempt log in.
+    if ( isset($_REQUEST['action']) )
+    {
+      if ($_REQUEST['action']  === 'login'
+          && isset($_POST['username'])
+          && isset($_POST['password']) )
+      {
+        // Check for cookie
+        $cookie = isset($_POST['cookie'])? TRUE : FALSE;
+        if ( $this->session->Login($_POST['username'], $_POST['password'], $cookie) )
+        {
+          header ("LOCATION: " . Pages::BOARD);
+        }
+      }
+      else if ($_REQUEST['action'] === 'logout')
+      {
+        $this->session->Logout();
+        header("Location: ".Pages::LOGIN);
+      }
+      $ret = FALSE;
+    }
     // If user is logged in, immediately go to board.
-    if ( $this->session->CheckLogin() && $this->session->GetUID() > 0 )
+    else if ( $this->session->CheckLogin() && $this->session->GetUID() > 0 )
     {
       header ("LOCATION: " . Pages::BOARD);
       $ret = FALSE;
     }
-    // Attempt log in.
-    else if ( isset($_REQUEST['action'])
-              && $_REQUEST['action']  === 'login'
-              && isset($_POST['username'])
-              && isset($_POST['password']) )
-    {
-      // Check for cookie
-      $cookie = isset($_POST['cookie'])? TRUE : FALSE;
-      if ( $this->session->Login($_POST['username'], $_POST['password'], $cookie) )
-      {
-        header ("LOCATION: " . Pages::BOARD);
-        $ret = FALSE;
-      }
-    }
+
     return $ret;
   }
 

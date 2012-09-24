@@ -16,7 +16,6 @@ class User extends Page
   private $subpage_funcs = array (
     SUBP::DETAILS => "User::SubProfDetails",
     SUBP::SETTINGS => "User::SubProfEdits",
-    SUBP::PW => "User::SubProfPassword",
     SUBP::RECENT => "User::SubProfRecent",
     SUBP::FAV => "User::SubProfFav",
     SUBP::PRIVMSG => "User::SubProfPrivMsg"
@@ -153,7 +152,18 @@ class User extends Page
   /* Display sub-page of profile. */
   private function SubPage ()
   {
-    $subpage = call_user_func($this->subpage_funcs[$this->subpage]);
+    //$subpage = call_user_func($this->subpage_funcs[$this->subpage]);
+    if ($this->subpage == SUBP::DETAILS)
+      $subpage = $this->SubProfDetails();
+    else if ($this->subpage == SUBP::SETTINGS)
+      $subpage = $this->SubProfEdits();
+    else if ($this->subpage == SUBP::RECENT)
+      $subpage = $this->SubProfRecent();
+    else if ($this->subpage == SUBP::FAV)
+      $subpage = $this->SubProfFav();
+    else if ($this->subpage == SUBP::PRIVMSG)
+      $subpage = $this->SubProfPrivMsg();
+
     PL( Div($subpage, array('class'=>'usrp_subp_box')) );
   }
 

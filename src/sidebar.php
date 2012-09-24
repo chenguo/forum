@@ -83,7 +83,7 @@ class Sidebar
     $this->sb_info['msg'] = UsrLink($this->session->GetUID(), "messages", Profile::MSG);
     $this->sb_info['cur_usrs'] = $cur_usr_str;
     $this->sb_info['day_usrs'] = $day_usr_str;
-    $this->sb_info['logout'] = hLink(Pages::ACTION."?action=logout", "logout");
+    $this->sb_info['logout'] = hLink(Pages::LOGIN."?action=logout", "logout");
     $this->sb_info['ver'] = "LOLBros beta " . hLink("changelog.txt", "v" . VERSION);
   }
 }
