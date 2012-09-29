@@ -225,24 +225,24 @@ class Forum
     $this->day_users = $this->GetOnlineUsers(1440);
     $cur_user_links = array();
     foreach ($this->cur_users as $user)
-      array_push ($cur_user_links, makeUserLink($user['uid'], $user['name']));
+      array_push ($cur_user_links, UsrLink($user['uid'], $user['name']));
     $cur_usr_str = "online users</br>";
     $cur_usr_str .= (count($cur_user_links) == 0)? "none" : implode(", ", $cur_user_links);
 
     $day_user_links = array();
     foreach ($this->day_users as $user)
-      array_push ($day_user_links, makeUserLink($user['uid'], $user['name']));
+      array_push ($day_user_links, UsrLink($user['uid'], $user['name']));
     $day_usr_str = "users in past day</br>";
     $day_usr_str .= (count($day_user_links) == 0)? "none" : implode(", ", $day_user_links);
 
     $sidebar_info['welcome'] =
       "Welcome</br>"
-      . makeUserLink($this->session->GetUID(), $this->session->GetUserName())
+      . UsrLink($this->session->GetUID(), $this->session->GetUserName())
       . "!";
     $sidebar_info['chat'] = $this->GenerateChat();
     $sidebar_info['board'] = hLink(Pages::BOARD, "board");
-    $sidebar_info['bookmark'] = makeUserLink($this->session->GetUID(), "bookmarks", Profile::FAV);
-    $sidebar_info['privmsg'] = makeUserLink($this->session->GetUID(), "messages", Profile::MSG);
+    $sidebar_info['bookmark'] = UsrLink($this->session->GetUID(), "bookmarks", Profile::FAV);
+    $sidebar_info['privmsg'] = UsrLink($this->session->GetUID(), "messages", Profile::MSG);
     $sidebar_info['cur_users'] = $cur_usr_str;
     $sidebar_info['day_users'] = $day_usr_str;
     $sidebar_info['logout'] = hLink(Pages::ACTION."?action=logout", "logout");

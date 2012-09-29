@@ -282,7 +282,7 @@ class Thread extends Page
     {
       $type = ($action === "karma_plus")? "plus" : "minus";
       if (TRUE == $this->db->AddPostKarma($type, $_GET['pid'], $_GET['puid'], $uid))
-        echo makeUserLink($uid, $this->session->GetUserName());
+        echo UsrLink($uid, $this->session->GetUserName());
       else
         echo "0";
     }
