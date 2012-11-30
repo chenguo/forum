@@ -93,6 +93,12 @@ function Button($text, $options_array = array())
   return "<input type='button' class='$class' value='$text'$options>";
 }
 
+// Line break
+function BR ()
+{
+  return "<br>";
+}
+
 // Include a CSS file
 function CSS ($files)
 {

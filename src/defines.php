@@ -75,6 +75,7 @@ final class JS
   const JQUERY = 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js';
   const COMMON = 'js/common.js';
   const INDEX = 'js/index.js';
+  const BOARD = 'js/board.js';
   const THREAD = 'js/thread.js';
   const SIDEBAR = 'js/sidebar.js';
   const USER = 'js/user.js';

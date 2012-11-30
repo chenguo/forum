@@ -40,3 +40,20 @@ function expUnhide(obj)
         $(obj).val("+");
     }
 }
+
+// Show overlay, with content
+function overlayShow (result, id)
+{
+    var json_result = $.parseJSON(result);
+    if (json_result.title)
+        $('.overlay .tbox_title_text').html(json_result.title);
+    if (json_result.content)
+        $('.overlay .titled_box .tbox_content').html(json_result.content);
+    $('.overlay#'+id).css('visibility', 'visible');
+}
+window.overlayShow = overlayShow;
+
+function overlayHide (id)
+{
+    $('.overlay#'+id).css('visibility', 'hidden');
+}

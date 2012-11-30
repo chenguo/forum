@@ -98,3 +98,49 @@ img.favicon {width:2em; height:2em}
     vertical-align:middle;
     font-weight:bold;
 }
+
+/* Titled boxes */
+.tbox_title {
+    font-weight:bold;
+    background-color:blue;
+    color:white;
+    padding:1em;
+    border:4px solid grey;
+    border-top-left-radius:7px;
+    border-top-right-radius:7px;
+}
+.tbox_title_x { width:1.5em; float:right }
+.tbox_title_xmin {
+    color:grey;
+    background:none;
+    border:1px solid grey;
+    border-top:none;
+    border-right:none;
+    border-radius:0;
+    border-bottom-left-radius:0.4em;
+    float:right;
+    display:inline;
+    font-size:x-small;
+    width:auto;
+}
+
+.tbox_content {
+    background-color:white;
+    border:4px solid grey;
+    border-top:none;
+    border-bottom-left-radius:7px;
+    border-bottom-right-radius:7px;
+}
+.tbox_content_pad {
+    padding:1em;
+}
+
+/* Overlays */
+.overlay {
+    position:fixed;
+    left:0;
+    right:0;
+    margin:auto;
+    visibility:hidden;
+}
+.overlay .xbutton { float:right; }

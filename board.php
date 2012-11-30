@@ -1,9 +1,11 @@
 <?php
 ini_set('display_errors', 1); error_reporting(E_ALL | E_STRICT);
 require_once ('src/common_cfg.php');
+require_once ('src/form.php');
 require_once ('src/sidebar.php');
 require_once ('src/page.php');
 require_once ('src/threadlist.php');
+require_once ('src/titledbox.php');
 
 class Board extends Page
 {
@@ -26,7 +28,7 @@ class Board extends Page
 
     // Lists of files to include.
     $this->css = array(CSS::COMMON, CSS::BOARD, CSS::SIDEBAR);
-    $this->js = array(JS::JQUERY, JS::COMMON, JS::SIDEBAR);
+    $this->js = array(JS::JQUERY, JS::COMMON, JS::BOARD, JS::SIDEBAR);
 
     // Display info.
     $this->nthreads = $this->session->threads_per_page;
@@ -78,6 +80,9 @@ class Board extends Page
     // Sidebar.
     $this->sidebar->Display();
 
+    // Overlay area.
+    PL( $this->Overlay() );
+
     // Titlebar.
     $titlebar = $this->TitleBar();
     PL($titlebar);
@@ -101,8 +106,39 @@ class Board extends Page
     $pages = Div( $plinks, array('class'=>'brd_pages') );
 
     // Link to new thread page.
-    $new_thr = Div ( hLink(Pages::MAKETHR, 'new thread'), array('class'=>'brd_new_thr') );
+    $new_thr = Div ( hLink("javascript:void(0)", 'new thread',
+                           array('onclick'=>'newThread()')),
+                     array('class'=>'brd_new_thr') );
     return Div( $pages . $new_thr, array('class'=>'title_bar container') );
+  }
+
+  /* Generate overlay area. */
+  private function Overlay ()
+  {
+    $overlay = new TitledBox('newthr', TitledBox::XBUTTON);
+    return Div($overlay->HTML(),
+               array('class'=>'overlay', 'id'=>'newthr'));
+  }
+
+  /* Form for making new thread */
+  private function NewThread ()
+  {
+    $form = new Form (array('class'=>'newthr_form', 'action'=>Pages::BOARD,
+                            'method'=>'post'));
+    $form->InsertInput (array('type'=>'text', 'name'=>'title',
+                              'maxlength'=>'64',
+                              'class'=>'newthr_title'));
+    $form->InsertBR ();
+    $form->InsertTextarea (array('rows'=>'10', 'cols'=>'80',
+                                 'name'=>'content', 'class'=>'newthr_body'));
+    $form->InsertBR ();
+    $form->InsertInput (array('type'=>'submit', 'value'=>'create',
+                              'class'=>'button'));
+    $form->InsertInput (array('type'=>'hidden', 'name'=>'action',
+                              'value'=>'newthrsubmit'));
+
+    $title = "Make New Thread";
+    return json_encode (array('title'=>$title, 'content'=>$form->HTML()));
   }
 
   /* Handle actions. */
@@ -117,6 +153,21 @@ class Board extends Page
       // Failures will be exceptions, so assume this succeeds.
       $this->db->UpdateUserThrFav($this->uid, $_POST['tid'], $_POST['fav']);
       echo "1";
+    }
+    else if ($action === 'newthr')
+    {
+      echo $this->NewThread();
+    }
+    else if ($action === 'newthrsubmit'
+             && isset($_POST['title']) && strlen($_POST['title']) > 0
+             && isset($_POST['content']) && strlen($_POST['content']) > 0)
+    {
+      $tid = $this->forum->MakeThread($_POST['title'], $_POST['content'],
+                                      $this->session->GetUID());
+      if ($tid > 0)
+        header ("LOCATION: thread.php?tid={$tid}");
+      else
+        header ("LOCATION: threads.php");
     }
   }
 }
