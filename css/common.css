@@ -33,18 +33,17 @@ div.banner {
 
 table.noshow, table.noshow td, table.noshow tr{ border-style:none; border:none; }
 
-.quote{
+.quote, .code{
     width:96%;
     margin-left:0%;
     margin-right:4%;
-    margin-bottom:1%;
-    margin-top:1%;
     border:1px solid;
     border-radius:3px;
     padding:1%;
     background-color:#e5e5e5;
     overflow-x:auto;
 }
+.quote_content { margin-top:0.5em; margin-bottom:0.5em }
 
 /* misc */
 table img.profile_img{ max-width:80%; max-height:180px; }
@@ -69,9 +68,12 @@ h2 {margin:0; padding:0}
 img.favicon {width:2em; height:2em}
 
 /* Expandable areas */
-.expandable {border:1px solid black; border-radius:7px; padding:0.5em}
+.expandable {border:1px solid black; border-radius:7px; padding:0.5em; ;}
 .button_exp {width:1.5em}
-.hidden {display:none}
+.hidden {display:none; margin-top:0.5em; }
+
+/* Embedded media */
+.media {margin: 0.5em; }
 
 /* Standard container */
 .container {
