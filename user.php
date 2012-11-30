@@ -152,7 +152,18 @@ class User extends Page
   /* Display sub-page of profile. */
   private function SubPage ()
   {
-    //$subpage = call_user_func($this->subpage_funcs[$this->subpage]);
+    $page = $_REQUEST['view'];
+    if ($page === 'settings')
+      $this->subpage = SUBP::SETTINGS;
+    else if ($page === 'recent')
+      $this->subpage = SUBP::RECENT;
+    else if ($page === 'fav')
+      $this->subpage = SUBP::FAV;
+    else if ($page === 'msg')
+      $this->subpage = SUBP::PRIVMSG;
+    else
+      $this->subpage = SUBP::DETAILS;
+
     if ($this->subpage == SUBP::DETAILS)
       $subpage = $this->SubProfDetails();
     else if ($this->subpage == SUBP::SETTINGS)

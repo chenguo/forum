@@ -110,4 +110,4 @@ Ver     Date      Description
 0.74    06/30/12  Sidebar links for bookmarks/messages enabled. Fix user bookmarks page
 0.74.1  07/01/12  Add [code] tags for HTML <code>
 0.80.1  09/23/12  OOP rewrite completed
-
+0.80.2  11/29/12  Fix links to subpages of profile
