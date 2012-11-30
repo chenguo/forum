@@ -314,7 +314,7 @@ class Thread extends Page
     // Cancel case: echo back what's stored in DB for post content
     else if ($action === 'edit_cancel')
     {
-      $reply['content'] == PrepContent($post['content'], $this->tid);
+      $reply['content'] = PrepContent($post['content'], $this->tid);
       if ($post['tpid'] == 1)
         $reply['title'] = $this->db->GetThreadTitle($this->tid);
       $reply['edit'] = ' ';

@@ -172,7 +172,7 @@ function PrepContent($content, $embed_vid=TRUE)
   // [b|i|s|u] check
   $content = nestedTextTags($content);
 
-  // [hid] check.
+  // [hide] check.
   $content = preg_replace("/\[hide\](.*?)\[\/hide\]/",
                           Tag("div",
                               Button("+", array('onclick'=>'expUnhide(this)', 'class'=>'button_exp')) . " Click to expand"
