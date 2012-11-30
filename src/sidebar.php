@@ -5,11 +5,13 @@
  */
 ini_set('display_errors', 1); error_reporting(E_ALL | E_STRICT);
 require_once ('src/common_cfg.php');
+require_once ('src/titledbox.php');
 
 class Sidebar
 {
   private $forum;               // forum object
   private $session;             // user session object
+  private $titledbox;           // UI container for sidebar
   private $sb_info =            // sidebar information
     array(
       'welcome' => '',
@@ -29,6 +31,7 @@ class Sidebar
       exit("Sidebar instantiation failed: bad forum or session object");
     $this->forum = $forum;
     $this->session = $session;
+    $this->titledbox = new TitledBox ('sidebar', TitledBox::NO_X, FALSE);
   }
 
   /* Display the sidebar. */
@@ -40,18 +43,25 @@ class Sidebar
     $trigger = Div('sidebar', array('class'=>'sbtrig_txt'));
     PL( Div($trigger, array('class'=>'sbtrig', 'id'=>'sbtrig')) );
 
-    // Sidebar.
-    $sidebar =
-      Div($this->sb_info['welcome'], array('class'=>'sb_head', 'id'=>'sb_welc'))
-      //. Div($this->sb_info['chat'], array('class'=>'sidebar_item', 'id'=>'sidebar_chat'))
-      . Div($this->sb_info['board'], array('class'=>'sb_elem'))
+    // Sidebar title
+    /* $title = Div($this->sb_info['welcome'], array('class'=>'sb_head')); */
+    /* $this->titledbox->SetTitle ($title);, 'sb_head'); */
+    $this->titledbox->SetTitle ($this->sb_info['welcome'], 'sb_head');
+
+    // Sidebar content
+    $content = Div($this->sb_info['board'], array('class'=>'sb_elem'))
       . Div($this->sb_info['bookmark'], array('class'=>'sb_elem'))
       . Div($this->sb_info['msg'], array('class'=>'sb_elem'))
       . Div($this->sb_info['cur_usrs'], array('class'=>'sb_elem sb_usrs'))
       . Div($this->sb_info['day_usrs'], array('class'=>'sb_elem sb_usrs'))
       . Div($this->sb_info['logout'], array('class'=>'sb_elem'))
       . Div($this->sb_info['ver'], array('class'=>'sb_elem sb_last', 'id'=>'sb_ver'));
-    PL( Div($sidebar, array('class'=>'sidebar', 'id'=>'sidebar')) );
+    $this->titledbox->SetContent ($content);
+
+    // Display the sidebar.
+    $sidebar = Div($this->titledbox->HTML(),
+                   array('class'=>'sidebar', 'id'=>'sidebar'));
+    PL($sidebar);
   }
 
   // Fill in sidebar information to be displayed.

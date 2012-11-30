@@ -1,11 +1,4 @@
 /* Login page */
-form.login_form {
-    background:white;
-    margin:10% auto;
-    width:20em;
-    border: 3px solid grey;
-    padding: 0.5em 0;
-    border-radius:7px;
-}
-form.login_form input { margin: 0.2em 0; text-align:center; }
-form.login_form .remember { display:inline; margin:0 0.2em; }
+.login_box { width:20em; margin:auto; }
+form input { margin: 0.2em 0; text-align:center; }
+form .remember { display:inline; margin:0 0.2em; }

@@ -14,3 +14,10 @@
 .brd_thr_page_links { display:inline-block; margin-right:0.3em; margin:0.2em; }
 .brd_thr_flags { display:inline-block; font-weight:bold; font-size:x-small; margin:0.2em; }
 .brd_thr_flags a {diaplay:inline; color:white; background:blue; text-decoration:none; padding:0 0.3em}
+
+/* For making new threads */
+#newthr { width:60%; }
+.newthr_form {width:100%;}
+.newthr_title { width:95%; overflow:scroll; margin-top:0.5em }
+.newthr_body { width:95%; resize:vertical; margin-top:0.5em }
+.newthr_form .button { margin-top:0.5em }

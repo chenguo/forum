@@ -1,6 +1,7 @@
 <?php
 ini_set('display_errors', 1); error_reporting( E_ALL | E_STRICT );
 require_once ('src/common_cfg.php');
+require_once ('src/form.php');
 require_once ('src/page.php');
 
 class Index extends Page
@@ -59,38 +60,28 @@ class Index extends Page
   /* Display body of login page. */
   protected function DisplayBody()
   {
-    $banner = $this->Banner();
+    $form = new Form (array('class'=>'login_form container',
+                            'acion'=>Pages::LOGIN,
+                            'method'=>'post'));
+    $form->InsertInput (array('type'=>'text', 'size'=>'20',
+                              'name'=>'username', 'maxlenght'=>'32',
+                              'class'=>'field'));
+    $form->InsertInput (array('type'=>'password', 'size'=>'20',
+                              'name'=>'password', 'maxlength'=>'32',
+                              'class'=>'field'));
+    $form->InsertInput (array('type'=>'submit', 'value'=>'log in',
+                              'class'=>'button'));
+    $form->InsertGeneric (BR());
+    $form->InsertInput (array('type'=>'checkbox', 'name'=>'cookie',
+                              'value'=>'set', 'class'=>'remember'));
+    $form->InsertGeneric ('Remember Me');
+    $form->InsertInput (array('type'=>'hidden', 'name'=>'action',
+                              'value'=>'login'));
 
-    // Username input
-    $username = Div( STag('input',
-                          array('type'=>'text', 'size'=>'20',
-                                'name'=>'username', 'maxlength'=>'32')),
-                     array('class'=>'field') );
-
-    // Password input
-    $password = Div( STag('input',
-                          array('type'=>'password', 'size'=>'20',
-                                'name'=>'password', 'maxlength'=>'32')),
-                     array('class'=>'field') );
-
-    // Login button
-    $button = Div( Stag('input', array('type'=>'submit', 'value'=>'log in', 'class'=>'button')));
-
-    // 'Remember Me' box and text
-    $remember = Div( STag('input', array('type'=>'checkbox', 'name'=>'cookie', 'value'=>'set')),
-                     array('class'=>'remember') );
-    $remember_txt = Div('remember me', array('class'=>'remember'));
-
-    // Login action
-    $action = Stag('input', array('type'=>'hidden', 'name'=>'action', 'value'=>'login'));
-
-    // Put the form together
-    $form = Tag('form',
-                $username . $password . $button . $remember . $remember_txt . $action,
-                array('class'=>'login_form', 'action'=>Pages::LOGIN, 'method'=>'post'));
+    $input_box = Div($form->HTML(), array('class'=>'login_box'));
 
     // Put the body together
-    $body = $banner . $form;
+    $body = $this->Banner() . $input_box;
     PL( Tag('body', $body) );
   }
 
