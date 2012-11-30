@@ -120,7 +120,6 @@ class ThreadList
     $page_links = "";
 
     $max_page = GetPagecount($thread['posts'], $nposts);
-    echo "posts " . $thread['posts'] . " max pages " . $max_page;
 
     if ($max_page > 4)
       $page_links .= '... ';
