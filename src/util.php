@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 1); error_reporting( E_ALL | E_STRICT );
 require_once('src/html.php');
 
 // Echo
@@ -65,56 +66,18 @@ function GetTime($time_type = TIME_FULL, $time = 0)
 // while still maintainable.
 function PrepContent($content, $embed_vid=TRUE)
 {
-  global $db;
-  global $session;
-
   $content = disableHTML($content);
 
   // [code] check.
-  $content = preg_replace("/\[code\](.*?)\[\/code\]/is", "<code>$1</code>", $content);
+  $content = preg_replace("/\[code\](.*?)\[\/code\]/is", "<div class='code'>Code</br><code>$1</code></div>", $content);
 
   // [img] check.
   $content = preg_replace("/\[img\](.*?)\[\/img\]/i","<div class='img_container'><img src='$1' alt='[IMAGE]'></div>", $content);
 
   if ($embed_vid)
-    {
-      $embed_opts = "frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen";
-
-      // Vimeo [vid] check.
-      $content = preg_replace("/\[(vid|vimeo)\][^\]]*?vimeo.com\/(.*\/)*(\d*)\[\/\\1\]/i",
-                              "<iframe src='http://player.vimeo.com/video/$3?title=0&amp;byline=0&amp;portrait=0' width='500' height='281' $embed_opts></iframe>",
-                              $content);
-
-      // Youtube url types
-      // http://youtu.be/code
-      // http://www.youtube.com/watch?v=code
-      // http://www.youtube.com/v/code
-      // http://www.youtube.com/embed/code
-
-      // Youtube videos. Use create function for the seeking time resolution instead of anonymous, since host only has PHP 5.2
-      $content = preg_replace_callback("/\[(vid|youtube)\].*?youtu(\.be\/|be.com\/(v\/|watch.*?v=))([0-9a-zA-Z_-]{8,})(&[^#\[]*)?(#t=(\d+m)?(\d+))?.*?\[\/\\1\]/",
-                                       create_function('$match',
-                                                       '$str = "";'
-                                                       //. 'foreach ($match as $key => $val) { $str .= "$key::$val</br>"; }'
-                                                       . '$time = 0;'
-                                                       . 'if (isset($match[8])) $time = $match[8];'
-                                                       . 'if (isset($match[7])) $time = $match[7] * 60 + $match[8];'
-                                                       . '$str .= "<iframe class=\'youtube-player\' type=\'text/html\' width=\'640\' height=\'385\' '
-                                                       . 'src=\'http://www.youtube.com/embed/$match[4]?rel=0&start=$time\' frameborder=\'0\' '
-                                                       . 'webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>";'
-                                                       . 'return $str;'),
-                                       $content);
-
-      // MLB [vid] check.
-      $content = preg_replace("/\[vid\][^\]]*?mlb.com.*?content_id=(\d+).*?\[\/vid\]/i",
-                              "<iframe src='http://mlb.mlb.com/shared/video/embed/embed.html?content_id=$1&width=640&height=360&property=mlb' width='640' height='360' $embed_opts></iframe>",
-                              $content);
-
-      // Gametrailers [vid] embed.
-      $content = preg_replace("/\[vid\][^\]]*?gametrailers.com.*?(\d+)(#.*?)?\[\/vid\]/i",
-                              "<iframe src='http://media.mtvnservices.com/embed/mgid:moses:video:gametrailers.com:$1' width='512' height='288' $embed_opts></iframe>",
-                              $content);
-    } /* embed videos */
+  {
+    $content = videoTags($content);
+  }
 
   // Audio
   $content = preg_replace("/\[aud\].*soundcloud.*(playlists|tracks)%2f(\w+).*?\[\/aud\]/i",
@@ -147,36 +110,17 @@ function PrepContent($content, $embed_vid=TRUE)
   // Useless whitespace around newlines.
   $content = preg_replace("/\s*<\/br>\s*/", "</br>", $content);
 
-  // [quote] check.
-  while (preg_match ("/\[quote\](.*?)\[\/quote\]/", $content) > 0)
-    $content = preg_replace("/\[quote\](.*?)\[\/quote\](<\/br>)?/i",
-                            "<div class='quote'>$1</div>",
-                            $content, 1);
-
-  while(preg_match ("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\](\n)?/", $content, $matches) > 0)
-    {
-      $quote_pid = $matches[2];
-      $post_meta = $db->GetPostMeta($quote_pid);
-      $tid = $post_meta['tid'];
-      $page = GetPageCount($matches[3], $session->posts_per_page);
-      $link = hLink("thread.php?tid=$tid&page=$page#post$quote_pid" , $matches[1] . " wrote:");
-      $content = preg_replace("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\](<\/br>)?/i",
-                            "<div class='quote'><b>$link</b></br>$4</div>",
-                              $content, 1);
-                              }
-  while(preg_match ("/\[quote author=([^\]]*)\](.*)\[\/quote\]/", $content) > 0)
-    $content = preg_replace("/\[quote author=([^\]]*)\](.*?)\[\/quote\](<\/br>)?/i",
-                            "<div class='quote'><b>$1 wrote</b></br>$2</div>",
-                            $content, 1);
+  // [quote]
+  $content = quoteTag($content);
 
   // [b|i|s|u] check
   $content = nestedTextTags($content);
 
   // [hide] check.
-  $content = preg_replace("/\[hide\](.*?)\[\/hide\]/",
+  $content = preg_replace("/\[hide\](<(\/)?br>)*(.*?)\[\/hide\]/",
                           Tag("div",
                               Button("+", array('onclick'=>'expUnhide(this)', 'class'=>'button_exp')) . " Click to expand"
-                              . Tag("div", "$1", array('class'=>'hidden'))
+                              . Tag("div", "$3", array('class'=>'hidden'))
                               ,
                               array('class'=>'expandable')),
                           $content);
@@ -193,6 +137,81 @@ function nestedTextTags($input)
   else
     $str = $input;
   return preg_replace_callback("/\[([bisu])\](.*?)\[\/\\1\]/i", 'nestedTextTags', $str);
+}
+
+// Video tag
+function videoTags($input)
+{
+  $embed_opts = "frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen";
+
+  // Vimeo [vid] check.
+  $input = preg_replace("/\[(vid|vimeo)\][^\]]*?vimeo.com\/(.*\/)*(\d*)\[\/\\1\]/i",
+                          "<div class='media'><iframe src='http://player.vimeo.com/video/$3?title=0&amp;byline=0&amp;portrait=0' width='500' height='281' $embed_opts></iframe></div>",
+                          $input);
+
+  // Youtube url types
+  // http://youtu.be/code
+  // http://www.youtube.com/watch?v=code
+  // http://www.youtube.com/v/code
+  // http://www.youtube.com/embed/code
+
+  // Youtube videos. Use create function for the seeking time resolution instead of anonymous, since host only has PHP 5.2
+  $input = preg_replace_callback("/\[(vid|youtube)\].*?youtu(\.be\/|be.com\/(v\/|watch.*?v=))([0-9a-zA-Z_-]{8,})(&[^#\[]*)?(#t=(\d+m)?(\d+))?.*?\[\/\\1\]/",
+                                   create_function('$match',
+                                                   '$str = "";'
+                                                   //. 'foreach ($match as $key => $val) { $str .= "$key::$val</br>"; }'
+                                                   . '$time = 0;'
+                                                   . 'if (isset($match[8])) $time = $match[8];'
+                                                   . 'if (isset($match[7])) $time = $match[7] * 60 + $match[8];'
+                                                   . '$str .= "<div class=\"media\"><iframe class=\'youtube-player\' type=\'text/html\' width=\'640\' height=\'385\' '
+                                                   . 'src=\'http://www.youtube.com/embed/$match[4]?rel=0&start=$time\' frameborder=\'0\' '
+                                                   . 'webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>";'
+                                                   . 'return $str;'),
+                                   $input);
+
+  // MLB [vid] check.
+  $input = preg_replace("/\[vid\][^\]]*?mlb.com.*?content_id=(\d+).*?\[\/vid\]/i",
+                          "<div class='media'><iframe src='http://mlb.mlb.com/shared/video/embed/embed.html?content_id=$1&width=640&height=360&property=mlb' width='640' height='360' $embed_opts></iframe></div>",
+                          $input);
+
+  // Gametrailers [vid] embed.
+  $input = preg_replace("/\[vid\][^\]]*?gametrailers.com.*?(\d+)(#.*?)?\[\/vid\]/i",
+                          "<div class='media'><iframe src='http://media.mtvnservices.com/embed/mgid:moses:video:gametrailers.com:$1' width='512' height='288' $embed_opts></iframe></div>",
+                          $input);
+
+  return $input;
+}
+
+// Quote tag
+function quoteTag($input)
+{
+  global $db;
+  global $session;
+
+  // [quote] check.
+  while (preg_match ("/\[quote\](.*?)\[\/quote\]/", $input) > 0)
+    $input = preg_replace("/\[quote\](.*?)\[\/quote\](<\/br>)?/i",
+                            "<div class='quote'>$1</div>",
+                            $input, 1);
+
+  while(preg_match ("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\](\n)?/", $input, $matches) > 0)
+  {
+    echo "QUOTE";
+    $quote_pid = $matches[2];
+    $post_meta = $db->GetPostMeta($quote_pid);
+    $tid = $post_meta['tid'];
+    $page = GetPageCount($matches[3], $session->posts_per_page);
+    $link = hLink("thread.php?tid=$tid&page=$page#post$quote_pid" , $matches[1] . " wrote:");
+    $input = preg_replace("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\](<\/br>)?/i",
+                          "<div class='quote'><b>$link</b><div class='quote_content'>$4</div></div>",
+                          $input, 1);
+  }
+  while(preg_match ("/\[quote author=([^\]]*)\](.*)\[\/quote\]/", $input) > 0)
+    $input = preg_replace("/\[quote author=([^\]]*)\](.*?)\[\/quote\](<\/br>)?/i",
+                          "<div class='quote'><b>$1 wrote</b><div class='quote_content'>$2</div></div>",
+                          $input, 1);
+
+  return $input;
 }
 
 ?>
