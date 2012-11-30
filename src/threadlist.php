@@ -95,11 +95,11 @@ class ThreadList
   private function ThreadInfo ($thread, $page)
   {
     $thread_info = array();
-    $nposts = $this->session->posts_per_page;
     $link = Pages::THREAD . "?tid={$thread['tid']}";
 
     $thread_info['link'] = hLink($link, $thread['title'], array('class'=>'thread'));
-    $thread_info['pages'] = MakePageLinks($page, $nposts, $thread['posts'], $link);
+    //$thread_info['pages'] = MakePageLinks($page, $nposts, $thread['posts'], $link);
+    $thread_info['pages'] = $this->ThreadPageLinks($thread);
     $thread_info['flags'] = $this->ThreadFlags($thread, $link);
     $thread_info['create_time'] = GetTime(TIME_FULL, $thread['create_time']);
     $thread_info['post_time'] = GetTime(TIME_FULL, $thread['post_time']);
@@ -109,6 +109,27 @@ class ThreadList
     $thread_info['last_poster'] = $this->db->GetUserName($thread['last_uid']);
 
     return $thread_info;
+  }
+
+  /* Make links to pages of a thread */
+  private function ThreadPageLinks ($thread)
+  {
+    $nposts = $this->session->posts_per_page;
+    $link = Pages::THREAD . "?tid={$thread['tid']}";
+
+    $page_links = "";
+
+    $max_page = GetPagecount($thread['posts'], $nposts);
+    echo "posts " . $thread['posts'] . " max pages " . $max_page;
+
+    if ($max_page > 4)
+      $page_links .= '... ';
+    for ($i = $max_page - 2; $i <= $max_page; $i++)
+    {
+      if ($i > 1)
+        $page_links .= hLink($link . "&page=$i", $i, array('class'=>'thr_page_link')) . ' ';
+    }
+    return $page_links;
   }
 
   /* For a particular user and thread, get notifications for user pertaining to that thread. */

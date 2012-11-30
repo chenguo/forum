@@ -143,7 +143,6 @@ class Thread extends Page
       array_push($this->posts, new Post($this->forum, $this->session, $this->db, $post_info));
     }
 
-
     // Mark user as at least having read the last post on current page.
     $last_post = end($this->posts);
     $this->db->UpdateUserPostView($uid, $tid, $last_post->pid(), $last_post->tpid());
