@@ -196,7 +196,6 @@ function quoteTag($input)
 
   while(preg_match ("/\[quote\s*author=(.*?)\s*pid=(\S*)\s*tpid=(\S*)\](.*?)\[\/quote\](\n)?/", $input, $matches) > 0)
   {
-    echo "QUOTE";
     $quote_pid = $matches[2];
     $post_meta = $db->GetPostMeta($quote_pid);
     $tid = $post_meta['tid'];
