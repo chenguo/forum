@@ -6,6 +6,7 @@ require_once ('src/sidebar.php');
 require_once ('src/page.php');
 require_once ('src/threadlist.php');
 require_once ('src/titledbox.php');
+require_once ('src/chat.php');
 
 class Board extends Page
 {
@@ -25,10 +26,12 @@ class Board extends Page
     $this->session = $session;
     $this->db = $db;
     $this->sidebar = new Sidebar($forum, $session);
+    $this->chat = new Chat();
 
     // Lists of files to include.
-    $this->css = array(CSS::COMMON, CSS::BOARD, CSS::SIDEBAR);
-    $this->js = array(JS::JQUERY, JS::COMMON, JS::BOARD, JS::SIDEBAR);
+    $this->css = array(CSS::COMMON, CSS::BOARD, CSS::SIDEBAR, CSS::CHAT);
+    $this->js = array(JS::JQUERY, JS::COMMON, JS::COOKIE, JS::BOARD,
+                      JS::SIDEBAR, JS::SOCKETIO, JS::CHAT);
 
     // Display info.
     $this->nthreads = $this->session->threads_per_page;
@@ -79,6 +82,9 @@ class Board extends Page
 
     // Sidebar.
     $this->sidebar->Display();
+
+    // Chat.
+    $this->chat->Display();
 
     // Overlay area.
     PL( $this->Overlay() );

@@ -60,11 +60,12 @@ class TitledBox
     }
     return Div( Div($title, array('class'=>'tbox_title'))
                 . Div($this->content, array('class'=>$content_class)),
-                array('class'=>'titled_box'));
+                array('class'=>'titled_box',
+                      'id'=>$this->id));
   }
 
   /* Set the title of the titled box. */
-  public function SetTitle ($title, $class)
+  public function SetTitle ($title, $class = "")
   {
     $this->title = $title;
     $this->title_class = $class;

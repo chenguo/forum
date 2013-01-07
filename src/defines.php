@@ -65,6 +65,7 @@ final class CSS
   const COMMON = 'css/common.css';
   const INDEX = 'css/index.css';
   const BOARD = 'css/board.css';
+  const CHAT = 'css/chat.css';
   const THREAD = 'css/thread.css';
   const SIDEBAR = 'css/sidebar.css';
   const USER = 'css/user.css';
@@ -74,8 +75,11 @@ final class JS
 {
   const JQUERY = 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js';
   const COMMON = 'js/common.js';
+  const COOKIE = 'js/jquery.cookie.js';
   const INDEX = 'js/index.js';
   const BOARD = 'js/board.js';
+  const CHAT = 'js/chat.js';
+  const SOCKETIO = 'http://localhost:8000/socket.io/socket.io.js';
   const THREAD = 'js/thread.js';
   const SIDEBAR = 'js/sidebar.js';
   const USER = 'js/user.js';

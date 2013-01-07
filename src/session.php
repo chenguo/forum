@@ -20,32 +20,32 @@ class Session
   {
     $ret = FALSE;
     if (isset($_SESSION[$this->session_var]))
+    {
+      $this->uid = $_SESSION[$this->session_var];
+      $ret = TRUE;
+    }
+    else if (isset($_COOKIE['pw']) && isset($_COOKIE['uid']))
+    {
+      if ($this->db->CheckCookie($_COOKIE['uid'], $_COOKIE['pw']))
       {
-        $this->uid = $_SESSION[$this->session_var];
+        $this->uid = $_COOKIE['uid'];
+        $_SESSION[$this->session_var] = $_COOKIE['uid'];
         $ret = TRUE;
-        }
-    else if (isset($_COOKIE['lolbros']) && isset($_COOKIE['lolbros_uid']))
-      {
-        if ($this->db->CheckCookie($_COOKIE['lolbros_uid'], $_COOKIE['lolbros']))
-          {
-            $this->uid = $_COOKIE['lolbros_uid'];
-            $_SESSION[$this->session_var] = $_COOKIE['lolbros_uid'];
-            $ret = TRUE;
-          }
       }
+    }
 
     if ($this->uid < 0)
       $ret = FALSE;
     if ($ret)
-      {
-        // Get user settings
-        $settings = $this->db->GetUserSettings($this->uid);
-        $this->posts_per_page = $settings['posts_display'];
-        $this->threads_per_page = $settings['threads_display'];
+    {
+      // Get user settings
+      $settings = $this->db->GetUserSettings($this->uid);
+      $this->posts_per_page = $settings['posts_display'];
+      $this->threads_per_page = $settings['threads_display'];
 
-        if ($update)
-          $this->db->UpdateUserTimestamp($_SESSION[$this->session_var]);
-      }
+      if ($update)
+        $this->db->UpdateUserTimestamp($_SESSION[$this->session_var]);
+    }
 
     return $ret;
   }
@@ -55,18 +55,20 @@ class Session
   {
     $uid = $this->db->VerifyUser($user, $pw, TRUE);
     if ($uid >= 0)
+    {
+      $this->uid = $uid;
+      $_SESSION[$this->session_var] = $uid;
+      $_SESSION['chat'] = "";
+      $_SESSION['user'] = $user;
+      // Store for 356 days
+      if ($cookie && !isset($__COOKIE['pw']))
       {
-        $this->uid = $uid;
-        $_SESSION[$this->session_var] = $uid;
-        $_SESSION['chat'] = "";
-        // Store for 60 days
-        if ($cookie)
-          {
-            setcookie('lolbros_uid', $uid, time() + 5184000);
-            setcookie('lolbros', md5($pw), time() + 5184000);
-          }
-        return TRUE;
+        setcookie('uid', $uid, time() + 31536000);
+        setcookie('user', $user, time() + 31536000);
+        setcookie('pw', md5($pw), time() + 31536000);
       }
+      return TRUE;
+    }
     else
       $this->Logout();
     return FALSE;

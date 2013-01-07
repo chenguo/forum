@@ -1,0 +1,24 @@
+#chat_box {
+    width:20%;
+    position:fixed;
+    right:0;
+    bottom:0;
+}
+#chat_box .tbox_title {
+    padding: 0.2em;
+ }
+#chat_box .tbox_content {
+    /* width:20%; */
+    padding:0.2em;
+}
+#chat_box .chat_msg {
+    text-align:left;
+    height:10em;
+    overflow-y:auto;
+    padding:0.2em;
+    margin-bottom:0.2em;
+}
+#chat_box .chat_input textarea { width:95%; }
+
+#chat_box span.self { color:red; font-weight:bold; }
+#chat_box span.other { color:blue; font-weight:bold; }
