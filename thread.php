@@ -5,6 +5,7 @@ require_once ('src/common_cfg.php');
 require_once ('src/page.php');
 require_once ('src/sidebar.php');
 require_once ('src/post.php');
+require_once ('src/chat.php');
 
 class Thread extends Page
 {
@@ -30,10 +31,12 @@ class Thread extends Page
     $this->session = $session;
     $this->db = $db;
     $this->sidebar = new Sidebar($forum, $session);
+    $this->chat = new Chat();
 
     // List of files to include.
-    $this->css = array(CSS::COMMON, CSS::THREAD, CSS::SIDEBAR);
-    $this->js = array(JS::JQUERY, JS::COMMON, JS::THREAD, JS::SIDEBAR);
+    $this->css = array(CSS::COMMON, CSS::THREAD, CSS::SIDEBAR, CSS::CHAT);
+    $this->js = array(JS::JQUERY, JS::COMMON, JS::COOKIE, JS::THREAD,
+                      JS::SIDEBAR, JS::SOCKETIO, JS::CHAT);
   }
 
   /* Actions taken on page request, before displaying page. */
@@ -83,6 +86,9 @@ class Thread extends Page
 
     // Sidebar.
     $this->sidebar->Display();
+
+    // Chat.
+    $this->chat->Display();
 
     // Titlebar.
     PL( $this->Titlebar() );

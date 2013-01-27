@@ -11,14 +11,15 @@
     /* width:20%; */
     padding:0.2em;
 }
-#chat_box .chat_msg {
+#chat_msg {
     text-align:left;
     height:10em;
     overflow-y:auto;
     padding:0.2em;
     margin-bottom:0.2em;
 }
-#chat_box .chat_input textarea { width:95%; }
+#chat_input textarea { width:95%; }
+#chat_count {text-align:right;}
 
 #chat_box span.self { color:red; font-weight:bold; }
 #chat_box span.other { color:blue; font-weight:bold; }

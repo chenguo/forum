@@ -24,8 +24,9 @@ class Chat
     /* $form = new Form (array('class'=>'chat_input')); */
     /* $form->InsertInput(array('type'=>'text', 'size' =>  */
 
-    $content = Div('', array('class'=>'chat_msg'))
-      . Div(Tag('textarea', ''), array('class'=>'chat_input'));
+    $content = Div('', array('id'=>'chat_msg'))
+      . Div(Tag('textarea', ''), array('id'=>'chat_input'))
+      . Div('0 users online', array('id'=>'chat_count'));
     $this->titledbox->SetContent ($content);
 
     PL($this->titledbox->HTML());
