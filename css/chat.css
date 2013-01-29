@@ -3,6 +3,7 @@
     position:fixed;
     right:0;
     bottom:0;
+    visibility:hidden;
 }
 #chat_box .tbox_title {
     padding: 0.2em;

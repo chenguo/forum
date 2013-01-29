@@ -174,6 +174,7 @@
             $(title).on('mouseup', function() {hide()});
             Chat.hide = false;
         }
+        $('#chat_box').css('visibility', 'visible');
     };
 
     // Hide chat box.
