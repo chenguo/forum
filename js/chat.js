@@ -18,7 +18,9 @@
         retrieveMsg();
 
         // Socket init and handling
-        Chat.socket = io.connect('http://localhost:8000/');
+        append("Chat coming soon!");
+        //Chat.socket = io.connect('http://localhost:8000/');
+
         Chat.socket.once('welcome', function(data) {
             append(data.msg);
             identify();
