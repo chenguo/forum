@@ -19,7 +19,7 @@
 
         // Socket init and handling
         append("Chat coming soon!");
-        //Chat.socket = io.connect('http://localhost:8000/');
+        Chat.socket = io.connect('http://localhost:8000/');
 
         Chat.socket.once('welcome', function(data) {
             append(data.msg);
@@ -180,13 +180,14 @@
     var hide = function () {
         if (!Chat.hide)
         {
+            Chat.hide = true;
+
             var boxHeight = $('#chat_box').height();
             var titleHeight = $('#chat_box .tbox_title').outerHeight();
             var delta = titleHeight - boxHeight;
             $('#chat_box').animate({bottom: delta.toString() + 'px'});
             $('#chat_box .tbox_title').off('mouseup');
             $('#chat_box .tbox_title').on('mouseup', function() {show()});
-            Chat.hide = true;
         }
     };
 
@@ -194,6 +195,9 @@
     var show = function () {
         if (Chat.hide)
         {
+            // State tracking.
+            Chat.hide = false;
+
             // Unhide and update the title.
             $('#chat_box').animate({bottom: '0'});
             $('#chat_box .tbox_title_text').html('Chat');
@@ -213,9 +217,6 @@
             // Update event handlers.
             $(title).off('mouseup');
             $(title).on('mouseup', function() {hide()});
-
-            // State tracking.
-            Chat.hide = false;
 
             // Populate messages.
             while (Chat.newMsg.length > 0)

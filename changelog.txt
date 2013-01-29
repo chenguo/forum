@@ -114,4 +114,4 @@ Ver     Date      Description
 0.80.3  11/29/12  Fix links to thread pages on main thread list
 0.80.4  11/29/12  Fix cancel post edit button
 0.80.5  11/29/12  Small appearance tweaks
-
+0.90.5  01/28/13  Chat implemented
