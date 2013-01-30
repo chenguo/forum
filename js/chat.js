@@ -18,8 +18,8 @@
         retrieveMsg();
 
         // Socket init and handling
-        append("Chat coming soon!");
-        Chat.socket = io.connect('http://localhost:8000/');
+        Chat.socket = io.connect('http://192.210.195.101:8000/');
+        //Chat.socket = io.connect('http://localhost:8000/');
 
         Chat.socket.once('welcome', function(data) {
             append(data.msg);
@@ -54,8 +54,8 @@
 
     // Send server identity message.
     var identify = function () {
-        var user = $.cookie('user');
-        var uid = $.cookie('uid');
+        var user = getUser();
+        var uid = getUID();
         Chat.socket.emit('id', { user: user, uid: uid });
     };
 
@@ -65,8 +65,8 @@
         var msg = $(input).val();
         msg = msg.replace(/\s*$/, '');
 
-        var user = $.cookie('user');
-        var uid = $.cookie('uid');
+        var user = getUser();
+        var uid = getUID();
         Chat.socket.emit('message', { msg: msg, user: user, uid: uid });
 
         $(input).val('');
@@ -108,7 +108,7 @@
     // Decode message.
     var decodeMsg = function (data) {
         var uclass = 'other';
-        if (data.uid === $.cookie('uid'))
+        if (data.uid === getUID())
         {
             uclass = 'self';
         }
@@ -259,6 +259,15 @@
         }
     }
 
+    // Get user name from embedded HTML data.
+    var getUser = function () {
+        return $('#chat_msg').attr('data-name');
+    };
+
+    // Get uid from embedded HTML data.
+    var getUID = function () {
+        return $('#chat_msg').attr('data-uid');
+    };
 
     // Bind page load/exit functions.
     $(document).ready(init);

@@ -8,11 +8,13 @@ require_once ('src/titledbox.php');
 
 class Chat
 {
-  private $titledbox;
+  private $titledbox;         // Container for chat box
+  private $session;           // Session
 
-  public function Chat()
+  public function Chat($session)
   {
     $this->titledbox = new TitledBox ('chat_box', TitledBox::NO_X, FALSE);
+    $this->session = $session;
   }
 
   public function Display()
@@ -21,10 +23,14 @@ class Chat
     $this->titledbox->SetTitle ("Chat");
 
     // Set chat content and buttons.
-    /* $form = new Form (array('class'=>'chat_input')); */
-    /* $form->InsertInput(array('type'=>'text', 'size' =>  */
-
-    $content = Div('', array('id'=>'chat_msg'))
+    // Embed uer name and uid into chat box. Approach was
+    // tried with cookies, but this way is more robust
+    // since cookies may be disabled.
+    $user = $this->session->GetUserName();
+    $uid = $this->session->GetUID();
+    $content = Div('', array('id'=>'chat_msg',
+                             'data-name'=>$user,
+                             'data-uid'=>$user))
       . Div(Tag('textarea', ''), array('id'=>'chat_input'))
       . Div('0 users online', array('id'=>'chat_count'));
     $this->titledbox->SetContent ($content);

@@ -26,7 +26,7 @@ class Board extends Page
     $this->session = $session;
     $this->db = $db;
     $this->sidebar = new Sidebar($forum, $session);
-    $this->chat = new Chat();
+    $this->chat = new Chat($session);
 
     // Lists of files to include.
     $this->css = array(CSS::COMMON, CSS::BOARD, CSS::SIDEBAR, CSS::CHAT);
