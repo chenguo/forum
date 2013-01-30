@@ -58,6 +58,7 @@ class Session
     {
       $this->uid = $uid;
       $_SESSION[$this->session_var] = $uid;
+      $_SESSION['uid'] = $uid;
       $_SESSION['chat'] = "";
       $_SESSION['user'] = $user;
       // Store for 356 days
@@ -101,10 +102,11 @@ class Session
   {
     if (isset($_SESSION[$this->session_var]))
       {
-        return $this->db->GetUserName($_SESSION[$this->session_var], FALSE);
+        return $_SESSION['user'];
+        //return $this->db->GetUserName($_SESSION[$this->session_var], FALSE);
       }
     else
-      return -1;
+      return "";
   }
 
   // Append chat messages to a session
@@ -124,8 +126,9 @@ class Session
   function Logout()
   {
     $this->uid = -1;
-    setcookie('lolbros_uid', 0, 1);
-    setcookie('lolbros', 0, 1);
+    setcookie('uid', 0, 1);
+    setcookie('user', 0, 1);
+    setcookie('pw', 0, 1);
     session_unset();
     session_destroy();
   }
