@@ -18,7 +18,7 @@
         retrieveMsg();
 
         // Socket init and handling
-        Chat.socket = io.connect('http://192.210.195.101:8000/');
+        Chat.socket = io.connect('http://198.23.227.187:8000/');
         //Chat.socket = io.connect('http://localhost:8000/');
 
         Chat.socket.once('welcome', function(data) {
