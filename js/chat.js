@@ -84,7 +84,7 @@
     var cacheMsg = function (data) {
         Chat.newMsg.push(data);;
         $('#chat_box .tbox_title_text').html('Chat (' + Chat.newMsg.length + ')');
-        if (!Chat.blink)
+        if (data.type == 'message' && !Chat.blink)
         {
             Chat.blink = setInterval(blink, 1000);
         }
