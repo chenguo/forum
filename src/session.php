@@ -102,8 +102,10 @@ class Session
   {
     if (isset($_SESSION[$this->session_var]))
       {
-        return $_SESSION['user'];
-        //return $this->db->GetUserName($_SESSION[$this->session_var], FALSE);
+        if (isset($_SESSION['user']))
+          return $_SESSION['user'];
+        else
+          return $this->db->GetUserName($_SESSION[$this->session_var], FALSE);
       }
     else
       return "";
